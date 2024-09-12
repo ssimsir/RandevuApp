@@ -36,11 +36,9 @@ module.exports = {
             id: reservation._id,  // _id'yi reservationId olarak değiştiriyoruz
             title: reservation.description,
 
-            start: reservation.startTime.toISOString(),
-            end: reservation.endTime.toISOString(),
+            start: reservation.startTime,
+            end: reservation.endTime,
 
-            //start: reservation.startTime,
-            //end: reservation.endTime,
             backgroundColor : reservation.productId.color,
             borderColor :  reservation.productId.color,
 
