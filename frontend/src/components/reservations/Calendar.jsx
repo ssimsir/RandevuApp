@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import useBiltekRequest from "../../services/useBiltekRequest";
 import NewReservationModal from "./NewReservationModal";
 import UpdateReservationModel from "./UpdateReservationModel";
-import { parseDateString, dateTimeToString } from "./dateTimeFormater";
 import useAxios from "../../services/useAxios";
 
 export default function Calendar() {
@@ -34,15 +33,10 @@ export default function Calendar() {
     }, []);
 
     const handleOpen = (selectInfo) => {
-        console.log(selectInfo)
         const startTime = new Date(selectInfo.start)
         const endTime = new Date(selectInfo.end)
         setModalStartTime(startTime.toLocaleString('tr-TR'));
         setModalEndTime(endTime.toLocaleString('tr-TR'));
-
-
-        //setModalStartTime(dateTimeToString(new Date(selectInfo.startStr)));
-        //setModalEndTime(dateTimeToString(new Date(selectInfo.endStr)));
 
         getBiltek("clients");
         getBiltek("products");
@@ -77,7 +71,6 @@ export default function Calendar() {
                 <div>Yükleniyor...</div>
             ) : (
                 <>
-                    {console.log(reservations)}
                     <Sidebar
                         weekendsVisible={weekendsVisible}
                         handleWeekendsToggle={handleWeekendsToggle}
@@ -114,22 +107,13 @@ export default function Calendar() {
                             eventClick={handleEventClick}
                             eventsSet={handleEvents} // called after events are initialized/added/changed/removed
                             eventChange={function (info) {
+                                
                                 console.log(info.event._instance.range.start)
                                 console.log(info.event._instance.range.end)
                                 
                                 const startTime = new Date(info.event._instance.range.start)
                                 const endTime = new Date(info.event._instance.range.end)
 
-                                //const localStartTime = new Date(startTime.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' }));
-                                //const localEndTime = new Date(endTime.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' }));
-
-                                const isoStartTime = startTime.toLocaleString('tr-TR');
-                                const isoEndTime = endTime.toLocaleString('tr-TR');
-
-                                //const startTime = new Date(info.event._instance.range.start).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
-                                //const endTime = new Date(info.event._instance.range.end).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
-                                console.log(isoStartTime)
-                                console.log(isoEndTime)
                                 if (
                                     window.confirm(
                                         `'${info.event._def.title}' Randevu güncellenecektir emin misiniz?`
@@ -137,8 +121,8 @@ export default function Calendar() {
                                 ) {
                                     axiosPublic
                                         .put(`/reservations/${info.event._def.publicId}`, {
-                                            startTime: isoStartTime,
-                                            endTime: isoEndTime,
+                                            startTime: startTime.setMinutes(startTime.getMinutes() + startTime.getTimezoneOffset()),
+                                            endTime: endTime.setMinutes(endTime.getMinutes() + endTime.getTimezoneOffset()),
                                         })
                                         .then(() => {
                                             getBiltek("reservations");

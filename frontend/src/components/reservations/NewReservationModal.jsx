@@ -66,7 +66,6 @@ const NewReservationModal = ({
 		axiosPublic
 			.post("/reservations", reservation)
 			.then((response) => {
-				console.log("İstek başarılı:", response.data);
 				const { id, title, start, end, backgroundColor, borderColor } =
 					response.data;
 
