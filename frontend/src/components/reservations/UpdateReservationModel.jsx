@@ -106,8 +106,6 @@ const UpdateReservationModel = ({
 			  aria-describedby="modal-modal-description"
 		 >
 			  <Box sx={modalStyle}>
-					{console.log(clients)}
-					{console.log(products)}
 					{clientsLoading && productsLoading ? (
 						 <div>Yükleniyor</div>
 					) : (

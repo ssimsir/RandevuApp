@@ -10,7 +10,7 @@ export default function ClientsDataGrid() {
 
 	const { clients, loading } = useSelector((state) => state.biltek);
 
-	const rows = clients.data;
+	const rows = clients;
    const { deleteBiltek } = useBiltekRequest();
    const deleteUser = React.useCallback(
       (id) => () => {

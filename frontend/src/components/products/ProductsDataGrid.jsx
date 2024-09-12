@@ -10,7 +10,7 @@ export default function ProductServicesDataGrid() {
 
 	const { products, loading } = useSelector((state) => state.biltek);
 
-	const rows = products.data;
+	const rows = products;
    const { deleteBiltek } = useBiltekRequest();
    // const deleteProductService = React.useCallback(
    //    (id) => () => {
