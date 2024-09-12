@@ -14,7 +14,8 @@ import { object, string } from "yup";
 import { useSelector } from "react-redux";
 import useAxios from "../../services/useAxios";
 import useBiltekRequest from "../../services/useBiltekRequest";
-import {parseDateString} from "./dateTimeFormater"
+import { parseDateString } from "./dateTimeFormater";
+
 const NewReservationModal = ({
 	modalStartTime,
 	modalEndTime,
@@ -23,7 +24,7 @@ const NewReservationModal = ({
 	selectInfo,
 }) => {
 	const { axiosPublic } = useAxios();
-   const {getBiltek} = useBiltekRequest();
+	const { getBiltek } = useBiltekRequest();
 	const { clients, products, clientsLoading, productsLoading } =
 		useSelector((state) => state.biltek);
 	const { userId } = useSelector((state) => state.auth);
@@ -39,12 +40,13 @@ const NewReservationModal = ({
 		boxShadow: 24,
 		p: 4,
 	};
+
 	const reservationFormSchema = object({
 		startTime: string(),
 		endTime: string(),
 		client: string().required("Lütfen Danışan Seçiniz"),
 		serviceType: string().required("Lütfen Hizmet Seçiniz"),
-      aciklama: string(),
+		aciklama: string(),
 	});
 
 	const handleClose = () => {
@@ -52,19 +54,17 @@ const NewReservationModal = ({
 	};
 
 	const handleSave = (values) => {
-
-		const resevation = {
-			//reservationId: 0,
+		const reservation = {
 			userId: userId,
 			description: values.aciklama,
 			startTime: parseDateString(values.startTime),
 			endTime: parseDateString(values.endTime),
 			clientId: values.client,
 			productId: values.serviceType,
-		}
-		console.log(resevation)
+		};
+
 		axiosPublic
-			.post("/reservations", resevation)
+			.post("/reservations", reservation)
 			.then((response) => {
 				console.log("İstek başarılı:", response.data);
 				const { id, title, start, end, backgroundColor, borderColor } =
@@ -80,9 +80,8 @@ const NewReservationModal = ({
 					backgroundColor,
 					borderColor,
 					allDay: false,
-				}
-         );
-            getBiltek("reservations");
+				});
+				getBiltek("reservations");
 				handleClose();
 			})
 			.catch((error) => {
@@ -91,7 +90,6 @@ const NewReservationModal = ({
 	};
 
 	return (
-		
 		<Modal
 			open={open}
 			onClose={handleClose}
@@ -99,23 +97,22 @@ const NewReservationModal = ({
 			aria-describedby="modal-modal-description"
 		>
 			<Box sx={modalStyle}>
-				{clientsLoading && productsLoading ? (
-					<div>Yükleniyor</div>
+				{clientsLoading || productsLoading ? (
+					<div>Yükleniyor...</div>
 				) : (
 					<Formik
 						initialValues={{
-							startTime: "",
-							endTime: "",
+							startTime: modalStartTime,
+							endTime: modalEndTime,
 							client: "",
 							serviceType: "",
-                     		aciklama:"",
+							aciklama: "",
 						}}
 						validationSchema={reservationFormSchema}
 						onSubmit={(values, actions) => {
+							handleSave(values);
 							actions.resetForm();
 							actions.setSubmitting(false);
-							handleSave(values);
-							console.log(values);
 						}}
 					>
 						{({
@@ -138,7 +135,7 @@ const NewReservationModal = ({
 										id="startTime"
 										name="startTime"
 										label="Başlangıç Zamanı"
-										value={(values.startTime = modalStartTime)}
+										value={values.startTime}
 										InputProps={{
 											readOnly: true,
 										}}
@@ -149,7 +146,7 @@ const NewReservationModal = ({
 										id="endTime"
 										name="endTime"
 										label="Bitiş Zamanı"
-										value={(values.endTime = modalEndTime)}
+										value={values.endTime}
 										InputProps={{
 											readOnly: true,
 										}}
@@ -168,7 +165,6 @@ const NewReservationModal = ({
 											onBlur={handleBlur}
 											error={touched.client && !!errors.client}
 										>
-											
 											{clients.map((client) => (
 												<MenuItem
 													key={`client${client._id}`}
@@ -214,12 +210,12 @@ const NewReservationModal = ({
 											</Typography>
 										)}
 									</FormControl>
-                                                        
+
 									<TextField
 										id="aciklama"
 										name="aciklama"
 										label="Açıklama"
-										value={(values.aciklama)}
+										value={values.aciklama}
 										onChange={handleChange}
 										onBlur={handleBlur}
 									/>

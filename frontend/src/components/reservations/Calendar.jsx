@@ -9,224 +9,184 @@ import { useSelector } from "react-redux";
 import useBiltekRequest from "../../services/useBiltekRequest";
 import NewReservationModal from "./NewReservationModal";
 import UpdateReservationModel from "./UpdateReservationModel";
-import {dateTimeToString} from "./dateTimeFormater"
+import { dateTimeToString } from "./dateTimeFormater";
 import useAxios from "../../services/useAxios";
 
 export default function Calendar() {
-	const [weekendsVisible, setWeekendsVisible] = useState(true);
-	const [currentEvents, setCurrentEvents] = useState([]);
+  const [weekendsVisible, setWeekendsVisible] = useState(true);
+  const [currentEvents, setCurrentEvents] = useState([]);
 
-	const [modalStartTime, setModalStartTime] = useState("");
-	const [modalEndTime, setModalEndTime] = useState("");
-	const [newModelopen, setNewModelopen] = useState(false);
-	const [updateModelopen, setUpdateModelopen] = useState(false);
-	const [reservationId, setReservationId] = useState(0);
-	const [selectInfo, setSelectInfo] = useState(null);
+  const [modalStartTime, setModalStartTime] = useState("");
+  const [modalEndTime, setModalEndTime] = useState("");
+  const [newModelopen, setNewModelopen] = useState(false);
+  const [updateModelopen, setUpdateModelopen] = useState(false);
+  const [reservationId, setReservationId] = useState(0);
+  const [selectInfo, setSelectInfo] = useState(null);
 
-	const { reservations, reservationsLoading } = useSelector(
-		(state) => state.biltek
-	);
-	const { getBiltek } = useBiltekRequest();
-	const { axiosPublic } = useAxios();
-	useEffect(() => {
-		getBiltek("reservations");
-	}, []);
+  const { reservations, reservationsLoading } = useSelector(
+    (state) => state.biltek
+  );
+  const { getBiltek } = useBiltekRequest();
+  const { axiosPublic } = useAxios();
 
-	const handleOpen = (selectInfo) => {
-		setModalStartTime(dateTimeToString(new Date(selectInfo.startStr)));
-		setModalEndTime(dateTimeToString(new Date(selectInfo.endStr)));
+  useEffect(() => {
+    getBiltek("reservations");
+  }, []);
 
-		getBiltek("clients");
-		getBiltek("products");
+  const handleOpen = (selectInfo) => {
+    setModalStartTime(dateTimeToString(new Date(selectInfo.startStr)));
+    setModalEndTime(dateTimeToString(new Date(selectInfo.endStr)));
 
-		setSelectInfo(selectInfo);
-		setNewModelopen(true);
-	};
+    getBiltek("clients");
+    getBiltek("products");
 
-	function handleWeekendsToggle() {
-		setWeekendsVisible(!weekendsVisible);
-	}
+    setSelectInfo(selectInfo);
+    setNewModelopen(true);
+  };
 
-	const handleDateSelect = (selectInfo) => {
-		handleOpen(selectInfo);
-	};
+  function handleWeekendsToggle() {
+    setWeekendsVisible(!weekendsVisible);
+  }
 
-	//silme için üzerinde çalışılacak
-	const handleEventClick = (clickInfo) => {
-		getBiltek("clients");
-		getBiltek("products");
-		setUpdateModelopen(true);
-		setReservationId(clickInfo.event._def.publicId);
-		//console.log(clickInfo.event._def.publicId);
-		// if (
-		// 	window.confirm(
-		// 		`Are you sure you want to delete the event '${clickInfo.event.title}'`
-		// 	)
-		// ) {
-		// 	clickInfo.event.remove();
-		// }
-	};
+  const handleDateSelect = (selectInfo) => {
+    handleOpen(selectInfo);
+  };
 
-	function handleEvents(events) {
-		setCurrentEvents(events);
-	}
+  const handleEventClick = (clickInfo) => {
+    getBiltek("clients");
+    getBiltek("products");
+    setUpdateModelopen(true);
+    setReservationId(clickInfo.event._def.publicId);
+  };
 
-	return (
-		<div className="demo-app">
-			{/*console.log(reservations)*/}
-			{/*console.log(reservationsLoading)*/}
-			{reservationsLoading ? (
-				<div>Yükleniyor...</div>
-			) : (
-				<>
-					<Sidebar
-						weekendsVisible={weekendsVisible}
-						handleWeekendsToggle={handleWeekendsToggle}
-						currentEvents={currentEvents}
-					/>
-					<div className="demo-app-main">
-						<FullCalendar
-							//key={modalValues}
-							locale={trLocale}
-							plugins={[
-								dayGridPlugin,
-								timeGridPlugin,
-								interactionPlugin,
-							]}
-							headerToolbar={{
-								left: "prev,next today",
-								center: "title",
-								right: "dayGridMonth,timeGridWeek,timeGridDay",
-							}}
-							slotMinTime={"08:00:00"}
-							slotMaxTime={"19:00:00"}
-							slotDuration={"00:15:00"}
-							slotLabelFormat={{
-								hour: "numeric",
-								minute: "2-digit",
-								meridiem: "long",
-							}}
-							initialView="timeGridWeek"
-							editable={true}
-							selectable={true}
-							selectMirror={true}
-							dayMaxEvents={true}
-							weekends={weekendsVisible}
-							initialEvents={reservations}
-							eventColor="gray"
-							select={handleDateSelect}
-							eventContent={renderEventContent} // custom render function
-							eventClick={handleEventClick}
-							eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-							/* you can update a remote database when these fire:*/
-							eventAdd={function (info) {
-								//const event = info.event;
-								console.log("Etkinlik eklendi:", info.event);
-							}}
-							eventChange={function (info) {
-								console.log("Etkinlik değişti:", info.event);
+  function handleEvents(events) {
+    setCurrentEvents(events);
+  }
 
-								if (
-									window.confirm(
-										`'${info.event._def.title}' Randevu güncellenecektir eminmisiniz`
-									)
-								) {
-									axiosPublic
-										.put(
-											`/reservations/${info.event._def.publicId}`,
-											{
-												startTime: info.event._instance.range.start,
-												endTime: info.event._instance.range.end,
-											}
-										)
-										.then((response) => {
-											getBiltek("reservations");
-										})
-										.catch((error) => {
-											console.error("Hata:", error);
-										});
-								} else {
-									getBiltek("reservations");
-								}
-							}}
-							eventRemove={function (info) {
-								console.log("Etkinlik silindi:", info.event);
-							}}
-						/>
-					</div>
+  return (
+    <div className="demo-app">
+      {reservationsLoading ? (
+        <div>Yükleniyor...</div>
+      ) : (
+        <>
+          <Sidebar
+            weekendsVisible={weekendsVisible}
+            handleWeekendsToggle={handleWeekendsToggle}
+            currentEvents={currentEvents}
+          />
+          <div className="demo-app-main">
+            <FullCalendar
+              locale={trLocale}
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek,timeGridDay",
+              }}
+              slotMinTime={"08:00:00"}
+              slotMaxTime={"19:00:00"}
+              slotDuration={"00:15:00"}
+              slotLabelFormat={{
+                hour: "numeric",
+                minute: "2-digit",
+                meridiem: "long",
+              }}
+              initialView="timeGridWeek"
+              editable={true}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={true}
+              weekends={weekendsVisible}
+              initialEvents={reservations}
+              eventColor="gray"
+              select={handleDateSelect}
+              eventContent={renderEventContent} // custom render function
+              eventClick={handleEventClick}
+              eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+              eventChange={function (info) {
+                const startTime = new Date(
+                  info.event._instance.range.start
+                ).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
+                const endTime = new Date(
+                  info.event._instance.range.end
+                ).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
 
-					<NewReservationModal
-						modalStartTime={modalStartTime}
-						modalEndTime={modalEndTime}
-						open={newModelopen}
-						setOpen={setNewModelopen}
-						selectInfo={selectInfo}
-					/>
-					<UpdateReservationModel
-						open={updateModelopen}
-						setOpen={setUpdateModelopen}
-						reservationId={reservationId}
-						selectInfo={selectInfo}
-					/>
-				</>
-			)}
-		</div>
-	);
+                if (
+                  window.confirm(
+                    `'${info.event._def.title}' Randevu güncellenecektir emin misiniz?`
+                  )
+                ) {
+                  axiosPublic
+                    .put(`/reservations/${info.event._def.publicId}`, {
+                      startTime: startTime,
+                      endTime: endTime,
+                    })
+                    .then(() => {
+                      getBiltek("reservations");
+                    })
+                    .catch((error) => {
+                      console.error("Hata:", error);
+                    });
+                } else {
+                  getBiltek("reservations");
+                }
+              }}
+              eventRemove={function (info) {
+                console.log("Etkinlik silindi:", info.event);
+              }}
+            />
+          </div>
+
+          <NewReservationModal
+            modalStartTime={modalStartTime}
+            modalEndTime={modalEndTime}
+            open={newModelopen}
+            setOpen={setNewModelopen}
+            selectInfo={selectInfo}
+          />
+          <UpdateReservationModel
+            open={updateModelopen}
+            setOpen={setUpdateModelopen}
+            reservationId={reservationId}
+            selectInfo={selectInfo}
+          />
+        </>
+      )}
+    </div>
+  );
 }
 
 function renderEventContent(eventInfo) {
-	return (
-		<>
-			<b>{eventInfo.timeText}</b>
-			<i>{eventInfo.event.title}</i>
-		</>
-	);
+  return (
+    <>
+      <b>{eventInfo.timeText}</b>
+      <i>{eventInfo.event.title}</i>
+    </>
+  );
 }
 
 function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
-	currentEvents = currentEvents.sort((a, b) => {
-		if (a.start < b.start) {
-			return -1;
-		}
-	});
+  currentEvents = currentEvents.sort((a, b) => {
+    if (a.start < b.start) {
+      return -1;
+    }
+  });
 
-	return (
-		<div className="demo-app-sidebar">
-			<div className="demo-app-sidebar-section">
-				<label>
-					<input
-						type="checkbox"
-						checked={weekendsVisible}
-						onChange={handleWeekendsToggle}
-					></input>
-					Haftasonu Göster
-				</label>
-			</div>
-			<div className="demo-app-sidebar-section">
-				<h2>Randevu Sayısı ({currentEvents.length})</h2>
-				{/* <ul>
-					{currentEvents.map((event) => (
-						<SidebarEvent key={event.id} event={event} />
-					))}
-				</ul> */}
-			</div>
-		</div>
-	);
+  return (
+    <div className="demo-app-sidebar">
+      <div className="demo-app-sidebar-section">
+        <label>
+          <input
+            type="checkbox"
+            checked={weekendsVisible}
+            onChange={handleWeekendsToggle}
+          ></input>
+          Haftasonu Göster
+        </label>
+      </div>
+      <div className="demo-app-sidebar-section">
+        <h2>Randevu Sayısı ({currentEvents.length})</h2>
+      </div>
+    </div>
+  );
 }
-
-// function SidebarEvent({ event }) {
-// 	return (
-// 		<li key={event.id}>
-// 			<b>
-// 				{new Date(event.start).toLocaleString("tr-TR")}
-// 				{/* {formatDate(event.start, {
-// 					year: "numeric",
-// 					month: "long",
-// 					day: "numeric",
-// 				})} */}
-// 			</b>
-// 			<br />
-// 			<i>{event.title}</i>
-// 		</li>
-// 	);
-// }
