@@ -76,6 +76,7 @@ const UpdateReservationModel = ({
 		 if (reservationId !== 0) {
 			  getReservationById();
 		 }
+		 console.log(reservationInfo)
 	}, [reservationId]);
 
 	const handleSave = (values) => {
