@@ -29,12 +29,15 @@ module.exports = {
         //    customFilter = { userId: req.user.id };
         //}
         const data = await res.getModelList(Reservation, customFilter, [
-            { path: "productId", select: "color" }
+            { path: "productId", select: "color" },
+            { path: "clientId", select: "name surname" }
+
+            
           ])
 
           const modifiedData = data.map(reservation => ({
             id: reservation._id,  // _id'yi reservationId olarak değiştiriyoruz
-            title: reservation.description,
+            title:  reservation.clientId.name + " " + reservation.clientId.surname, //+ " " + reservation.description,
 
             start: reservation.startTime,
             end: reservation.endTime,
