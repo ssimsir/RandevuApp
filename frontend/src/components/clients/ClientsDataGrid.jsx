@@ -23,7 +23,7 @@ export default function ClientsDataGrid() {
           //setRows((prevRows) => prevRows.filter((row) => row.id !== id));
         });
       },
-      [],
+      [deleteBiltek],
     );
 
    const getRowId = (row) => row._id

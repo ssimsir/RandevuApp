@@ -17,17 +17,17 @@ const style = {
 	p: 4,
 };
 
-const boxStyle = {
-	display: "flex",
-	gap: 2,
-	width: "100%",
-	flex: 1,
-	justifyContent: "space-between",
-};
+// const boxStyle = {
+// 	display: "flex",
+// 	gap: 2,
+// 	width: "100%",
+// 	flex: 1,
+// 	justifyContent: "space-between",
+// };
 
-const textFieldStyle = {
-	width: 325,
-};
+// const textFieldStyle = {
+// 	width: 325,
+// };
 
 export default function ProductsModal({ handleClose, open, info, setInfo }) {
 	const { postBiltek} = useBiltekRequest()

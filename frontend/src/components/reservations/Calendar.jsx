@@ -30,7 +30,7 @@ export default function Calendar() {
 
     useEffect(() => {
         getBiltek("reservations");
-    }, []);
+    }, [getBiltek]);
 
     const handleOpen = (selectInfo) => {
         const startTime = new Date(selectInfo.start)
@@ -172,7 +172,10 @@ function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
     currentEvents = currentEvents.sort((a, b) => {
         if (a.start < b.start) {
             return -1;
+        }  if (a.start > b.start) {
+            return 1; // b, a'dan önce gelir
         }
+        return 0; // a ve b eşittir
     });
 
     return (
