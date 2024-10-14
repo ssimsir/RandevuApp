@@ -11,10 +11,12 @@ const useAuthRequest = () => {
 
    const {axiosPublic} = useAxios()
 
+   const BASE_URL = "/API/v1"
+
    const login = async (userData) => {
       dispatch(fetchStart())
       try {
-         const { data } = await axiosPublic.post("/auth/login",userData)         
+         const { data } = await axiosPublic.post(BASE_URL+"/auth/login",userData)         
          console.log(data.user)
 
          dispatch(loginSuccess(data.user))
@@ -31,7 +33,7 @@ const useAuthRequest = () => {
       dispatch(fetchStart())
       try {
          //const { data } = await axiosPublic.post("/auth/signup",registerData)
-         const { data } = await axiosPublic.post("/users",registerData)
+         const { data } = await axiosPublic.post(BASE_URL+"/users",registerData)
          console.log(data)
          dispatch(loginSuccess(data))
          toastSuccessNotify("Register işlemi başarılı")
@@ -46,7 +48,7 @@ const useAuthRequest = () => {
    const logout = async () => {
       dispatch(fetchStart())
       try {
-         await axiosPublic.post("/auth/refresh", {"token":token})  //kontrol edilecek
+         await axiosPublic.post(BASE_URL+"/auth/refresh", {"token":token})  //kontrol edilecek
          //await axiosPublic.post("/auth/refresh", {"token":token})
          dispatch(logoutSuccess())
       } catch (error) {

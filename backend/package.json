@@ -1,8 +1,8 @@
 {
-  "title": "Stock Management API",
-  "name": "stockapi",
+  "title": "Randevu API",
+  "name": "randevuapi",
   "version": "1.0.0",
-  "description": "Stock Management System",
+  "description": "Randevu Management System",
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
@@ -11,7 +11,7 @@
     "dev": "node swaggerAutogen && nodemon index.js"
   },
   "keywords": [],
-  "author": "CourseName",
+  "author": "Sadık ŞİMŞİR",
   "license": "ISC Licence",
   "dependencies": {
     "dotenv": "^16.3.1",
@@ -21,8 +21,11 @@
     "mongoose": "^7.6.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "netlify-cli": "^17.37.0",
+    "netlify-lambda": "^2.0.16",
     "nodemailer": "^6.9.7",
     "redoc-express": "^2.1.0",
+    "serverless-http": "^3.2.0",
     "swagger-autogen": "^2.23.6",
     "swagger-ui-express": "^5.0.0"
   }

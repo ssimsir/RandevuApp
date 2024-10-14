@@ -56,7 +56,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 
 	const getReservationById = async () => {
 		try {
-			const response = await axiosPublic(`/reservations/${reservationId}`);
+			const response = await axiosPublic(`/API/v1/reservations/${reservationId}`);
 			const { startTime, endTime, clientId, productId, description } =
 				response.data.data;
 			setReservationInfo({
@@ -79,7 +79,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 
 	const handleSave = (values) => {
 		axiosPublic
-			.put(`/reservations/${reservationId}`, {
+			.put(`/API/v1/reservations/${reservationId}`, {
 				description: values.description,
 				clientId: values.clientId,
 				productId: values.productId,

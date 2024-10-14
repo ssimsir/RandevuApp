@@ -30,7 +30,7 @@ export default function Calendar() {
 
     useEffect(() => {
         getBiltek("reservations");
-    }, [getBiltek]);
+    }, []);
 
     const handleOpen = (selectInfo) => {
         const startTime = new Date(selectInfo.start)
@@ -120,7 +120,7 @@ export default function Calendar() {
                                     )
                                 ) {
                                     axiosPublic
-                                        .put(`/reservations/${info.event._def.publicId}`, {
+                                        .put(`/API/v1/reservations/${info.event._def.publicId}`, {
                                             startTime: startTime.setMinutes(startTime.getMinutes() + startTime.getTimezoneOffset()),
                                             endTime: endTime.setMinutes(endTime.getMinutes() + endTime.getTimezoneOffset()),
                                         })

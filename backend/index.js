@@ -34,7 +34,7 @@ app.all("/", (req, res) => {
   });
 });
 
-app.use(require("./src/routes"));
+app.use('/API/v1',require("./src/routes"));
 
 app.use(require("./src/middlewares/errorHandler"));
 

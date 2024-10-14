@@ -64,7 +64,7 @@ const NewReservationModal = ({
 		};
 
 		axiosPublic
-			.post("/reservations", reservation)
+			.post("/API/v1/reservations", reservation)
 			.then((response) => {
 				const { id, title, start, end, backgroundColor, borderColor } =
 					response.data;

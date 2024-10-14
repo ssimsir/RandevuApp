@@ -11,7 +11,7 @@ const useBiltekRequest = () => {
    const getBiltek = async (path) => {
       dispatch(fetchStart({path}))
       try {
-         const response = await axiosPublic(`/${path}`)
+         const response = await axiosPublic(`/API/v1/${path}`)
          const biltekData = response.data.data
          dispatch(getBiltekSuccess({path, biltekData}))
       } catch (error) {
@@ -22,7 +22,7 @@ const useBiltekRequest = () => {
    const postBiltek = async (path, info) => {
       dispatch(fetchStart({path}))
       try {
-        await axiosPublic.post(`/${path}`, info)
+        await axiosPublic.post(`/API/v1/${path}`, info)
         getBiltek(path)
         toastSuccessNotify(`${path} basariliyla eklenmiştir.`)
       } catch (error) {
@@ -37,7 +37,7 @@ const useBiltekRequest = () => {
    const deleteBiltek = async (path, id) => {
       dispatch(fetchStart({path}))
       try {
-         await axiosPublic.delete(`/${path}/${id}`)
+         await axiosPublic.delete(`/API/v1/${path}/${id}`)
          getBiltek(path)     
          toastSuccessNotify(`${path} basariliyla silinmiştir.`)    
       } catch (error) {
