@@ -24,6 +24,10 @@ router.use('/categories', require('./category'))
 router.use('/firms', require('./firm'))
 // product:
 router.use('/products', require('./product'))
+
+// service:
+router.use('/services', require('./service'))
+
 // purchase:
 router.use('/purchases', require('./purchase'))
 // sale:

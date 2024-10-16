@@ -31,6 +31,11 @@ const ServiceSchema = new mongoose.Schema({
         trim: true,
     },
 
+    code: {
+        type: Number,
+        trim: true,
+    },
+
     price: {
         type: Number,
         default: 0
