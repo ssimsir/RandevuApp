@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 
     reservations: [],
-    reservationsLoading: false,
+    reservationPatientlists : [],
+    loading : false,
     error: false,
 };
 
@@ -12,12 +13,17 @@ const reservationSlice = createSlice({
     initialState,
     reducers: {
         fetchStart: (state) => {
-            state.reservationsLoading = true
+            state.loading = true
         },
 
         getReservationSuccess: (state, { payload:{reservationData} }) => {
-            state["reservationsLoading"] = false
+            state["loading"] = false
             state["reservations"] = reservationData
+        },
+
+        getReservationPatientlistsSuccess:(state, { payload:{reservationPatientlistsData} }) => {
+            state["loading"] = false
+            state["reservationPatientlists"] = reservationPatientlistsData
         },
 
         fetchFail: (state) => {
@@ -27,6 +33,6 @@ const reservationSlice = createSlice({
     },
 });
 
-export const { fetchStart, getReservationSuccess, fetchFail } = reservationSlice.actions;
+export const { fetchStart, getReservationSuccess, getReservationPatientlistsSuccess, fetchFail } = reservationSlice.actions;
 
 export default reservationSlice.reducer;

@@ -8,9 +8,9 @@ import useBiltekRequest from "../../services/useBiltekRequest";
 
 export default function PatientDataGrid() {
 
-	const { reservations, loading } = useSelector((state) => state.biltek);
-
-	const rows = reservations;
+	const { reservationPatientlists, loading } = useSelector((state) => state.reservation);
+	
+	const rows = reservationPatientlists;
 	const { deleteBiltek } = useBiltekRequest();
 	const deleteUser = React.useCallback(
 		(id) => () => {
@@ -25,42 +25,39 @@ export default function PatientDataGrid() {
 		},
 		[deleteBiltek],
 	);
-
-	const getRowId = (row) => row._id
+	console.log(reservationPatientlists);
+	const getRowId = (row) => row.reservationId
 	const columns = [
-		// {
-		// 	field: "clientId",
-		// 	hide: true,
-		// },
 		{
-			field: "name",
+			field: "startTime",
+			headerName: "#",
+			flex: 1,
+			valueGetter: (value) => new Date(value).toLocaleTimeString("tr-TR") ,
+		},
+		{
+			field: "patientName",
 			headerName: "Adı",
-			flex: 1.5,
+			flex: 1.2,
 		},
 		{
-			field: "surname",
+			field: "patientSurname",
 			headerName: "Soyadı",
-			flex: 1.5,
+			flex: 1.2,
 		},
 		{
-			field: "idNumber",
-			headerName: "Kimlik No",
+			field: "serviceName",
+			headerName: "Hizmet",
 			flex: 1,
 		},
 		{
-			field: "email",
-			headerName: "Email",
-			flex: 1,
-		},
-		{
-			field: "phoneNumber",
+			field: "patientPhoneNumber",
 			headerName: "Telefon",
 			flex: 1,
 		},
 
 		{
-			field: "companyName",
-			headerName: "Firma Adı",
+			field: "servicePrice",
+			headerName: "Birim Fiyat",
 			flex: 1,
 		},
 		{
@@ -93,7 +90,7 @@ export default function PatientDataGrid() {
 						toolbarDensityStandard: "Medium",
 						toolbarDensityComfortable: "Large",
 					}}
-					getRowId={getRowId}
+					getRowId={getRowId}					
 				/>
 			)}
 		</div>

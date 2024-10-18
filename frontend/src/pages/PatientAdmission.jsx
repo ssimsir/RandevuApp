@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import useBiltekRequest from "../services/useBiltekRequest";
+import useReservationRequest from "../services/useReservationRequest";
 import { Box, Typography } from "@mui/material";
-import ClientsDataGrid from "../components/clients/ClientsDataGrid";
 import { useSelector } from "react-redux";
 import ResponsiveAppBar from "../components/patientAdmission/ResponsiveAppBar";
 import PatientDataGrid from "../components/patientAdmission/PatientDataGrid";
@@ -28,11 +27,11 @@ const PatientAdmission = () => {
 		taxNumber: "",
 		taxOffice: ""
 	})
-	const { getBiltek } = useBiltekRequest();
+	const { getReservationPatientlists } = useReservationRequest();
 
 
 	useEffect(() => {
-		getBiltek("clients");
+		getReservationPatientlists();
 	}, []);
 
 	return (

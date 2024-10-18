@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
 import useAxios from "./useAxios"
-import { fetchFail, fetchStart, getReservationSuccess } from "../features/reservationSlice"
+import { fetchFail, fetchStart, getReservationSuccess, getReservationPatientlistsSuccess } from "../features/reservationSlice"
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify"
 const useReservationRequest = () => {
 
@@ -14,6 +14,17 @@ const useReservationRequest = () => {
          const response = await axiosPublic(`/API/v1/reservations`)
          const reservationData = response.data.data
          dispatch(getReservationSuccess({reservationData}))
+      } catch (error) {
+         dispatch(fetchFail())
+      }
+   }
+
+   const getReservationPatientlists = async () => {
+      dispatch(fetchStart())
+      try {
+         const response = await axiosPublic(`/API/v1/reservationPatientlists`)
+         const reservationPatientlistsData = response.data.data
+         dispatch(getReservationPatientlistsSuccess({reservationPatientlistsData}))
       } catch (error) {
          dispatch(fetchFail())
       }
@@ -45,6 +56,6 @@ const useReservationRequest = () => {
       }
    }
 
-   return {getReservation, postReservation, deleteReservation}
+   return {getReservation, getReservationPatientlists, postReservation, deleteReservation}
 }
 export default useReservationRequest

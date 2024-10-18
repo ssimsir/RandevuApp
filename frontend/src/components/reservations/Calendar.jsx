@@ -23,7 +23,7 @@ export default function Calendar() {
     const [reservationId, setReservationId] = useState(0);
     const [selectInfo, setSelectInfo] = useState(null);
 
-    const { reservations, reservationsLoading } = useSelector((state) => state.reservation);
+    const { reservations, loading } = useSelector((state) => state.reservation);
     const { getBiltek } = useBiltekRequest();
     const { getReservation } = useReservationRequest();
     const { axiosPublic } = useAxios();
@@ -64,11 +64,9 @@ export default function Calendar() {
         setCurrentEvents(events);
     }
 
-    console.log(reservations);
-
     return (
         <div className="demo-app">
-            {reservationsLoading ? (
+            {loading ? (
                 
                 <div>Yükleniyor...</div>
             ) : (
