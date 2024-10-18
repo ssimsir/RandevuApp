@@ -29,7 +29,7 @@ module.exports = {
         //    customFilter = { userId: req.user.id };
         //}
         const data = await res.getModelList(Reservation, customFilter, [
-            { path: "productId", select: "color" },
+            { path: "serviceId", select: "color" },
             { path: "clientId", select: "name surname" }
 
             
@@ -42,8 +42,8 @@ module.exports = {
             start: reservation.startTime,
             end: reservation.endTime,
 
-            backgroundColor : reservation.productId.color,
-            borderColor :  reservation.productId.color,
+            backgroundColor : reservation.serviceId.color,
+            borderColor :  reservation.serviceId.color,
 
         }));
 

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import ServicesModal from "../components/services/ServicesModal";
 import ServicesDataGrid from "../components/services/ServicesDataGrid";
 
-const ServiceServices = () => {
+const Services = () => {
 	
 	const [open, setOpen] = useState(false)
 	const handleOpen = () => setOpen(true)
@@ -36,9 +36,9 @@ const ServiceServices = () => {
 	return (
 		<div>
 			<Typography variant="h4" color={"error"} mb={2}>
-				Ürün ve Hizmetler
+				Hizmetler
 			</Typography>
-			<Button sx={{marginY:"20px"}} variant="contained" onClick={handleOpen}>YENİ ÜRÜN VE HİZMET</Button>
+			<Button sx={{marginY:"20px"}} variant="contained" onClick={handleOpen}>YENİ HİZMET</Button>
 			<ServicesModal
         handleClose={handleClose}
         open={open}
@@ -50,5 +50,5 @@ const ServiceServices = () => {
 	);
 };
 
-export default ServiceServices;
+export default Services;
 

@@ -8,12 +8,6 @@ const { mongoose } = require('../configs/dbConnection')
 
 const ServiceSchema = new mongoose.Schema({
 
-    brandId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Brand',
-        //required: true,
-    },
-
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -44,7 +38,7 @@ const ServiceSchema = new mongoose.Schema({
     color: {
         type: String,
         trim: true,
-    },
+    }
 
 }, {
     collection: 'services',

@@ -19,14 +19,14 @@ import { useEffect, useState } from "react";
 const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 	const { axiosPublic } = useAxios();
 	const { getBiltek } = useBiltekRequest();
-	const { clients, products, clientsLoading, productsLoading } =
+	const { clients, services, clientsLoading, servicesLoading } =
 		useSelector((state) => state.biltek);
 
 	const initialState = {
 		startTime: "",
 		endTime: "",
 		clientId: "",
-		productId: "",
+		serviceId: "",
 		description: "",
 	};
 	const [reservationInfo, setReservationInfo] = useState(initialState);
@@ -46,7 +46,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 		startTime: string(),
 		endTime: string(),
 		clientId: string().required("Lütfen Danışan Seçiniz"),
-		productId: string().required("Lütfen Hizmet Seçiniz"),
+		serviceId: string().required("Lütfen Hizmet Seçiniz"),
 		description: string(),
 	});
 
@@ -57,13 +57,13 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 	const getReservationById = async () => {
 		try {
 			const response = await axiosPublic(`/API/v1/reservations/${reservationId}`);
-			const { startTime, endTime, clientId, productId, description } =
+			const { startTime, endTime, clientId, serviceId, description } =
 				response.data.data;
 			setReservationInfo({
 				startTime,
 				endTime,
 				clientId,
-				productId,
+				serviceId,
 				description,
 			});
 		} catch (error) {
@@ -82,7 +82,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 			.put(`/API/v1/reservations/${reservationId}`, {
 				description: values.description,
 				clientId: values.clientId,
-				productId: values.productId,
+				serviceId: values.serviceId,
 			})
 			.then((response) => {
 				console.log("İstek başarılı:", response.data);
@@ -102,7 +102,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 			aria-describedby="modal-modal-description"
 		>
 			<Box sx={modalStyle}>
-				{clientsLoading || productsLoading ? (
+				{clientsLoading || servicesLoading ? (
 					<div>Yükleniyor</div>
 				) : (
 					<>
@@ -202,28 +202,28 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 												<InputLabel id="serviceTypeLabel">Hizmet Türü</InputLabel>
 												<Select
 													labelId="serviceTypeLabel"
-													id="productId"
-													name="productId"
-													value={values.productId}
+													id="serviceId"
+													name="serviceId"
+													value={values.serviceId}
 													label="Hizmet Türü"
 													onChange={(e) =>
-														setFieldValue("productId", e.target.value)
+														setFieldValue("serviceId", e.target.value)
 													}
 													onBlur={handleBlur}
-													error={touched.productId && !!errors.productId}
+													error={touched.serviceId && !!errors.serviceId}
 												>
-													{products.map((product) => (
+													{services.map((service) => (
 														<MenuItem
-															key={`serviceType${product._id}`}
-															value={product._id}
+															key={`serviceType${service._id}`}
+															value={service._id}
 														>
-															{product.name}
+															{service.name}
 														</MenuItem>
 													))}
 												</Select>
-												{touched.productId && errors.productId && (
+												{touched.serviceId && errors.serviceId && (
 													<Typography color="error">
-														{errors.productId}
+														{errors.serviceId}
 													</Typography>
 												)}
 											</FormControl>

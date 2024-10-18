@@ -36,9 +36,9 @@ const ReservationSchema = new mongoose.Schema({
         required: true,
     },
 
-    productId: {
+    serviceId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'Service',
         required: true,
     },
 

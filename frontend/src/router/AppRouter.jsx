@@ -7,7 +7,8 @@ import Dashboard from "../pages/Dashboard";
 import Reservations from "../pages/Reservations";
 import Home from "../pages/Home";
 import Clients from "../pages/Clients";
-import Products from "../pages/Products";
+import Services from "../pages/Services";
+import PatientAdmission from "../pages/PatientAdmission";
 
 const AppRouter = () => {
 	return (
@@ -20,7 +21,8 @@ const AppRouter = () => {
 						<Route index element={<Home />} />
 						<Route path="clients" element={<Clients />} />
 						<Route path="reservations" element={<Reservations />} />
-						<Route path="products" element={<Products />} />
+						<Route path="services" element={<Services />} />
+						<Route path="patientAdmission" element={<PatientAdmission />} />
 					</Route>
 				</Route>
 			</Routes>

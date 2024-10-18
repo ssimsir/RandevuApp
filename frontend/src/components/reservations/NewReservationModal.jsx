@@ -25,7 +25,7 @@ const NewReservationModal = ({
 }) => {
 	const { axiosPublic } = useAxios();
 	const { getBiltek } = useBiltekRequest();
-	const { clients, products, clientsLoading, productsLoading } =
+	const { clients, services, clientsLoading, servicesLoading } =
 		useSelector((state) => state.biltek);
 	const { userId } = useSelector((state) => state.auth);
 
@@ -60,7 +60,7 @@ const NewReservationModal = ({
 			startTime: parseDateString(values.startTime),
 			endTime: parseDateString(values.endTime),
 			clientId: values.client,
-			productId: values.serviceType,
+			serviceId: values.serviceType,
 		};
 
 		axiosPublic
@@ -96,7 +96,7 @@ const NewReservationModal = ({
 			aria-describedby="modal-modal-description"
 		>
 			<Box sx={modalStyle}>
-				{clientsLoading || productsLoading ? (
+				{clientsLoading || servicesLoading ? (
 					<div>Yükleniyor...</div>
 				) : (
 					<Formik
@@ -194,12 +194,12 @@ const NewReservationModal = ({
 												touched.serviceType && !!errors.serviceType
 											}
 										>
-											{products.map((product) => (
+											{services.map((service) => (
 												<MenuItem
-													key={`serviceType${product._id}`}
-													value={product._id}
+													key={`serviceType${service._id}`}
+													value={service._id}
 												>
-													{product.name}
+													{service.name}
 												</MenuItem>
 											))}
 										</Select>
