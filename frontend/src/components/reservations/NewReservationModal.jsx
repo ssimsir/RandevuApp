@@ -13,7 +13,7 @@ import { Form, Formik } from "formik";
 import { object, string } from "yup";
 import { useSelector } from "react-redux";
 import useAxios from "../../services/useAxios";
-import useBiltekRequest from "../../services/useBiltekRequest";
+import useReservationRequest from "../../services/useReservationRequest";
 import { parseDateString } from "./dateTimeFormater";
 
 const NewReservationModal = ({
@@ -24,7 +24,7 @@ const NewReservationModal = ({
 	selectInfo,
 }) => {
 	const { axiosPublic } = useAxios();
-	const { getBiltek } = useBiltekRequest();
+	const { getReservation } = useReservationRequest();
 	const { clients, services, clientsLoading, servicesLoading } =
 		useSelector((state) => state.biltek);
 	const { userId } = useSelector((state) => state.auth);
@@ -80,7 +80,7 @@ const NewReservationModal = ({
 					borderColor,
 					allDay: false,
 				});
-				getBiltek("reservations");
+				getReservation();
 				handleClose();
 			})
 			.catch((error) => {

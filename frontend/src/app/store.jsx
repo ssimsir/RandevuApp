@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/authSlice";
 import biltekReducer from "../features/biltekSlice";
+import reservationReducer from "../features/reservationSlice";
 
 import {
   persistStore,
@@ -26,6 +27,7 @@ const store = configureStore({
   reducer: {
     auth: persistedReducer,
     biltek:biltekReducer,
+    reservation:reservationReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

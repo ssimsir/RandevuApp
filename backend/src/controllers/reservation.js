@@ -56,6 +56,55 @@ module.exports = {
 
     },
 
+    reservationPatientlist: async (req, res) => {
+        /*
+            #swagger.tags = ["Reservation"]
+            #swagger.summary = "List Reservation"
+            #swagger.description = `
+                You can use <u>filter[] & search[] & sort[] & page & limit</u> queries with endpoint.
+                <ul> Examples:
+                    <li>URL/?<b>filter[field1]=value1&filter[field2]=value2</b></li>
+                    <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>
+                    <li>URL/?<b>sort[field1]=asc&sort[field2]=desc</b></li>
+                    <li>URL/?<b>limit=10&page=1</b></li>
+                </ul>
+            `
+        */
+
+        //yetkisine göre revervasyonlara erişim ver
+        let customFilter = {};
+        //if (!req.user.isAdmin && !req.user.isStaff) {
+        //    customFilter = { userId: req.user.id };
+        //}
+        const data = await res.getModelList(Reservation, customFilter, [
+            { path: "serviceId", select: "name price color" },
+            { path: "clientId", select: "name surname idNumber email phoneNumber" }            
+          ])
+
+          const modifiedData = data.map(reservation => ({
+            reservationId: reservation._id,  // _id'yi reservationId olarak değiştiriyoruz
+            description: reservation.description,
+            startTime: reservation.startTime,
+            endTime: reservation.endTime,
+            patientName : reservation.clientId.name,
+            patientSurname : reservation.clientId.surname,
+            patientIdNumber : reservation.clientId.idNumber,
+            patientEmail : reservation.clientId.email,
+            patientPhoneNumber : reservation.clientId.phoneNumber,
+            serviceName : reservation.serviceId.name,
+            servicePrice : reservation.serviceId.price,
+            serviceColor : reservation.serviceId.color
+        }));
+
+
+        res.status(200).send({
+            error: false,
+            details: await res.getModelListDetails(Reservation),
+            data:modifiedData
+        })
+
+    },
+
     create: async (req, res) => {
         /*
             #swagger.tags = ["Reservation"]

@@ -7,6 +7,7 @@ import trLocale from "@fullcalendar/core/locales/tr";
 import "./calendar.css";
 import { useSelector } from "react-redux";
 import useBiltekRequest from "../../services/useBiltekRequest";
+import useReservationRequest from "../../services/useReservationRequest";
 import NewReservationModal from "./NewReservationModal";
 import UpdateReservationModel from "./UpdateReservationModel";
 import useAxios from "../../services/useAxios";
@@ -22,14 +23,13 @@ export default function Calendar() {
     const [reservationId, setReservationId] = useState(0);
     const [selectInfo, setSelectInfo] = useState(null);
 
-    const { reservations, reservationsLoading } = useSelector(
-        (state) => state.biltek
-    );
+    const { reservations, reservationsLoading } = useSelector((state) => state.reservation);
     const { getBiltek } = useBiltekRequest();
+    const { getReservation } = useReservationRequest();
     const { axiosPublic } = useAxios();
 
     useEffect(() => {
-        getBiltek("reservations");
+        getReservation();
     }, []);
 
     const handleOpen = (selectInfo) => {
@@ -63,6 +63,8 @@ export default function Calendar() {
     function handleEvents(events) {
         setCurrentEvents(events);
     }
+
+    console.log(reservations);
 
     return (
         <div className="demo-app">
@@ -125,13 +127,13 @@ export default function Calendar() {
                                             endTime: endTime.setMinutes(endTime.getMinutes() + endTime.getTimezoneOffset()),
                                         })
                                         .then(() => {
-                                            getBiltek("reservations");
+                                            getReservation();
                                         })
                                         .catch((error) => {
                                             console.error("Hata:", error);
                                         });
                                 } else {
-                                    getBiltek("reservations");
+                                    getReservation();
                                 }
                             }}
                             eventRemove={function (info) {

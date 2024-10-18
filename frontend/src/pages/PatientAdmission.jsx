@@ -38,7 +38,7 @@ const PatientAdmission = () => {
 	return (
 		<div>
 			<Typography variant="h4" color={"error"} mb={2}>
-				Müşteriler
+				Hasta Kabul
 			</Typography>
 
 			<ResponsiveAppBar/>

@@ -35,6 +35,8 @@ router.use('/sales', require('./sale'))
 
 // reservation:
 router.use('/reservations', require('./reservation'))
+router.use('/reservationPatientlists', require('./reservationPatientlist'))
+
 
 // client:
 router.use('/clients', require('./client'))

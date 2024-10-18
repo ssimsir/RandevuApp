@@ -42,7 +42,7 @@ const ClientSchema = new mongoose.Schema({
         index: true
     },
 
-    phophoneNumber: {
+    phoneNumber: {
         type: String,
         trim: true,
     },

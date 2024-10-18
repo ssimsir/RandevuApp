@@ -8,9 +8,9 @@ import useBiltekRequest from "../../services/useBiltekRequest";
 
 export default function PatientDataGrid() {
 
-	const { clients, loading } = useSelector((state) => state.biltek);
+	const { reservations, loading } = useSelector((state) => state.biltek);
 
-	const rows = clients;
+	const rows = reservations;
 	const { deleteBiltek } = useBiltekRequest();
 	const deleteUser = React.useCallback(
 		(id) => () => {
@@ -94,9 +94,6 @@ export default function PatientDataGrid() {
 						toolbarDensityComfortable: "Large",
 					}}
 					getRowId={getRowId}
-					slots={{
-						toolbar: GridToolbar,
-					}}
 				/>
 			)}
 		</div>
