@@ -4,6 +4,7 @@ import { Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import ResponsiveAppBar from "../components/patientAdmission/ResponsiveAppBar";
 import PatientDataGrid from "../components/patientAdmission/PatientDataGrid";
+import PatientDataProcess from "../components/patientAdmission/PatientDataProcess";
 
 const PatientAdmission = () => {
 
@@ -43,7 +44,7 @@ const PatientAdmission = () => {
 			<ResponsiveAppBar/>
 			<Box sx={{ display: "flex", gap: 2, marginTop:2 }} >
 				<PatientDataGrid sx={{ width: "200px" }} />
-				<PatientDataGrid sx={{ width: "500px" }} />
+				<PatientDataProcess sx={{ width: "500px" }} />
 			</Box>
 
 		</div>

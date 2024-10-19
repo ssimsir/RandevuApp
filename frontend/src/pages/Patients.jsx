@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import useBiltekRequest from "../services/useBiltekRequest";
 import { Button, Typography } from "@mui/material";
-import ClientsDataGrid from "../components/clients/ClientsDataGrid";
-import ClientModal from "../components/clients/ClientsModal";
+import PatientsDataGrid from "../components/patients/PatientsDataGrid";
+import PatientModal from "../components/patients/PatientsModal";
 import { useSelector } from "react-redux";
 
-const Clients = () => {
+const Patients = () => {
 	
 	const [open, setOpen] = useState(false)
 	const handleOpen = () => setOpen(true)
@@ -14,7 +14,7 @@ const Clients = () => {
 	 }
 	 const {userId} = useSelector(state=> state.auth)
 	const [info, setInfo] = useState({
-		clientId: 0,
+		patientId: 0,
 		userId: userId,
 		name: "",
 		surname: "",
@@ -31,7 +31,7 @@ const Clients = () => {
 
 
 	useEffect(() => {
-		getBiltek("clients");
+		getBiltek("patients");
 	}, []);
 
 	return (
@@ -40,15 +40,15 @@ const Clients = () => {
 				Müşteriler
 			</Typography>
 			<Button sx={{marginY:"20px"}} variant="contained" onClick={handleOpen}>YENİ MÜŞTERİ</Button>
-			<ClientModal
+			<PatientModal
         handleClose={handleClose}
         open={open}
         info={info}
         setInfo={setInfo}
       />
-			<ClientsDataGrid />
+			<PatientsDataGrid />
 		</div>
 	);
 };
 
-export default Clients;
+export default Patients;

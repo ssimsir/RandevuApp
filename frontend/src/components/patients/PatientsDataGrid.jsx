@@ -6,18 +6,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import useBiltekRequest from "../../services/useBiltekRequest";
 
 
-export default function ClientsDataGrid() {
+export default function PatientsDataGrid() {
 
-	const { clients, loading } = useSelector((state) => state.biltek);
+	const { patients, loading } = useSelector((state) => state.biltek);
 
-	const rows = clients;
+	const rows = patients;
 	const { deleteBiltek } = useBiltekRequest();
 	const deleteUser = React.useCallback(
 		(id) => () => {
 			setTimeout(() => {
 
 				if (window.confirm("Müşteri silinecektir eminmisiniz")) {
-					deleteBiltek("clients", id)
+					deleteBiltek("patients", id)
 				}
 				console.log("delete", id)
 				//setRows((prevRows) => prevRows.filter((row) => row.id !== id));
@@ -29,7 +29,7 @@ export default function ClientsDataGrid() {
 	const getRowId = (row) => row._id
 	const columns = [
 		// {
-		// 	field: "clientId",
+		// 	field: "patientId",
 		// 	hide: true,
 		// },
 		{

@@ -25,7 +25,7 @@ const NewReservationModal = ({
 }) => {
 	const { axiosPublic } = useAxios();
 	const { getReservation } = useReservationRequest();
-	const { clients, services, clientsLoading, servicesLoading } =
+	const { patients, services, patientsLoading, servicesLoading } =
 		useSelector((state) => state.biltek);
 	const { userId } = useSelector((state) => state.auth);
 
@@ -44,7 +44,7 @@ const NewReservationModal = ({
 	const reservationFormSchema = object({
 		startTime: string(),
 		endTime: string(),
-		client: string().required("Lütfen Danışan Seçiniz"),
+		patient: string().required("Lütfen Danışan Seçiniz"),
 		serviceType: string().required("Lütfen Hizmet Seçiniz"),
 		aciklama: string(),
 	});
@@ -59,7 +59,7 @@ const NewReservationModal = ({
 			description: values.aciklama,
 			startTime: parseDateString(values.startTime),
 			endTime: parseDateString(values.endTime),
-			clientId: values.client,
+			patientId: values.patient,
 			serviceId: values.serviceType,
 		};
 
@@ -96,14 +96,14 @@ const NewReservationModal = ({
 			aria-describedby="modal-modal-description"
 		>
 			<Box sx={modalStyle}>
-				{clientsLoading || servicesLoading ? (
+				{patientsLoading || servicesLoading ? (
 					<div>Yükleniyor...</div>
 				) : (
 					<Formik
 						initialValues={{
 							startTime: modalStartTime,
 							endTime: modalEndTime,
-							client: "",
+							patient: "",
 							serviceType: "",
 							aciklama: "",
 						}}
@@ -153,27 +153,27 @@ const NewReservationModal = ({
 										onBlur={handleBlur}
 									/>
 									<FormControl fullWidth>
-										<InputLabel id="clientLabel">Danışan</InputLabel>
+										<InputLabel id="patientLabel">Danışan</InputLabel>
 										<Select
-											labelId="clientLabel"
-											id="client"
-											name="client"
-											value={values.client}
+											labelId="patientLabel"
+											id="patient"
+											name="patient"
+											value={values.patient}
 											label="Danışan"
 											onChange={handleChange}
 											onBlur={handleBlur}
-											error={touched.client && !!errors.client}
+											error={touched.patient && !!errors.patient}
 										>
-											{clients.map((client) => (
+											{patients.map((patient) => (
 												<MenuItem
-													key={`client${client._id}`}
-													value={client._id}
-												>{`${client.name} ${client.surname}`}</MenuItem>
+													key={`patient${patient._id}`}
+													value={patient._id}
+												>{`${patient.name} ${patient.surname}`}</MenuItem>
 											))}
 										</Select>
-										{touched.client && errors.client && (
+										{touched.patient && errors.patient && (
 											<Typography color="error">
-												{errors.client}
+												{errors.patient}
 											</Typography>
 										)}
 									</FormControl>

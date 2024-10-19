@@ -20,8 +20,8 @@ const MenuListComp = () => {
 		},
 		{
 			iconName: <PersonIcon />,
-			title: "Müşteriler",
-			path: "/app/biltek/clients",
+			title: "Hasta Kayıt",
+			path: "/app/biltek/patients",
 		},
 		{
 			iconName: <PersonIcon />,

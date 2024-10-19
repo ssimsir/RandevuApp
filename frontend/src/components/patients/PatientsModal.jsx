@@ -29,7 +29,7 @@ const textFieldStyle = {
 	width: 325,
 };
 
-export default function ClientModal({ handleClose, open, info, setInfo }) {
+export default function PatientModal({ handleClose, open, info, setInfo }) {
 	const { postBiltek} = useBiltekRequest()
 	
 	const handleChange = (e) => {
@@ -42,10 +42,10 @@ export default function ClientModal({ handleClose, open, info, setInfo }) {
 		console.log(info)
 		if (info?._id) {
 			//? put isteginin
-			postBiltek("clients", info)
+			postBiltek("patients", info)
 		} else {
 			//? post firma işlemi
-			postBiltek("clients", info)
+			postBiltek("patients", info)
 		}
 
 		//? modal ı kapıtıyoruz

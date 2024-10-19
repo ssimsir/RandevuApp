@@ -10,7 +10,7 @@ const { mongoose } = require('../configs/dbConnection')
 /* ------------------------------------------------------- */
 // Firm Model:
 
-const ClientSchema = new mongoose.Schema({
+const PatientSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -74,9 +74,9 @@ const ClientSchema = new mongoose.Schema({
 
 
 }, {
-    collection: 'client',
+    collection: 'patient',
     timestamps: true
 })
 
 /* ------------------------------------------------------- */
-module.exports = mongoose.model('Client', ClientSchema)
+module.exports = mongoose.model('Patient', PatientSchema)

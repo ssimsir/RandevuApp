@@ -38,7 +38,7 @@ export default function Calendar() {
         setModalStartTime(startTime.toLocaleString('tr-TR'));
         setModalEndTime(endTime.toLocaleString('tr-TR'));
 
-        getBiltek("clients");
+        getBiltek("patients");
         getBiltek("services");
 
         setSelectInfo(selectInfo);
@@ -54,7 +54,7 @@ export default function Calendar() {
     };
 
     const handleEventClick = (clickInfo) => {
-        getBiltek("clients");
+        getBiltek("patients");
         getBiltek("services");
         setUpdateModelopen(true);
         setReservationId(clickInfo.event._def.publicId);

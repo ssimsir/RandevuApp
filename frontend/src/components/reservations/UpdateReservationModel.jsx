@@ -19,13 +19,13 @@ import { useEffect, useState } from "react";
 const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 	const { axiosPublic } = useAxios();
 	const { getBiltek } = useBiltekRequest();
-	const { clients, services, clientsLoading, servicesLoading } =
+	const { patients, services, patientsLoading, servicesLoading } =
 		useSelector((state) => state.biltek);
 
 	const initialState = {
 		startTime: "",
 		endTime: "",
-		clientId: "",
+		patientId: "",
 		serviceId: "",
 		description: "",
 	};
@@ -45,7 +45,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 	const reservationFormSchema = object({
 		startTime: string(),
 		endTime: string(),
-		clientId: string().required("Lütfen Danışan Seçiniz"),
+		patientId: string().required("Lütfen Danışan Seçiniz"),
 		serviceId: string().required("Lütfen Hizmet Seçiniz"),
 		description: string(),
 	});
@@ -57,12 +57,12 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 	const getReservationById = async () => {
 		try {
 			const response = await axiosPublic(`/API/v1/reservations/${reservationId}`);
-			const { startTime, endTime, clientId, serviceId, description } =
+			const { startTime, endTime, patientId, serviceId, description } =
 				response.data.data;
 			setReservationInfo({
 				startTime,
 				endTime,
-				clientId,
+				patientId,
 				serviceId,
 				description,
 			});
@@ -81,7 +81,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 		axiosPublic
 			.put(`/API/v1/reservations/${reservationId}`, {
 				description: values.description,
-				clientId: values.clientId,
+				patientId: values.patientId,
 				serviceId: values.serviceId,
 			})
 			.then((response) => {
@@ -102,7 +102,7 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 			aria-describedby="modal-modal-description"
 		>
 			<Box sx={modalStyle}>
-				{clientsLoading || servicesLoading ? (
+				{patientsLoading || servicesLoading ? (
 					<div>Yükleniyor</div>
 				) : (
 					<>
@@ -171,29 +171,29 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 												onBlur={handleBlur}
 											/>
 											<FormControl fullWidth>
-												<InputLabel id="clientLabel">Danışan</InputLabel>
+												<InputLabel id="patientLabel">Danışan</InputLabel>
 												<Select
-													labelId="clientLabel"
-													id="clientId"
-													name="clientId"
-													value={values.clientId}
+													labelId="patientLabel"
+													id="patientId"
+													name="patientId"
+													value={values.patientId}
 													label="Danışan"
 													onChange={(e) =>
-														setFieldValue("clientId", e.target.value)
+														setFieldValue("patientId", e.target.value)
 													}
 													onBlur={handleBlur}
-													error={touched.clientId && !!errors.clientId}
+													error={touched.patientId && !!errors.patientId}
 												>
-													{clients.map((client) => (
+													{patients.map((patient) => (
 														<MenuItem
-															key={`client${client._id}`}
-															value={client._id}
-														>{`${client.name} ${client.surname}`}</MenuItem>
+															key={`patient${patient._id}`}
+															value={patient._id}
+														>{`${patient.name} ${patient.surname}`}</MenuItem>
 													))}
 												</Select>
-												{touched.clientId && errors.clientId && (
+												{touched.patientId && errors.patientId && (
 													<Typography color="error">
-														{errors.clientId}
+														{errors.patientId}
 													</Typography>
 												)}
 											</FormControl>

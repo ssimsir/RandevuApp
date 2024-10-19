@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	clients: [],
-   clientsLoading:false,
+	patients: [],
+   patientsLoading:false,
 	products: [],
    productsLoding:false,
 	reservations: [],

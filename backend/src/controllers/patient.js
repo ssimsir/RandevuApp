@@ -4,14 +4,14 @@
 ------------------------------------------------------- */
 // Category Controllers:
 
-const Client = require('../models/client')
+const Patient = require('../models/patient')
 
 module.exports = {
 
     list: async (req, res) => {
         /*
-            #swagger.tags = ["Client"]
-            #swagger.summary = "List Client"
+            #swagger.tags = ["Patient"]
+            #swagger.summary = "List Patient"
             #swagger.description = `
                 You can use <u>filter[] & search[] & sort[] & page & limit</u> queries with endpoint.
                 <ul> Examples:
@@ -23,11 +23,11 @@ module.exports = {
             `
         */
 
-        const data = await res.getModelList(Client)
+        const data = await res.getModelList(Patient)
 
         res.status(200).send({
             error: false,
-            details: await res.getModelListDetails(Client),
+            details: await res.getModelListDetails(Patient),
             data
         })
 
@@ -35,18 +35,18 @@ module.exports = {
 
     create: async (req, res) => {
         /*
-            #swagger.tags = ["Client"]
-            #swagger.summary = "Create Client"
+            #swagger.tags = ["Patient"]
+            #swagger.summary = "Create Patient"
             #swagger.parameters['body'] = {
                 in: 'body',
                 required: true,
                 schema: {
-                    $ref: "#/definitions/Client"
+                    $ref: "#/definitions/Patient"
                 }
             }
         */
 
-        const data = await Client.create(req.body)
+        const data = await Patient.create(req.body)
 
         res.status(201).send({
             error: false,
@@ -56,11 +56,11 @@ module.exports = {
 
     read: async (req, res) => {
         /*
-            #swagger.tags = ["Client"]
-            #swagger.summary = "Get Single Client"
+            #swagger.tags = ["Patient"]
+            #swagger.summary = "Get Single Patient"
         */
 
-        const data = await Client.findOne({ _id: req.params.id })
+        const data = await Patient.findOne({ _id: req.params.id })
 
         res.status(200).send({
             error: false,
@@ -71,34 +71,34 @@ module.exports = {
 
     update: async (req, res) => {
         /*
-            #swagger.tags = ["Client"]
-            #swagger.summary = "Update Client"
+            #swagger.tags = ["Patient"]
+            #swagger.summary = "Update Patient"
             #swagger.parameters['body'] = {
                 in: 'body',
                 required: true,
                 schema: {
-                    $ref: "#/definitions/Client"
+                    $ref: "#/definitions/Patient"
                 }
             }
         */
 
-        const data = await Client.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
+        const data = await Patient.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
 
         res.status(202).send({
             error: false,
             data,
-            new: await Client.findOne({ _id: req.params.id })
+            new: await Patient.findOne({ _id: req.params.id })
         })
 
     },
 
     delete: async (req, res) => {
         /*
-            #swagger.tags = ["Client"]
-            #swagger.summary = "Delete Client"
+            #swagger.tags = ["Patient"]
+            #swagger.summary = "Delete Patient"
         */
 
-        const data = await Client.deleteOne({ _id: req.params.id })
+        const data = await Patient.deleteOne({ _id: req.params.id })
     
         res.status(data.deletedCount ? 204 : 404).send({
             error: !data.deletedCount,

@@ -30,14 +30,14 @@ module.exports = {
         //}
         const data = await res.getModelList(Reservation, customFilter, [
             { path: "serviceId", select: "color" },
-            { path: "clientId", select: "name surname" }
+            { path: "patientId", select: "name surname" }
 
             
           ])
 
           const modifiedData = data.map(reservation => ({
             id: reservation._id,  // _id'yi reservationId olarak değiştiriyoruz
-            title:  reservation.clientId.name + " " + reservation.clientId.surname, //+ " " + reservation.description,
+            title:  reservation.patientId.name + " " + reservation.patientId.surname, //+ " " + reservation.description,
 
             start: reservation.startTime,
             end: reservation.endTime,
@@ -78,7 +78,7 @@ module.exports = {
         //}
         const data = await res.getModelList(Reservation, customFilter, [
             { path: "serviceId", select: "name price color" },
-            { path: "clientId", select: "name surname idNumber email phoneNumber" }            
+            { path: "patientId", select: "name surname idNumber email phoneNumber" }            
           ])
 
           const modifiedData = data.map(reservation => ({
@@ -86,11 +86,11 @@ module.exports = {
             description: reservation.description,
             startTime: reservation.startTime,
             endTime: reservation.endTime,
-            patientName : reservation.clientId.name,
-            patientSurname : reservation.clientId.surname,
-            patientIdNumber : reservation.clientId.idNumber,
-            patientEmail : reservation.clientId.email,
-            patientPhoneNumber : reservation.clientId.phoneNumber,
+            patientName : reservation.patientId.name,
+            patientSurname : reservation.patientId.surname,
+            patientIdNumber : reservation.patientId.idNumber,
+            patientEmail : reservation.patientId.email,
+            patientPhoneNumber : reservation.patientId.phoneNumber,
             serviceName : reservation.serviceId.name,
             servicePrice : reservation.serviceId.price,
             serviceColor : reservation.serviceId.color

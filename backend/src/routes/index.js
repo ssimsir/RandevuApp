@@ -38,8 +38,8 @@ router.use('/reservations', require('./reservation'))
 router.use('/reservationPatientlists', require('./reservationPatientlist'))
 
 
-// client:
-router.use('/clients', require('./client'))
+// patient:
+router.use('/patients', require('./patient'))
 
 // document:
 router.use('/documents', require('./document'))

@@ -30,9 +30,9 @@ const ReservationSchema = new mongoose.Schema({
         default: 0
     },
 
-    clientId: {
+    patientId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Client',
+        ref: 'Patient',
         required: true,
     },
 

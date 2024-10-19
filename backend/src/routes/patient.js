@@ -4,24 +4,24 @@
 ------------------------------------------------------- */
 const router = require('express').Router()
 /* ------------------------------------------------------- */
-// routes/client:
+// routes/patient:
 
-const client = require('../controllers/client')
+const patient = require('../controllers/patient')
 const permissions = require('../middlewares/permissions')
 
-// URL: /clients
+// URL: /patients
 
 //router.use(permissions.isAdmin)
 
 router.route('/')
-    .get(client.list)
-    .post(client.create)
+    .get(patient.list)
+    .post(patient.create)
 
 router.route('/:id')
-    .get(client.read)
-    .put(client.update)
-    .patch(client.update)
-    .delete(client.delete)
+    .get(patient.read)
+    .put(patient.update)
+    .patch(patient.update)
+    .delete(patient.delete)
 
 /* ------------------------------------------------------- */
 // Exports:

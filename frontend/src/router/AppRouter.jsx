@@ -6,7 +6,7 @@ import PrivateRouter from "./PrivateRouter";
 import Dashboard from "../pages/Dashboard";
 import Reservations from "../pages/Reservations";
 import Home from "../pages/Home";
-import Clients from "../pages/Clients";
+import Patients from "../pages/Patients";
 import Services from "../pages/Services";
 import PatientAdmission from "../pages/PatientAdmission";
 
@@ -19,7 +19,7 @@ const AppRouter = () => {
 				<Route path="app/biltek" element={<PrivateRouter />}>
 					<Route path="" element={<Dashboard />}>
 						<Route index element={<Home />} />
-						<Route path="clients" element={<Clients />} />
+						<Route path="patients" element={<Patients />} />
 						<Route path="reservations" element={<Reservations />} />
 						<Route path="services" element={<Services />} />
 						<Route path="patientAdmission" element={<PatientAdmission />} />
