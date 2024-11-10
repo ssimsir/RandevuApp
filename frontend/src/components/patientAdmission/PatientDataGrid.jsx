@@ -1,15 +1,16 @@
 import * as React from "react";
 import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
-import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 import useBiltekRequest from "../../services/useBiltekRequest";
+import NewPatientAdmissionModal from "./NewPatientAdmissionModal";
 
 
 export default function PatientDataGrid() {
 
 	const { reservationPatientlists, loading } = useSelector((state) => state.reservation);
-	
+
 	const rows = reservationPatientlists;
 	const { deleteBiltek } = useBiltekRequest();
 	const deleteUser = React.useCallback(
@@ -25,14 +26,15 @@ export default function PatientDataGrid() {
 		},
 		[deleteBiltek],
 	);
-	console.log(reservationPatientlists);
+
+
 	const getRowId = (row) => row.reservationId
 	const columns = [
 		{
 			field: "startTime",
 			headerName: "#",
 			flex: 1,
-			valueGetter: (value) => new Date(value).toLocaleTimeString("tr-TR") ,
+			valueGetter: (value) => new Date(value).toLocaleTimeString("tr-TR"),
 		},
 		{
 			field: "patientName",
@@ -66,14 +68,37 @@ export default function PatientDataGrid() {
 			flex: 0.7,
 			getActions: (params) => [
 				<GridActionsCellItem
-					icon={<DeleteIcon />}
-					label="Delete"
-					onClick={deleteUser(params.id)}
+					icon={<AddIcon />}
+					label="Add"
+					onClick={() => {
+						newPatientAdmissionModalOpenHandle()
+						//setQuotationDetailInfo({ id, productId, productGroup, product, brand, color, cablePackage, delivery, quantity, discount })
+					}}
 				/>,
 
 			],
 		},
 	];
+
+	const [selectionModel, setSelectionModel] = React.useState([]);
+	function CustomSelectionToolbar() {
+		return null; // Boş bir bileşen döndür
+	}
+
+
+	const [newPatientAdmissionModalOpen, setNewPatientAdmissionModalOpen] = React.useState(false);
+
+	const newPatientAdmissionModalOpenHandle = () => {
+		setNewPatientAdmissionModalOpen(true);
+		//getArmer("firms");
+	}
+
+
+
+	const newPatientAdmissionModalCloseHandle = () => {
+		setNewPatientAdmissionModalOpen(false);
+		//setQuotationDetailInfo(quotationDetailInfoInitialState);
+	}
 
 	return (
 		<div style={{ height: 400, width: "100%" }}>
@@ -90,9 +115,24 @@ export default function PatientDataGrid() {
 						toolbarDensityStandard: "Medium",
 						toolbarDensityComfortable: "Large",
 					}}
-					getRowId={getRowId}					
+					disableSelectionOnClick
+					hideFooterSelectedRowCount
+					onRowClick={(params) => {
+						setSelectionModel([params.id]);
+						console.log('Seçilen Satır ID:', params.id);
+					}}
+					selectionModel={selectionModel}
+					getRowId={getRowId}
 				/>
 			)}
+
+			<NewPatientAdmissionModal
+				newPatientAdmissionModalOpen={newPatientAdmissionModalOpen}
+				newPatientAdmissionModalCloseHandle={newPatientAdmissionModalCloseHandle}
+				setNewPatientAdmissionModalOpen={setNewPatientAdmissionModalOpen}
+			//quotationDetailInfo={quotationDetailInfo}
+			//setQuotationDetailInfo={setQuotationDetailInfo}
+			/>
 		</div>
 	);
 }
