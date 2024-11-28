@@ -86,6 +86,7 @@ module.exports = {
             description: reservation.description,
             startTime: reservation.startTime,
             endTime: reservation.endTime,
+            patientId : reservation.patientId._id,
             patientName : reservation.patientId.name,
             patientSurname : reservation.patientId.surname,
             patientIdNumber : reservation.patientId.idNumber,

@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import useBiltekRequest from "../../services/useBiltekRequest";
 import NewPatientAdmissionModal from "./NewPatientAdmissionModal";
+import { useState } from "react";
 
 
 export default function PatientDataGrid() {
@@ -12,23 +13,17 @@ export default function PatientDataGrid() {
 	const { reservationPatientlists, loading } = useSelector((state) => state.reservation);
 
 	const rows = reservationPatientlists;
-	const { deleteBiltek } = useBiltekRequest();
-	const deleteUser = React.useCallback(
-		(id) => () => {
-			setTimeout(() => {
 
-				if (window.confirm("Müşteri silinecektir eminmisiniz")) {
-					deleteBiltek("clients", id)
-				}
-				console.log("delete", id)
-				//setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-			});
-		},
-		[deleteBiltek],
-	);
-
+	console.log(reservationPatientlists);
 
 	const getRowId = (row) => row.reservationId
+
+	const newPatientAdmissionInitialState = {
+		patientId: "",
+		examinationType: ""
+	}
+	const [newPatientAdmissionData, setNewPatientAdmissionData] = useState (newPatientAdmissionInitialState);
+	
 	const columns = [
 		{
 			field: "startTime",
@@ -71,8 +66,9 @@ export default function PatientDataGrid() {
 					icon={<AddIcon />}
 					label="Add"
 					onClick={() => {
-						newPatientAdmissionModalOpenHandle()
-						//setQuotationDetailInfo({ id, productId, productGroup, product, brand, color, cablePackage, delivery, quantity, discount })
+						newPatientAdmissionModalOpenHandle()	
+						console.log(params.row.patientId);				
+						setNewPatientAdmissionData({ patientId:params.row.patientId})
 					}}
 				/>,
 
@@ -85,15 +81,11 @@ export default function PatientDataGrid() {
 		return null; // Boş bir bileşen döndür
 	}
 
-
-	const [newPatientAdmissionModalOpen, setNewPatientAdmissionModalOpen] = React.useState(false);
+	const [newPatientAdmissionModalOpen, setNewPatientAdmissionModalOpen] = useState(false);
 
 	const newPatientAdmissionModalOpenHandle = () => {
 		setNewPatientAdmissionModalOpen(true);
-		//getArmer("firms");
 	}
-
-
 
 	const newPatientAdmissionModalCloseHandle = () => {
 		setNewPatientAdmissionModalOpen(false);
@@ -129,9 +121,9 @@ export default function PatientDataGrid() {
 			<NewPatientAdmissionModal
 				newPatientAdmissionModalOpen={newPatientAdmissionModalOpen}
 				newPatientAdmissionModalCloseHandle={newPatientAdmissionModalCloseHandle}
-				setNewPatientAdmissionModalOpen={setNewPatientAdmissionModalOpen}
-			//quotationDetailInfo={quotationDetailInfo}
-			//setQuotationDetailInfo={setQuotationDetailInfo}
+				//setNewPatientAdmissionModalOpen={setNewPatientAdmissionModalOpen}
+				//quotationDetailInfo={quotationDetailInfo}
+				//setQuotationDetailInfo={setQuotationDetailInfo}
 			/>
 		</div>
 	);
