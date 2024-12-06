@@ -6,11 +6,14 @@ import AddIcon from '@mui/icons-material/Add';
 import useBiltekRequest from "../../services/useBiltekRequest";
 import NewPatientAdmissionModal from "./NewPatientAdmissionModal";
 import { useState } from "react";
+import useFetchPatientAdmission from "../../services/useFetchPatientAdmission";
 
 
 export default function PatientDataGrid() {
 
 	const { reservationPatientlists, loading } = useSelector((state) => state.reservation);
+
+	const { patientAdmissions, fetchPatientAdmission, loading:patientAdmissionLoading} = useFetchPatientAdmission();
 
 	const rows = reservationPatientlists;
 
@@ -66,6 +69,7 @@ export default function PatientDataGrid() {
 					icon={<AddIcon />}
 					label="Add"
 					onClick={() => {
+						fetchPatientAdmission()
 						newPatientAdmissionModalOpenHandle()	
 						console.log(params.row.patientId);				
 						setNewPatientAdmissionData({ patientId:params.row.patientId})
@@ -111,7 +115,9 @@ export default function PatientDataGrid() {
 					hideFooterSelectedRowCount
 					onRowClick={(params) => {
 						setSelectionModel([params.id]);
+
 						console.log('Seçilen Satır ID:', params.id);
+						console.log('patientId', params.row.patientId);
 					}}
 					selectionModel={selectionModel}
 					getRowId={getRowId}

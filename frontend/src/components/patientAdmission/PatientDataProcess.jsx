@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 
@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import useAxios from "../../services/useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../../helper/ToastNotify";
 import PatientDataProcessDetailTable from "./PatientDataProcessDetailTable";
+import useFetchPatientAdmission from "../../services/useFetchPatientAdmission";
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -54,41 +55,30 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
     borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotationInfo, quotationModalData, setQuotationModalData }) => {
+const PatientDataProcess = ({ patientId, setPatientId, setQuotationModalOpen, setQuotationInfo, patientAdmissionModalData, setQuotationModalData }) => {
+    
+    useEffect(() => {
+        // Bileşen yüklendiğinde ürün gruplarını çek
+        //fetchPatientAdmission();
+    }, []);
 
-    //const quotations = quotationsData.data
+    console.log(patientAdmissions);
 
-    const quotations = [
-        {
-            _id : "deneme data1",
-            firmName : "deneme data1",
-            description : "deneme data1",
-            firmAuthorizedPersonnel : "deneme data1",
-            firmFhone : "deneme data1",
-            firmEmail : "deneme data1",
-            projectName : "deneme data1",
-            quotationNumber : "deneme data1",
-            quotationDate : "deneme data1",
-            representativeGSM : "deneme data1",
-            quotationSpecialist : "deneme data1",
-        },
-        {
-            _id : "deneme data2",
-            firmName : "deneme data2",
-            description : "deneme data2",
-            firmAuthorizedPersonnel : "deneme data2",
-            firmFhone : "deneme data2",
-            firmEmail : "deneme data2",
-            projectName : "deneme data2",
-            quotationNumber : "deneme data2",
-            quotationDate : "deneme data2",
-            representativeGSM : "deneme data2",
-            quotationSpecialist : "deneme data2",
+    if (patientAdmissions.length === 0 ) {
+        patientAdmissions[0] = {
+            "_id": "",
+            "userId": "66e2c3a6f19283216a784693",
+            "patientId": "671428c67690e0de6f4c3b3b",
+            "admissionDate": "2024-10-09T05:15:00.000Z",
+            "admissionNumber": 1,
+            "examinationType": "general",
+            "createdAt": "2024-11-29T20:58:10.714Z",
+            "updatedAt": "2024-11-29T20:58:10.714Z",
+            "__v": 0
         }
-    ]
-    //const { quotations} = useSelector((state) => state.armer);
+    }
 
-    const [expanded, setExpanded] = useState(quotations[0]._id);
+    const [expanded, setExpanded] = useState(patientAdmissions[0]._id);
 
     const handleChange = (panel) => (event, newExpanded) => {
         if (event.target.tagName !== 'BUTTON' && event.target.tagName !== 'path' && event.target.tagName !== 'svg') {
@@ -98,26 +88,15 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
 
     const { axiosToken } = useAxios()
 
-    const deleteQuotation = async (quotationId) => {
-        try {
-            const { data: productType } = await axiosToken.delete(`/API/v1/quotations/${quotationId}`);
-            toastSuccessNotify(`İşlem Başarılı.`);
-            setQuotationModalData(quotationModalData + 1)
-        } catch (error) {
-            console.error(error);
-            toastErrorNotify(`Hata Oluştu`);
-        }
-    }
-
     return (
         <>
             <Box sx={{ width: "100%", mt: 2 }}>
                 {
-                    quotations.map((quotation) => (
+                    patientAdmissions.map((patientAdmission) => (
                         <Accordion
-                            key={quotation._id + "-key"}
-                            expanded={expanded === quotation._id}
-                            onChange={handleChange(quotation._id)}
+                            key={patientAdmission._id + "-key"}
+                            expanded={expanded === patientAdmission._id}
+                            onChange={handleChange(patientAdmission._id)}
                             sx={{
                                 width: "100%", // Tam genişlik
                                 // [theme.breakpoints.down('sm')]: {
@@ -126,13 +105,13 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
                             }}
                         >
                             <AccordionSummary
-                                aria-controls={quotation._id + "-content"}
-                                id={quotation._id + "-header"}
+                                aria-controls={patientAdmission._id + "-content"}
+                                id={patientAdmission._id + "-header"}
                             >
                                 <Box sx={{ width: "100%", mt: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "end" }}>
                                     <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: 'wrap' }}>
                                         <Typography variant="h4" sx={{ fontSize: { xs: '1.2rem', sm: '2rem', md: '2.5rem' } }}>
-                                            {quotation.firmName}
+                                            {patientAdmission.firmName}
                                         </Typography>
 
                                         <Box sx={{ width: { xs: "100%", sm: "auto" }, display: "flex", justifyContent: "start", alignItems: "center", mt: { xs: 2, sm: 0 } }}>
@@ -140,7 +119,7 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
                                                 sx={{ marginRight: '10px', width: { xs: '100%', sm: 'auto' } }}
                                                 variant="contained"
                                                 startIcon={<EditIcon />}
-                                                onClick={() => { setQuotationModalOpen(true); setQuotationInfo(quotation) }}
+                                                onClick={() => { setQuotationModalOpen(true); setQuotationInfo(patientAdmission) }}
                                             >
                                                 GÜNCELLE
                                             </Button>
@@ -148,7 +127,7 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
                                                 sx={{ width: { xs: '100%', sm: 'auto' } }}
                                                 variant="contained"
                                                 startIcon={<DeleteIcon />}
-                                                onClick={() => { window.confirm(`${quotation.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(quotation._id) }}
+                                                //onClick={() => { window.confirm(`${patientAdmission.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(patientAdmission._id) }}
                                             >
                                                 SİL
                                             </Button>
@@ -157,10 +136,10 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
                                     <Box sx={{ width: "100%", mt: 1, display: "flex", justifyContent: "space-between" }}>
                                         <Grid container spacing={1}>
                                             <Grid item xs={12} sm={12} md={6} lg={4}>
-                                                <QuotationFirmInfoTable quotation={quotation} />
+                                                <QuotationFirmInfoTable patientAdmission={patientAdmission} />
                                             </Grid>
                                             <Grid item xs={12} sm={12} md={6} lg={4}>
-                                                <QuotationInfoTable quotation={quotation} />
+                                                <QuotationInfoTable patientAdmission={patientAdmission} />
                                             </Grid>
                                             <Grid item xs={12} sm={12} md={6} lg={4}>
                                                 <TextField
@@ -178,7 +157,7 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
                                                     rows={5}
                                                     variant="outlined"
                                                     name="description"
-                                                    value={quotation.description}
+                                                    value={patientAdmission.description}
                                                     disabled
                                                 />
                                             </Grid>
@@ -187,7 +166,7 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
                                 </Box>
                             </AccordionSummary>
                             <AccordionDetails>
-                                {expanded === quotation._id && <PatientDataProcessDetailTable quotationId={quotation._id} />}
+                                {expanded === patientAdmission._id && <PatientDataProcessDetailTable patientAdmissionId={patientAdmission._id} />}
                             </AccordionDetails>
                         </Accordion>
                     ))
@@ -196,8 +175,6 @@ const PatientDataProcess = ({ quotationsData, setQuotationModalOpen, setQuotatio
         </>
     );
 };
-
-// Separate component for displaying quotation details
 
 const StyledTable = styled(Table)(({ theme }) => ({
     width: '100%',
@@ -215,48 +192,48 @@ const StyledTable = styled(Table)(({ theme }) => ({
     },
 }));
 
-const QuotationFirmInfoTable = ({ quotation }) => (
+const QuotationFirmInfoTable = ({ patientAdmission }) => (
     <StyledTable>
         <TableBody>
             <TableRow>
                 <TableCell>FİRMA YETKİLİSİ</TableCell>
-                <TableCell>{quotation.firmAuthorizedPersonnel}</TableCell>
+                <TableCell>{patientAdmission.firmAuthorizedPersonnel}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell>TELEFON/FAKS</TableCell>
-                <TableCell>{quotation.firmFhone}</TableCell>
+                <TableCell>{patientAdmission.firmFhone}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell>E-MAIL</TableCell>
-                <TableCell>{quotation.firmEmail}</TableCell>
+                <TableCell>{patientAdmission.firmEmail}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell>PROJE ADI</TableCell>
-                <TableCell>{quotation.projectName}</TableCell>
+                <TableCell>{patientAdmission.projectName}</TableCell>
             </TableRow>
         </TableBody>
     </StyledTable>
 );
 
 
-const QuotationInfoTable = ({ quotation }) => (
+const QuotationInfoTable = ({ patientAdmission }) => (
     <StyledTable>
         <TableBody>
             <TableRow>
                 <TableCell>TEKLİF NO</TableCell>
-                <TableCell>{quotation.quotationNumber}</TableCell>
+                <TableCell>{patientAdmission.patientAdmissionNumber}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell>TEKLİF TARİHİ</TableCell>
-                <TableCell>{new Date(quotation.quotationDate).toLocaleDateString("tr-TR")}</TableCell>
+                <TableCell>{new Date(patientAdmission.patientAdmissionDate).toLocaleDateString("tr-TR")}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell>TEMSİLCİ GSM</TableCell>
-                <TableCell>{quotation.representativeGSM}</TableCell>
+                <TableCell>{patientAdmission.representativeGSM}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell>TEKLİFİ HAZIRLAYAN</TableCell>
-                <TableCell>{quotation.quotationSpecialist}</TableCell>
+                <TableCell>{patientAdmission.patientAdmissionSpecialist}</TableCell>
             </TableRow>
         </TableBody>
     </StyledTable>

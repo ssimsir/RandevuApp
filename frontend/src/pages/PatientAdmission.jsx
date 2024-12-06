@@ -8,29 +8,10 @@ import PatientDataProcess from "../components/patientAdmission/PatientDataProces
 
 const PatientAdmission = () => {
 
-	const [open, setOpen] = useState(false)
-	const handleOpen = () => setOpen(true)
-	const handleClose = () => {
-		setOpen(false)
-	}
-	const { userId } = useSelector(state => state.auth)
-	const [info, setInfo] = useState({
-		clientId: 0,
-		userId: userId,
-		name: "",
-		surname: "",
-		idNumber: "",
-		email: "",
-		phoneNumber: "",
-		companyName: "",
-		iban: "",
-		address: "",
-		taxNumber: "",
-		taxOffice: ""
-	})
+
 	const { getReservationPatientlists } = useReservationRequest();
 
-
+	const [patientId, setPatientId] = useState("")
 	useEffect(() => {
 		getReservationPatientlists();
 	}, []);
@@ -41,10 +22,10 @@ const PatientAdmission = () => {
 				Hasta Kabul
 			</Typography>
 
-			<ResponsiveAppBar/>
+			{/* <ResponsiveAppBar/> */}
 			<Box sx={{ display: "flex", gap: 2, marginTop:2 }} >
-				<PatientDataGrid sx={{ width: "200px" }} />
-				<PatientDataProcess sx={{ width: "500px" }} />
+				{/* <PatientDataGrid sx={{ width: "200px" }} /> */}
+				{/* <PatientDataProcess sx={{ width: "500px" }} patientId={patientId} setPatientId = {setPatientId} /> */}
 			</Box>
 
 		</div>
