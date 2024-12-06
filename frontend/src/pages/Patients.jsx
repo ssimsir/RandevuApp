@@ -4,6 +4,7 @@ import { Button, Typography } from "@mui/material";
 import PatientsSearch from "../components/patients/patientSearch/PatientsSearch";
 import PatientModal from "../components/patients/PatientsModal";
 import { useSelector } from "react-redux";
+import PatientAdmissions from "../components/patients/patientAdmissions/PatientAdmissions";
 
 const Patients = () => {
 
@@ -46,7 +47,7 @@ const Patients = () => {
 				info={info}
 				setInfo={setInfo}
 			/>
-			<PatientsSearch />
+			<PatientsSearch />					
 		</div>
 	);
 };

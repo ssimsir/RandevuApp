@@ -79,7 +79,7 @@ export default function PatientsDataGrid({patients, patientLoading}) {
 	];
 
 	return (
-		<div style={{ height: 400, width: "100%" }}>
+		<div style={{ height: 'calc(55vh - 100px)', width: '100%' }}>
 			{patientLoading ? (
 				<div>Yükleniyor</div>
 			) : (
