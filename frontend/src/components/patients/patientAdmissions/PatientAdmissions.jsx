@@ -9,12 +9,16 @@ import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-//import QuotationDetailTable from "./QuotationDetailTable";
-import { Box, Table, TableBody, TableCell, TableRow, TextField, Button, Grid } from "@mui/material";
-import { useSelector } from "react-redux";
-
+import { Box, Table, TableBody, TableCell, TableRow, TextField, Button, Grid, Card, CardContent, Avatar } from "@mui/material";
 import useAxios from "../../../services/useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../../../helper/ToastNotify";
+
+import AddIcon from "@mui/icons-material/Add";
+
+import { blue, pink, grey } from "@mui/material/colors";
+import avatarMale from "../../../assets/avatarMale.png";
+import avatarFemale from "../../../assets/avatarFemale.png";
+
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -53,10 +57,14 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
     borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const PatientAdmissions = ({ quotationsData, setQuotationModalOpen, setQuotationInfo, quotationModalData, setQuotationModalData }) => {
+const PatientAdmissions = ({ selectedPatient, quotationsData, setQuotationModalOpen, setQuotationInfo, quotationModalData, setQuotationModalData }) => {
 
     //const quotations = quotationsData.data
     //const { quotations} = useSelector((state) => state.armer);
+    console.log(selectedPatient);
+    const patient = selectedPatient
+    const genderColor = patient.gender === "Male" ? blue[50] : pink[50];
+    const genderAvatar = patient.gender === "Male" ? avatarMale : avatarFemale;
 
     const quotations = [
         {
@@ -121,48 +129,6 @@ const PatientAdmissions = ({ quotationsData, setQuotationModalOpen, setQuotation
             "createdAt": "2024-10-10T00:23:11.324Z",
             "updatedAt": "2024-10-10T00:23:11.324Z",
             "__v": 0
-        },
-        {
-            "_id": "67071e6feb2699ad591b7c40",
-            "userId": "66f1646afacc487b86a2d84e",
-            "quotationId": {
-                "_id": "67071e38eb2699ad591b7bc3",
-                "quotationDate": "2024-10-02T00:00:00.000Z"
-            },
-            "productId": "66f17e5c283729f1c009d987",
-            "brand": "HES KABLO",
-            "color": "SARI",
-            "cablePackage": "PAKET",
-            "delivery": "KARGO",
-            "unitPrice": 175,
-            "quantity": 50,
-            "discount": 0,
-            "discountedPrice": 175,
-            "amount": 8750,
-            "createdAt": "2024-10-10T00:23:11.324Z",
-            "updatedAt": "2024-10-10T00:23:11.324Z",
-            "__v": 0
-        },
-        {
-            "_id": "67071e6feb2699ad591b7c40",
-            "userId": "66f1646afacc487b86a2d84e",
-            "quotationId": {
-                "_id": "67071e38eb2699ad591b7bc3",
-                "quotationDate": "2024-10-02T00:00:00.000Z"
-            },
-            "productId": "66f17e5c283729f1c009d987",
-            "brand": "HES KABLO",
-            "color": "SARI",
-            "cablePackage": "PAKET",
-            "delivery": "KARGO",
-            "unitPrice": 175,
-            "quantity": 50,
-            "discount": 0,
-            "discountedPrice": 175,
-            "amount": 8750,
-            "createdAt": "2024-10-10T00:23:11.324Z",
-            "updatedAt": "2024-10-10T00:23:11.324Z",
-            "__v": 0
         }
     ]
 
@@ -191,15 +157,68 @@ const PatientAdmissions = ({ quotationsData, setQuotationModalOpen, setQuotation
 
     return (
         <>
-            <Box sx={{ 
-                width: "100%", 
-                mt: 2,
-                maxHeight:"60vh",
+
+            <Box sx={{
+                width: "100%",
+                //mt: 2,
+                maxHeight: "60vh",
                 overflowY: 'auto', // Yalnızca dikey kaydırma
                 border: '1px solid #ccc',
                 padding: '10px',
-                borderRadius: '8px'        
+                borderRadius: '8px'
             }}>
+
+
+
+
+
+
+                <Box sx={{ padding: 1 }}>
+
+                <Button
+                                sx={{ width: { xs: '100%', sm: 'auto' }, marginBottom:"10px" }}
+                                variant="contained"
+                                startIcon={<AddIcon />}
+                            // onClick={() => { window.confirm(`${quotation.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(quotation._id) }}
+                            >
+                                Yeni Kayıt Oluştur
+                            </Button>
+
+                    <Card sx={{ minWidth: 500, boxShadow: 3, backgroundColor: genderColor, color: grey[800] }}>
+                        <CardContent>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <Avatar
+                                    sx={{ width: 120, height: 120, border: `2px solid ${genderColor}`, marginRight: 2 }}
+                                    src={genderAvatar}
+                                    alt="Patient Avatar"
+                                />
+                                <Box sx={{ width: "100%", display: "flex", alignItems: "start", justifyContent: "space-between", marginRight:"100px" }}>
+                                    <Box>
+                                        <Typography >
+                                            <strong>Adı:</strong> {patient.name}
+                                        </Typography>
+                                        <Typography>
+                                            <strong>Soyadı:</strong> {patient.surname}
+                                        </Typography>
+                                        <Typography>
+                                            <strong>Kimlik No:</strong> {patient.idNumber}
+                                        </Typography>
+                                    </Box>
+                                    <Box>
+                                        <Typography>
+                                            <strong>Email:</strong> {patient.email}
+                                        </Typography>
+                                        <Typography>
+                                            <strong>Telefon:</strong> {patient.phoneNumber}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </CardContent>
+                    </Card>
+
+                </Box>
+
                 {
                     quotations.map((quotation) => (
                         <Accordion
@@ -258,7 +277,7 @@ const PatientAdmissions = ({ quotationsData, setQuotationModalOpen, setQuotation
                                                         minWidth: '100px',
                                                         maxWidth: '300px',
                                                         marginLeft: '10px',
-                                                        overflow:"hidden"
+                                                        overflow: "hidden"
                                                         //marginRight: '15px',
                                                     }}
                                                     label=""

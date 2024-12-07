@@ -3,7 +3,6 @@ import { Container, TextField, Typography, Box, Button, Grid } from '@mui/materi
 import PatientsDataGrid from './PatientsDataGrid';
 import useFetchPatient from "../../../services/useFetchPatient";
 import PatientAdmissions from '../patientAdmissions/PatientAdmissions';
-import AddIcon from "@mui/icons-material/Add";
 
 const PatientsSearch = () => {
 
@@ -27,6 +26,8 @@ const PatientsSearch = () => {
     const handleSearch = () => {
         fetchPatient({ name: nameFilter.toLowerCase(), idNumber: idFilter });
     };
+    
+    const [selectedPatient, setSelectedPatient] = useState({}); // Seçilen hasta bilgisini tutuyoruz
 
     return (
         <Container maxWidth="xxl" style={{ marginTop: '5px', border: "1px solid black" }}>
@@ -66,18 +67,11 @@ const PatientsSearch = () => {
                             </Button>
                         </Box>
                     </Box>
-                    <PatientsDataGrid patients={patients} patientLoadin={patientLoading} />
+                    <PatientsDataGrid patients={patients} patientLoadin={patientLoading} setSelectedPatient={setSelectedPatient} />
                 </Grid>
                 <Grid item xs={7}>
-                    <Button
-                        sx={{ marginRight: '10px', width: { xs: '100%', sm: 'auto' } }}
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        // onClick={() => { setQuotationModalOpen(true); setQuotationInfo(quotation) }}
-                    >
-                        Yeni Kayıt Oluştur
-                    </Button>
-                    <PatientAdmissions />
+
+                    <PatientAdmissions selectedPatient={selectedPatient} />
                 </Grid>
             </Grid>
         </Container>
