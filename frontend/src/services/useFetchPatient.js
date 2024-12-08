@@ -6,6 +6,7 @@ const useFetchPatient = () => {
 
     // State'leri tanımlıyoruz
     const [patients, setPatients] = useState([]);
+    const [patientByPatientId, setPatientByPatientId] = useState([]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -31,6 +32,21 @@ const useFetchPatient = () => {
             setLoading(false); // Yükleme durumu bitiyor
         }
     };
+
+    const fetchPatientByPatientId = async (patientId) => {
+        setLoading(true);
+        setError(null); // Önceki hatayı sıfırlıyoruz
+        try {
+            const { data } = await axiosToken(`/API/v1/patients/${patientId}`);
+            setPatientByPatientId(data.data); // Gelen verileri state'e kaydediyoruz
+        } catch (error) {
+            setError('Hata oluşru.');
+            console.error(error);
+        } finally {
+            setLoading(false); // Yükleme durumu bitiyor
+        }
+    };
+
 
 
     const saveProduct = async (product) => {
@@ -81,6 +97,8 @@ const useFetchPatient = () => {
     return {
         patients,
         fetchPatient,
+        patientByPatientId,
+        fetchPatientByPatientId,
         loading,
         error,
         saveProduct,

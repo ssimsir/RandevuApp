@@ -6,7 +6,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import useBiltekRequest from "../../../services/useBiltekRequest";
 
 
-export default function PatientsDataGrid({patients, patientLoading, setSelectedPatient}) {
+export default function PatientsDataGrid({ patients, patientLoading, fetchPatientByPatientId }) {
+
 
 	// const { patients, loading } = useSelector((state) => state.biltek);
 
@@ -78,10 +79,10 @@ export default function PatientsDataGrid({patients, patientLoading, setSelectedP
 		},
 	];
 
-  // Satıra tıklama işlevi
-  const handleRowClick = (param) => {
-	setSelectedPatient(param.row)
-  };
+	// Satıra tıklama işlevi
+	const handleRowClick = (param) => {
+		fetchPatientByPatientId(param.row._id)
+	};
 
 	return (
 		<div style={{ height: 'calc(55vh - 100px)', width: '100%' }}>
@@ -102,7 +103,7 @@ export default function PatientsDataGrid({patients, patientLoading, setSelectedP
 					slots={{
 						toolbar: GridToolbar,
 					}}
-					onRowClick={handleRowClick} // Tıklama olayını buraya ekliyoruz
+					onRowClick={handleRowClick} // Tıklama olayını buraya ekliyoruz				
 				/>
 			)}
 		</div>

@@ -3,7 +3,7 @@
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
 // Category Controllers:
-
+const mongoose = require('mongoose');
 const Patient = require('../models/patient')
 
 module.exports = {
@@ -59,8 +59,17 @@ module.exports = {
             #swagger.tags = ["Patient"]
             #swagger.summary = "Get Single Patient"
         */
-
-        const data = await Patient.findOne({ _id: req.params.id })
+        const data = await Patient.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } }, // ObjectId dönüşümü
+            {
+                $lookup: {
+                    from: 'patientAdmission', // İlişkili koleksiyon adı
+                    localField: '_id',        // Patient._id
+                    foreignField: 'patientId', // PatientAdmission.patientId
+                    as: 'patientAdmissionId'          // Dönen veri için bir ad
+                }
+            }
+        ]);
 
         res.status(200).send({
             error: false,

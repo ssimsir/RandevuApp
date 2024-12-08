@@ -8,19 +8,25 @@ import useAxios from "../../../services/useAxios"
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
-const NewPatientAdmissionModal = ({ newPatientAdmissionModalOpen, newPatientAdmissionModalHandleClose , patientAdmissionInfo, setPatientAdmissionInfo }) => {
+const NewPatientAdmissionModal = ({ 
+    newPatientAdmissionModalOpen, 
+    newPatientAdmissionModalHandleClose , 
+    patientAdmissionInfo, 
+    setPatientAdmissionInfo,
+    fetchPatientByPatientId
+}) => {
 
     const { axiosToken } = useAxios()
 
     const handleChange = (e) => {
-        console.log(patientAdmissionInfo);
         setPatientAdmissionInfo({ ...patientAdmissionInfo, [e.target.name]: e.target.value });
+        console.log(patientAdmissionInfo);
     };
 
     const savePatientAdmission = async (info) => {
-        console.log(info);
         try {
             const { data: productType } = await axiosToken.post(`/API/v1/patientAdmissions`, info);
+            fetchPatientByPatientId(info.patientId)
         } catch (error) {
             console.error(error);
         }
@@ -51,8 +57,9 @@ const NewPatientAdmissionModal = ({ newPatientAdmissionModalOpen, newPatientAdmi
     const closeHandle = () => {
         newPatientAdmissionModalHandleClose();
         setPatientAdmissionInfo({
-            ...patientAdmissionInfo,
-            admissionDate : new Date().toISOString().split("T")[0],
+            userId:"",
+            patientId :"",
+            admissionDate : "",
             doctorId :""
         })
     }
@@ -86,7 +93,7 @@ const NewPatientAdmissionModal = ({ newPatientAdmissionModalOpen, newPatientAdmi
                                 labelId="doctorLabel"
                                 label="Doktor"
                                 name="doctorId"
-                                value={patientAdmissionInfo.doctorId}
+                                value={patientAdmissionInfo?.doctorId}
                                 onChange={handleChange}
                                 required
                             >
@@ -103,7 +110,7 @@ const NewPatientAdmissionModal = ({ newPatientAdmissionModalOpen, newPatientAdmi
                             name="admissionDate"
                             type="date"
                             variant="outlined"
-                            value={patientAdmissionInfo.admissionDate}
+                            value={patientAdmissionInfo?.admissionDate}
                             onChange={handleChange}
                             required
                             InputLabelProps={{

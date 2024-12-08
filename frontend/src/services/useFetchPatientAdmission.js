@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import useAxios from './useAxios';
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
+import useFetchPatient from './useFetchPatient';
 const useFetchPatientAdmission = () => {
     const { axiosToken } = useAxios();
 
     // State'leri tanımlıyoruz
     const [patientAdmissions, setPatientAdmissions] = useState([]);
+    const [patientAdmissionsByPatientId, setPatientAdmissionsByPatientId] = useState([]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -17,6 +19,21 @@ const useFetchPatientAdmission = () => {
         try {
             const { data } = await axiosToken(`/API/v1/patientAdmissions`);
             setPatientAdmissions(data.data); // Gelen verileri state'e kaydediyoruz
+
+        } catch (error) {
+            setError('Hata oluşru.');
+            console.error(error);
+        } finally {
+            setLoading(false); // Yükleme durumu bitiyor
+        }
+    };
+
+    const fetchPatientAdmissionByPatientId = async (patientId) => {
+        setLoading(true);
+        setError(null); // Önceki hatayı sıfırlıyoruz
+        try {
+            const { data } = await axiosToken(`/API/v1/patientAdmissions/?filter[patientId]=${patientId}`);
+            setPatientAdmissionsByPatientId(data.data); // Gelen verileri state'e kaydediyoruz
         } catch (error) {
             setError('Hata oluşru.');
             console.error(error);
@@ -26,13 +43,13 @@ const useFetchPatientAdmission = () => {
     };
 
 
-    const saveProduct = async (product) => {
+    const savePatientAdmission = async (patientAdmissions) => {
         setLoading(true);
         setError(null);
         try {
-            const { data } = await axiosToken.post('/API/v1/products', product);
+            const { data } = await axiosToken.post('/API/v1/patientAdmissions', patientAdmissions);
+            console.log(data);
             toastSuccessNotify(`${data.data.group} ${data.data.type} Eklenmiştir`)
-
         } catch (error) {
             toastErrorNotify("Hata Oluştu")
         }finally {
@@ -74,9 +91,12 @@ const useFetchPatientAdmission = () => {
     return {
         patientAdmissions,
         fetchPatientAdmission,
+        patientAdmissionsByPatientId,
+        fetchPatientAdmissionByPatientId,
+        savePatientAdmission,
         loading,
         error,
-        saveProduct,
+        
         updateProduct,
         deleteProduct
     };

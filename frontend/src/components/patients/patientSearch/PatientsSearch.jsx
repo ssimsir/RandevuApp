@@ -3,6 +3,7 @@ import { Container, TextField, Typography, Box, Button, Grid } from '@mui/materi
 import PatientsDataGrid from './PatientsDataGrid';
 import useFetchPatient from "../../../services/useFetchPatient";
 import PatientAdmissions from '../patientAdmissions/PatientAdmissions';
+import useFetchPatientAdmission from '../../../services/useFetchPatientAdmission';
 
 const PatientsSearch = () => {
 
@@ -18,7 +19,7 @@ const PatientsSearch = () => {
         fetchData();
     }, []);
 
-    const { patients, fetchPatient, loading: patientLoading } = useFetchPatient();
+    const { patients, fetchPatient, patientByPatientId, fetchPatientByPatientId, loading: patientLoading } = useFetchPatient();
     const [nameFilter, setNameFilter] = useState('');
     const [idFilter, setIdFilter] = useState('');
 
@@ -26,8 +27,6 @@ const PatientsSearch = () => {
     const handleSearch = () => {
         fetchPatient({ name: nameFilter.toLowerCase(), idNumber: idFilter });
     };
-    
-    const [selectedPatient, setSelectedPatient] = useState({}); // Seçilen hasta bilgisini tutuyoruz
 
     return (
         <Container maxWidth="xxl" style={{ marginTop: '5px', border: "1px solid black" }}>
@@ -67,11 +66,19 @@ const PatientsSearch = () => {
                             </Button>
                         </Box>
                     </Box>
-                    <PatientsDataGrid patients={patients} patientLoadin={patientLoading} setSelectedPatient={setSelectedPatient} />
+                    <PatientsDataGrid 
+                        patients={patients} 
+                        patientLoadin={patientLoading} 
+                        fetchPatientByPatientId= {fetchPatientByPatientId} 
+                    />
                 </Grid>
                 <Grid item xs={7}>
-
-                    <PatientAdmissions selectedPatient={selectedPatient} />
+                {patientByPatientId.length >0 ?
+                    <PatientAdmissions
+                        patientByPatientId = {patientByPatientId}
+                        fetchPatientByPatientId = {fetchPatientByPatientId} 
+                        patientLoading = {patientLoading} 
+                    /> : <p>Hasta Seçiniz</p>}
                 </Grid>
             </Grid>
         </Container>
