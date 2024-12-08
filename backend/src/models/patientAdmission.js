@@ -3,12 +3,9 @@
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
 const { mongoose } = require('../configs/dbConnection')
-/* ------------------------------------------------------- *
-{
-    "name": "Firm -1"
-}
+const Counter = require('./counter'); // Counter modelini import et
+
 /* ------------------------------------------------------- */
-// Firm Model:
 
 const PatientAdmissionSchema = new mongoose.Schema({
     userId: {
@@ -31,13 +28,11 @@ const PatientAdmissionSchema = new mongoose.Schema({
     admissionNumber:  {
         type:Number,
         trim: true,
-        required: true,
         unique: true,
     },
 
-    examinationType: {
-        type: String,
-        enum: ['general', 'emergency', 'specialist'],  // Geçerli değerler
+    doctorId: {
+        type: Number,
         required: true,
     }
 
@@ -46,27 +41,27 @@ const PatientAdmissionSchema = new mongoose.Schema({
     timestamps: true
 })
 
-// // Pre-save hook to increment admissionNumber
-// PatientAdmissionSchema.pre('save', async function (next) {
-//     if (!this.isNew) {
-//         return next(); // Yalnızca yeni belgelerde çalışsın
-//     }
+// Pre-save hook to increment admissionNumber
+PatientAdmissionSchema.pre('save', async function (next) {
+    if (!this.isNew) {
+        return next(); // Yalnızca yeni belgelerde çalışsın
+    }
 
-//     try {
-//         // Counter koleksiyonundan admissionNumber için yeni bir ardışık sayı alın
-//         const counter = await Counter.findOneAndUpdate(
-//             { name: 'admissionNumber' }, // Sayaç adı
-//             { $inc: { seq: 1 } },        // seq değerini 1 artır
-//             { new: true, upsert: true }  // Belge yoksa oluştur
-//         );
+    try {
+        // Counter koleksiyonundan admissionNumber için yeni bir ardışık sayı alın
+        const counter = await Counter.findOneAndUpdate(
+            { name: 'admissionNumber' }, // Sayaç adı
+            { $inc: { seq: 1 } },        // seq değerini 1 artır
+            { new: true, upsert: true }  // Belge yoksa oluştur
+        );
 
-//         // Increment edilen sayıyı admissionNumber alanına ata
-//         this.admissionNumber = counter.seq;
-//         next();
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+        // Increment edilen sayıyı admissionNumber alanına ata
+        this.admissionNumber = counter.seq;
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 /* ------------------------------------------------------- */
 module.exports = mongoose.model('PatientAdmission', PatientAdmissionSchema)

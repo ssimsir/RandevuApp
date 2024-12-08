@@ -19,6 +19,7 @@ const Patients = () => {
 		userId: userId,
 		name: "",
 		surname: "",
+		gender:"",
 		idNumber: "",
 		email: "",
 		phoneNumber: "",

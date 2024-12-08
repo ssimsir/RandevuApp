@@ -18,6 +18,9 @@ import AddIcon from "@mui/icons-material/Add";
 import { blue, pink, grey } from "@mui/material/colors";
 import avatarMale from "../../../assets/avatarMale.png";
 import avatarFemale from "../../../assets/avatarFemale.png";
+import NewPatientAdmissionModal from "./NewPatientAdmissionModal";
+
+import { useSelector } from "react-redux";
 
 
 const Accordion = styled((props) => (
@@ -59,12 +62,25 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const PatientAdmissions = ({ selectedPatient, quotationsData, setQuotationModalOpen, setQuotationInfo, quotationModalData, setQuotationModalData }) => {
 
+    const { userId } = useSelector((state) => state.auth); 
     //const quotations = quotationsData.data
     //const { quotations} = useSelector((state) => state.armer);
-    console.log(selectedPatient);
+    
     const patient = selectedPatient
     const genderColor = patient.gender === "Male" ? blue[50] : pink[50];
     const genderAvatar = patient.gender === "Male" ? avatarMale : avatarFemale;
+    const patientId=patient._id;
+    console.log(patientId);
+    const [newPatientAdmissionModalOpen, setNewPatientAdmissionModalOpen] = useState(false)
+    const [patientAdmissionInfo, setPatientAdmissionInfo] = useState({
+        userId,
+        patientId,
+        admissionDate : new Date().toISOString().split("T")[0],
+        doctorId :""
+    })
+	const newPatientAdmissionModalHandleOpen = () => setNewPatientAdmissionModalOpen(true)
+	const newPatientAdmissionModalHandleClose = () => setNewPatientAdmissionModalOpen(false)
+	 
 
     const quotations = [
         {
@@ -179,7 +195,7 @@ const PatientAdmissions = ({ selectedPatient, quotationsData, setQuotationModalO
                                 sx={{ width: { xs: '100%', sm: 'auto' }, marginBottom:"10px" }}
                                 variant="contained"
                                 startIcon={<AddIcon />}
-                            // onClick={() => { window.confirm(`${quotation.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(quotation._id) }}
+                                onClick={newPatientAdmissionModalHandleOpen}
                             >
                                 Yeni Kayıt Oluştur
                             </Button>
@@ -300,6 +316,14 @@ const PatientAdmissions = ({ selectedPatient, quotationsData, setQuotationModalO
                     ))
                 }
             </Box>
+
+
+            <NewPatientAdmissionModal
+                    newPatientAdmissionModalHandleClose={newPatientAdmissionModalHandleClose}
+                    newPatientAdmissionModalOpen={newPatientAdmissionModalOpen} 
+                    patientAdmissionInfo = {patientAdmissionInfo}
+                    setPatientAdmissionInfo = {setPatientAdmissionInfo}
+            />
         </>
     );
 };

@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import useBiltekRequest from "../../services/useBiltekRequest";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 
 const style = {
@@ -89,6 +90,23 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								onChange={handleChange}
 								required
 							/>
+							<FormControl>
+                            <InputLabel variant="outlined" id="genderLabel">
+                                Cinsiyet
+                            </InputLabel>
+                            <Select
+                                labelId="genderLabel"
+                                label="Cinsiyet"
+                                name="gender"
+                                value={info?.gender}
+                                onChange={handleChange}
+                                required
+                            >
+                                <MenuItem key={1} value={"Female"}>Kadın</MenuItem>
+                                <MenuItem key={2} value={"Male"}>Erkek</MenuItem>
+
+                            </Select>
+                        </FormControl>
 
 							<TextField
 								label="Kimlik No"
