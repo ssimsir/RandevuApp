@@ -1,11 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Container, TextField, Typography, Box, Button, Grid } from '@mui/material';
+import { Container, TextField, Box, Button, Grid } from '@mui/material';
 import PatientsDataGrid from './PatientsDataGrid';
 import useFetchPatient from "../../../services/useFetchPatient";
 import PatientAdmissions from '../patientAdmissions/PatientAdmissions';
-import useFetchPatientAdmission from '../../../services/useFetchPatientAdmission';
+import PatientModal from '../PatientsModal';
+import { useSelector } from "react-redux";
 
 const PatientsSearch = () => {
+
+    const [open, setOpen] = useState(false)
+	const handleOpen = () => setOpen(true)
+	const handleClose = () => {
+		setOpen(false)
+	}
+	const { userId } = useSelector(state => state.auth)
+	const [info, setInfo] = useState({
+		patientId: 0,
+		userId: userId,
+		name: "",
+		surname: "",
+		gender:"",
+		idNumber: "",
+		email: "",
+		phoneNumber: "",
+		companyName: "",
+		iban: "",
+		address: "",
+		taxNumber: "",
+		taxOffice: ""
+	})
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,11 +54,11 @@ const PatientsSearch = () => {
     };
 
     return (
-        <Container maxWidth="xxl" style={{ marginTop: '5px', border: "1px solid black" }}>
-            <Grid container spacing={2} sx={{ display: 'flex', alignItems:"center", justifyContent:"center" }} >
+        <>
+            <Grid container spacing={2}>
                 <Grid item xs={5}>
-
-                    <Box  style={{ border: "1px solid black", padding: "10px" }}>
+                <Button sx={{ marginY: "10px" }} variant="contained" onClick={handleOpen}>YENİ MÜŞTERİ</Button>
+                    <Box mb={1}  sx ={{ border: "1px solid #ddd", padding: "5px" }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -55,7 +80,7 @@ const PatientsSearch = () => {
                                 />
                             </Grid>
                         </Grid>
-                        <Box mt={2} mb={3}>
+                        <Box mt={1} mb={1}>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -72,7 +97,7 @@ const PatientsSearch = () => {
                         fetchPatientByPatientId= {fetchPatientByPatientId} 
                     />
                 </Grid>
-                <Grid item xs={7}>
+                <Grid item xs={7} >
                 {patientByPatientId.length >0 ?
                     <PatientAdmissions
                         patientByPatientId = {patientByPatientId}
@@ -81,7 +106,13 @@ const PatientsSearch = () => {
                     /> : <p>Hasta Seçiniz</p>}
                 </Grid>
             </Grid>
-        </Container>
+            			<PatientModal				
+                        handleClose={handleClose}
+                        open={open}
+                        info={info}
+                        setInfo={setInfo}
+                    />	
+        </>
     )
 }
 

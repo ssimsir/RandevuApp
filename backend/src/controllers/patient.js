@@ -59,17 +59,31 @@ module.exports = {
             #swagger.tags = ["Patient"]
             #swagger.summary = "Get Single Patient"
         */
-        const data = await Patient.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } }, // ObjectId dönüşümü
-            {
-                $lookup: {
-                    from: 'patientAdmission', // İlişkili koleksiyon adı
-                    localField: '_id',        // Patient._id
-                    foreignField: 'patientId', // PatientAdmission.patientId
-                    as: 'patientAdmissionId'          // Dönen veri için bir ad
+            const data = await Patient.aggregate([
+                { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } }, // ObjectId dönüşümü
+                {
+                    $lookup: {
+                        from: 'patientAdmission', // İlişkili koleksiyon adı
+                        localField: '_id',        // Patient._id
+                        foreignField: 'patientId', // PatientAdmission.patientId
+                        as: 'patientAdmissions'    // Dönen veri için bir ad
+                    }
+                },
+                { $unwind: { path: "$patientAdmissions", preserveNullAndEmptyArrays: true } }, // patientAdmissions'ı aç
+                { $sort: { "patientAdmissions.admissionNumber": -1 } }, // Sıralama işlemi
+                {
+                    $group: {
+                        _id: "$_id",
+                        name: { $first: "$name" },
+                        surname: { $first: "$surname" },
+                        gender: { $first: "$gender" },
+                        idNumber: { $first: "$idNumber" },
+                        email: { $first: "$email" },
+                        phoneNumber: { $first: "$phoneNumber" },
+                        patientAdmissions: { $push: "$patientAdmissions" } // Sıralanmış admissions'ı yeniden grupla
+                    }
                 }
-            }
-        ]);
+            ]);
 
         res.status(200).send({
             error: false,

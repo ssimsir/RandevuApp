@@ -20,7 +20,6 @@ const NewPatientAdmissionModal = ({
 
     const handleChange = (e) => {
         setPatientAdmissionInfo({ ...patientAdmissionInfo, [e.target.name]: e.target.value });
-        console.log(patientAdmissionInfo);
     };
 
     const savePatientAdmission = async (info) => {

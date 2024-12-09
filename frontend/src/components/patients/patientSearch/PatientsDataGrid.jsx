@@ -10,7 +10,7 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 
 
 	// const { patients, loading } = useSelector((state) => state.biltek);
-
+	
 	const rows = patients;
 	const { deleteBiltek } = useBiltekRequest();
 	const deleteUser = React.useCallback(
@@ -85,7 +85,7 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 	};
 
 	return (
-		<div style={{ height: 'calc(55vh - 100px)', width: '100%' }}>
+		<div style={{ height: 'calc(90vh - 260px)', width: '100%' }}>
 			{patientLoading ? (
 				<div>Yükleniyor</div>
 			) : (

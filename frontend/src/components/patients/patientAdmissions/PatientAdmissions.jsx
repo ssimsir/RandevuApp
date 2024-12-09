@@ -75,12 +75,9 @@ const PatientAdmissions = ({
     const genderColor = selectedPatient?.gender === "Male" ? blue[50] : pink[50];
     const genderAvatar = selectedPatient?.gender === "Male" ? avatarMale : avatarFemale;
     const patientId = selectedPatient?._id;
-    const patientAdmissions = selectedPatient.patientAdmissionId;
-    console.log(patientAdmissions);
+    const patientAdmissions = selectedPatient.patientAdmissions;
 
-    
-
-    const [expanded, setExpanded] = useState(patientAdmissions[0]?._id || 1);
+    const [expanded, setExpanded] = useState();
 
     const handleChange = (panel) => (event, newExpanded) => {
         if (event.target.tagName !== 'BUTTON' && event.target.tagName !== 'path' && event.target.tagName !== 'svg') {
@@ -88,6 +85,9 @@ const PatientAdmissions = ({
         }
     };
 
+    useEffect(() => {
+        setExpanded(patientAdmissions[0]?._id || 1)
+    },[patientAdmissions] )
     const { axiosToken } = useAxios()
 
     const deleteQuotation = async (quotationId) => {
@@ -127,11 +127,10 @@ const PatientAdmissions = ({
             <Box sx={{
                 width: "100%",
                 //mt: 2,
-                maxHeight: "60vh",
-                overflowY: 'auto', // Yalnızca dikey kaydırma
+
+               
                 border: '1px solid #ccc',
-                padding: '10px',
-                borderRadius: '8px'
+
             }}>
                 <Box sx={{ padding: 1 }}>
 
@@ -178,7 +177,13 @@ const PatientAdmissions = ({
                     </Card>
 
                 </Box>
-
+                <Box sx={{
+                width: "100%",
+                //mt: 2,
+                height: 'calc(90vh - 227px)',
+                overflowY: 'auto', // Yalnızca dikey kaydırma                
+                padding: '5px',
+            }}>
                 {
                     patientAdmissions.map((patientAdmission) => (
                         <Accordion
@@ -256,6 +261,7 @@ const PatientAdmissions = ({
                         </Accordion>
                     ))
                 }
+                </Box>
             </Box>
 
 
