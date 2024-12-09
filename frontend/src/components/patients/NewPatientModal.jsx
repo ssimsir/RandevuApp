@@ -30,35 +30,41 @@ const textFieldStyle = {
 	width: 325,
 };
 
-export default function PatientModal({ handleClose, open, info, setInfo }) {
+export default function NewPatientModal({ 
+	newPatientModalopen, 
+	newPatientModalHandleClose, 
+	patientInfo, 
+	setPatientInfo,
+	fetchPatient}) 
+{
 	const { postBiltek} = useBiltekRequest()
 	
 	const handleChange = (e) => {
-		setInfo({ ...info, [e.target.name]: e.target.value });
+		setPatientInfo({ ...patientInfo, [e.target.name]: e.target.value });
 
 	};
 	
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(info)
-		if (info?._id) {
+		console.log(patientInfo)
+		if (patientInfo?._id) {
 			//? put isteginin
-			postBiltek("patients", info)
+			postBiltek("patients", patientInfo)
 		} else {
 			//? post firma işlemi
-			postBiltek("patients", info)
+			postBiltek("patients", patientInfo)
 		}
 
 		//? modal ı kapıtıyoruz
-		handleClose();
+		newPatientModalHandleClose();
 	};
 
-	//console.log(info);
+	//console.log(patientInfo);
 	return (
 		<div>
 			<Modal
-				open={open}
-				onClose={handleClose}
+				open={newPatientModalopen}
+				onClose={newPatientModalHandleClose}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
 			>
@@ -75,7 +81,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="name"
 								type="text"
 								variant="outlined"
-								value={info?.name}
+								value={patientInfo?.name}
 								onChange={handleChange}
 								required
 							/>
@@ -86,7 +92,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="surname"
 								type="text"
 								variant="outlined"
-								value={info?.surname}
+								value={patientInfo?.surname}
 								onChange={handleChange}
 								required
 							/>
@@ -98,7 +104,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
                                 labelId="genderLabel"
                                 label="Cinsiyet"
                                 name="gender"
-                                value={info?.gender}
+                                value={patientInfo?.gender}
                                 onChange={handleChange}
                                 required
                             >
@@ -114,7 +120,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="idNumber"
 								type="number"
 								variant="outlined"
-								value={info?.idNumber}
+								value={patientInfo?.idNumber}
 								onChange={handleChange}
 								required
 							/>
@@ -127,7 +133,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="email"
 								type="email"
 								variant="outlined"
-								value={info?.email}
+								value={patientInfo?.email}
 								onChange={handleChange}
 								required
 							/>
@@ -139,7 +145,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="phoneNumber"
 								type="tel"
 								variant="outlined"
-								value={info?.phoneNumber}
+								value={patientInfo?.phoneNumber}
 								onChange={handleChange}
 								required
 							/>
@@ -153,7 +159,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="companyName"
 								type="text"
 								variant="outlined"
-								value={info?.companyName}
+								value={patientInfo?.companyName}
 								onChange={handleChange}
 								required
 							/>
@@ -165,7 +171,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="iban"
 								type="text"
 								variant="outlined"
-								value={info?.iban}
+								value={patientInfo?.iban}
 								onChange={handleChange}
 								required
 							/>
@@ -176,7 +182,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 							id="address"
 							type="text"
 							variant="outlined"
-							value={info?.address}
+							value={patientInfo?.address}
 							onChange={handleChange}
 							required
 						/>
@@ -188,7 +194,7 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="taxNumber"
 								type="number"
 								variant="outlined"
-								value={info?.taxNumber}
+								value={patientInfo?.taxNumber}
 								onChange={handleChange}
 								required
 							/>
@@ -199,13 +205,13 @@ export default function PatientModal({ handleClose, open, info, setInfo }) {
 								id="taxOffice"
 								type="text"
 								variant="outlined"
-								value={info?.taxOffice}
+								value={patientInfo?.taxOffice}
 								onChange={handleChange}
 								required
 							/>
 						</Box>
 						<Button variant="contained" type="submit">
-							{info?._id ? "UPDATE FIRM" : "KAYIT"}
+							{patientInfo?._id ? "UPDATE FIRM" : "KAYIT"}
 						</Button>
 					</Box>
 				</Box>

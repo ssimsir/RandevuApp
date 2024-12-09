@@ -3,18 +3,14 @@ import { Container, TextField, Box, Button, Grid } from '@mui/material';
 import PatientsDataGrid from './PatientsDataGrid';
 import useFetchPatient from "../../../services/useFetchPatient";
 import PatientAdmissions from '../patientAdmissions/PatientAdmissions';
-import PatientModal from '../PatientsModal';
+import NewPatientModal from '../NewPatientModal';
 import { useSelector } from "react-redux";
 
 const PatientsSearch = () => {
 
-    const [open, setOpen] = useState(false)
-	const handleOpen = () => setOpen(true)
-	const handleClose = () => {
-		setOpen(false)
-	}
-	const { userId } = useSelector(state => state.auth)
-	const [info, setInfo] = useState({
+
+    const { userId } = useSelector(state => state.auth)
+    const patientInfoInitialize = {
 		patientId: 0,
 		userId: userId,
 		name: "",
@@ -28,9 +24,17 @@ const PatientsSearch = () => {
 		address: "",
 		taxNumber: "",
 		taxOffice: ""
-	})
+	}
 
+    const [newPatientModalopen, setNewPatientModalopen] = useState(false)
+	const newPatientModalHandleOpen = () => setNewPatientModalopen(true)
+    const [patientInfo, setPatientInfo] = useState(patientInfoInitialize)
 
+	const newPatientModalHandleClose = () => {
+		setNewPatientModalopen(false)
+        setPatientInfo(patientInfoInitialize)
+	}
+	
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,7 +61,7 @@ const PatientsSearch = () => {
         <>
             <Grid container spacing={2}>
                 <Grid item xs={5}>
-                <Button sx={{ marginY: "10px" }} variant="contained" onClick={handleOpen}>YENİ MÜŞTERİ</Button>
+                    <Button sx={{ marginY: "10px" }} variant="contained" onClick={newPatientModalHandleOpen}>YENİ HASTA KAYDI</Button>
                     <Box mb={1}  sx ={{ border: "1px solid #ddd", padding: "5px" }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
@@ -106,11 +110,12 @@ const PatientsSearch = () => {
                     /> : <p>Hasta Seçiniz</p>}
                 </Grid>
             </Grid>
-            			<PatientModal				
-                        handleClose={handleClose}
-                        open={open}
-                        info={info}
-                        setInfo={setInfo}
+            			<NewPatientModal				
+                        newPatientModalopen={newPatientModalopen}
+                        newPatientModalHandleClose={newPatientModalHandleClose}                        
+                        patientInfo={patientInfo}
+                        setPatientInfo={setPatientInfo}
+                        fetchPatient={fetchPatient}
                     />	
         </>
     )

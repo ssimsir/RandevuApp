@@ -5,11 +5,12 @@ import PatientsSearch from "../components/patients/patientSearch/PatientsSearch"
 
 const Patients = () => {
 	const { getBiltek } = useBiltekRequest();
+	
 	useEffect(() => {
 		getBiltek("patients");
 	}, []);
 	return (
-		<Container maxWidth="xxl" style={{ marginTop: '5px', height:"90vh", border: "1px solid black" }}>	
+		<Container maxWidth="xxl" style={{ marginTop: '1px', height:"91vh", border: "1px solid black" }}>	
 			<PatientsSearch/>			
 		</Container>
 	);
