@@ -55,7 +55,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
     borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const PatientDataProcess = ({ patientId, setPatientId, setQuotationModalOpen, setQuotationInfo, patientAdmissionModalData, setQuotationModalData }) => {
+const PatientDataProcess = ({ patientAdmissions, patientId, setPatientId, setQuotationModalOpen, setQuotationInfo, patientAdmissionModalData, setQuotationModalData }) => {
     
     useEffect(() => {
         // Bileşen yüklendiğinde ürün gruplarını çek

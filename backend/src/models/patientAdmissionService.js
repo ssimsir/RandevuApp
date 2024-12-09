@@ -22,17 +22,32 @@ const PatientAdmissionServiceSchema = new mongoose.Schema({
 
     patientAdmissionId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'patientAdmission',
+        ref: 'PatientAdmission',
         required: true,
     },
 
     serviceId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'service',
+        ref: 'Service',
         required: true,
     },
 
+    price: {
+        type: Number,
+        required: true
+    },
 
+    discount: {
+        type: Number,
+        required: true
+    },
+
+    discountedPrice: {
+        type: Number,
+        //set: function() { return this.unitPrice - (this.unitPrice * this.discount) / 100 }, // Data gönderilmediğinde çalışmaz.
+        //default: function() { return this.unitPrice - (this.unitPrice * this.discount) / 100 }, // Sadece Create'de çalışır.
+        //transform: function() { return this.unitPrice - (this.unitPrice * this.discount) / 100 } // Update yaparken de hesaplasın.
+    },
 }, {
     collection: 'patientAdmissionService',
     timestamps: true
