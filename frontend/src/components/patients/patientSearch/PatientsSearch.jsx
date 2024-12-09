@@ -10,31 +10,31 @@ const PatientsSearch = () => {
 
 
     const { userId } = useSelector(state => state.auth)
-    const patientInfoInitialize = {
-		patientId: 0,
-		userId: userId,
-		name: "",
-		surname: "",
-		gender:"",
-		idNumber: "",
-		email: "",
-		phoneNumber: "",
-		companyName: "",
-		iban: "",
-		address: "",
-		taxNumber: "",
-		taxOffice: ""
-	}
+    const patientInfoInitialState = {
+        patientId: 0,
+        userId: userId,
+        name: "",
+        surname: "",
+        gender: "",
+        idNumber: "",
+        email: "",
+        phoneNumber: "",
+        companyName: "",
+        iban: "",
+        address: "",
+        taxNumber: "",
+        taxOffice: ""
+    }
 
     const [newPatientModalopen, setNewPatientModalopen] = useState(false)
-	const newPatientModalHandleOpen = () => setNewPatientModalopen(true)
-    const [patientInfo, setPatientInfo] = useState(patientInfoInitialize)
+    const [patientInfo, setPatientInfo] = useState(patientInfoInitialState)
 
-	const newPatientModalHandleClose = () => {
-		setNewPatientModalopen(false)
-        setPatientInfo(patientInfoInitialize)
-	}
-	
+    const newPatientModalHandleOpen = () => setNewPatientModalopen(true)
+    const newPatientModalHandleClose = () => {
+        setNewPatientModalopen(false)
+        setPatientInfo(patientInfoInitialState)
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,7 +62,7 @@ const PatientsSearch = () => {
             <Grid container spacing={2}>
                 <Grid item xs={5}>
                     <Button sx={{ marginY: "10px" }} variant="contained" onClick={newPatientModalHandleOpen}>YENİ HASTA KAYDI</Button>
-                    <Box mb={1}  sx ={{ border: "1px solid #ddd", padding: "5px" }}>
+                    <Box mb={1} sx={{ border: "1px solid #ddd", padding: "5px" }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -95,28 +95,28 @@ const PatientsSearch = () => {
                             </Button>
                         </Box>
                     </Box>
-                    <PatientsDataGrid 
-                        patients={patients} 
-                        patientLoadin={patientLoading} 
-                        fetchPatientByPatientId= {fetchPatientByPatientId} 
+                    <PatientsDataGrid
+                        patients={patients}
+                        patientLoadin={patientLoading}
+                        fetchPatientByPatientId={fetchPatientByPatientId}
                     />
                 </Grid>
                 <Grid item xs={7} >
-                {patientByPatientId.length >0 ?
-                    <PatientAdmissions
-                        patientByPatientId = {patientByPatientId}
-                        fetchPatientByPatientId = {fetchPatientByPatientId} 
-                        patientLoading = {patientLoading} 
-                    /> : <p>Hasta Seçiniz</p>}
+                    {patientByPatientId.length > 0 ?
+                        <PatientAdmissions
+                            patientByPatientId={patientByPatientId}
+                            fetchPatientByPatientId={fetchPatientByPatientId}
+                            patientLoading={patientLoading}
+                        /> : <h1 style={{textAlign:"center"}}>Hasta Seçiniz</h1>}
                 </Grid>
             </Grid>
-            			<NewPatientModal				
-                        newPatientModalopen={newPatientModalopen}
-                        newPatientModalHandleClose={newPatientModalHandleClose}                        
-                        patientInfo={patientInfo}
-                        setPatientInfo={setPatientInfo}
-                        fetchPatient={fetchPatient}
-                    />	
+            <NewPatientModal
+                newPatientModalopen={newPatientModalopen}
+                newPatientModalHandleClose={newPatientModalHandleClose}
+                patientInfo={patientInfo}
+                setPatientInfo={setPatientInfo}
+                fetchPatient={fetchPatient}
+            />
         </>
     )
 }

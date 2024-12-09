@@ -44,6 +44,9 @@ router.use('/patients', require('./patient'))
 // patientAdmission:
 router.use('/patientAdmissions', require('./patientAdmission'))
 
+// patientAdmissionServices:
+router.use('/patientAdmissionServices', require('./patientAdmissionService'))
+
 // document:
 router.use('/documents', require('./document'))
 

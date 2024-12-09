@@ -21,6 +21,7 @@ import avatarFemale from "../../../assets/avatarFemale.png";
 import NewPatientAdmissionModal from "./NewPatientAdmissionModal";
 
 import { useSelector } from "react-redux";
+import PatinetAdmissionServices from "./PatinetAdmissionServices";
 
 
 const Accordion = styled((props) => (
@@ -256,7 +257,7 @@ const PatientAdmissions = ({
                                 </Box>
                             </AccordionSummary>
                             <AccordionDetails>
-                                {expanded === patientAdmission._id && <p>Expended area</p>}
+                                {expanded === patientAdmission._id && <PatinetAdmissionServices patientAdmissionId={patientAdmission._id}/>}
                             </AccordionDetails>
                         </Accordion>
                     ))
