@@ -31,6 +31,12 @@ const PatientAdmissionSchema = new mongoose.Schema({
         unique: true,
     },
 
+    protocolNumber:  {
+        type:Number,
+        trim: true,
+        unique: true,
+    },
+
     doctorId: {
         type: Number,
         required: true,
@@ -46,17 +52,30 @@ PatientAdmissionSchema.pre('save', async function (next) {
     if (!this.isNew) {
         return next(); // Yalnızca yeni belgelerde çalışsın
     }
+    console.log("save")
 
     try {
         // Counter koleksiyonundan admissionNumber için yeni bir ardışık sayı alın
-        const counter = await Counter.findOneAndUpdate(
+        const counterAdmissionNumber = await Counter.findOneAndUpdate(
             { name: 'admissionNumber' }, // Sayaç adı
             { $inc: { seq: 1 } },        // seq değerini 1 artır
             { new: true, upsert: true }  // Belge yoksa oluştur
         );
-
         // Increment edilen sayıyı admissionNumber alanına ata
-        this.admissionNumber = counter.seq;
+        console.log(counterAdmissionNumber.seq)
+        this.admissionNumber = counterAdmissionNumber.seq;
+
+        // Counter koleksiyonundan admissionNumber için yeni bir ardışık sayı alın
+        const counterProtocolNumber = await Counter.findOneAndUpdate(
+            { name: 'protocolNumber' }, // Sayaç adı
+            { $inc: { seq: 1 } },        // seq değerini 1 artır
+            { new: true, upsert: true }  // Belge yoksa oluştur
+        );
+
+        console.log(counterProtocolNumber.seq)
+        // Increment edilen sayıyı admissionNumber alanına ata
+        this.protocolNumber = counterProtocolNumber.seq;
+
         next();
     } catch (error) {
         next(error);

@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { modalStyle } from "../../../styles/globalStyles";
+import { modalStyle } from "../../../../styles/globalStyles";
 import { Button, TextField } from "@mui/material";
 import { MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import { useState } from "react";
-import useAxios from "../../../services/useAxios"
+import useAxios from "../../../../services/useAxios"
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 

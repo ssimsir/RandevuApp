@@ -1,7 +1,7 @@
 import React, { useEffect} from "react";
 import useBiltekRequest from "../services/useBiltekRequest";
 import { Container} from "@mui/material";
-import PatientsSearch from "../components/patients/patientSearch/PatientsSearch";
+import PatientsSearch from "../components/patients/PatientsSearch";
 
 const Patients = () => {
 	const { getBiltek } = useBiltekRequest();

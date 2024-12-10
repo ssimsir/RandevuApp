@@ -17,16 +17,30 @@ const PatientSchema = new mongoose.Schema({
         required: true,
     },
 
-    name: {
+    idNumber: {
         type: String,
         trim: true,
         required: true,
         unique: true,
+        index: true
+    },
+
+    name: {
+        type: String,
+        trim: true,
+        required: true,
     },
 
     surname: {
         type: String,
         trim: true,
+        required: true,
+    },
+
+    birthDate: {
+        type:Date,
+        trim: true,
+        required: true
     },
 
     gender: {
@@ -35,30 +49,25 @@ const PatientSchema = new mongoose.Schema({
         required: true,
     },
 
-    idNumber: {
-        type: String,
-        trim: true,
-    },
-
     email: {
         type: String,
         trim: true,
-        required: true,
         unique: true,
         index: true
     },
 
-    phoneNumber: {
+    gsmNumber: {
+        type: String,
+        trim: true,
+        required: true,
+    },
+
+    motherName: {
         type: String,
         trim: true,
     },
 
-    companyName: {
-        type: String,
-        trim: true,
-    },
-
-    iban: {
+    fatherName: {
         type: String,
         trim: true,
     },
@@ -68,17 +77,10 @@ const PatientSchema = new mongoose.Schema({
         trim: true,
     },
 
-    taxNumber: {
+    infoMessage: {
         type: String,
         trim: true,
     },
-
-    taxOffice: {
-        type: String,
-        trim: true,
-    },
-
-
 }, {
     collection: 'patient',
     timestamps: true

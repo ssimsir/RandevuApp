@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Container, TextField, Box, Button, Grid } from '@mui/material';
-import PatientsDataGrid from './PatientsDataGrid';
-import useFetchPatient from "../../../services/useFetchPatient";
-import PatientAdmissions from '../patientAdmissions/PatientAdmissions';
-import NewPatientModal from '../NewPatientModal';
+import PatientsDataGrid from './patientSearch/PatientsDataGrid';
+import useFetchPatient from "../../services/useFetchPatient";
+import PatientAdmissions from './patientSearch/PatientAdmissions';
+import NewPatientModal from './patientSearch/NewPatientModal';
 import { useSelector } from "react-redux";
 
 const PatientsSearch = () => {
@@ -13,17 +13,18 @@ const PatientsSearch = () => {
     const patientInfoInitialState = {
         patientId: 0,
         userId: userId,
+
+        idNumber: "",
         name: "",
         surname: "",
+        birthDate: "",
         gender: "",
-        idNumber: "",
         email: "",
-        phoneNumber: "",
-        companyName: "",
-        iban: "",
+        gsmNumber: "",
+        motherName: "",
+        fatherName: "",
         address: "",
-        taxNumber: "",
-        taxOffice: ""
+        infoMessage: "",
     }
 
     const [newPatientModalopen, setNewPatientModalopen] = useState(false)

@@ -4,16 +4,16 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import PrintIcon from '@mui/icons-material/Print';
 import AddIcon from '@mui/icons-material/Add';
-import { btnStyle } from "../../../styles/globalStyles"
+import { btnStyle } from "../../../../styles/globalStyles"
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid"
 import { Box, Table, TableBody, TableCell, TableRow } from "@mui/material";
 
 import { Button } from "@mui/material"
-import useAxios from "../../../services/useAxios";
+import useAxios from "../../../../services/useAxios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import {AccordionTableSkeleton, NoDataMessage} from "../../DataFetchMessages";
+import {AccordionTableSkeleton, NoDataMessage} from "../../../DataFetchMessages";
 
 
 const PatinetAdmissionServices = ({patientAdmissionId}) => {

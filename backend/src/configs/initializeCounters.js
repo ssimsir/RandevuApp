@@ -10,9 +10,9 @@ const initializeCounters = async () => {
             await Counter.create({ name: 'admissionNumber', seq: 1 }); // Başlangıç değeri
         }
 
-        const patientNumber = await Counter.findOne({ name: 'patientNumber' });
-        if (!patientNumber) {
-            await Counter.create({ name: 'patientNumber', seq: 1 }); // Başlangıç değeri
+        const protocolNumber = await Counter.findOne({ name: 'protocolNumber' });
+        if (!protocolNumber) {
+            await Counter.create({ name: 'protocolNumber', seq: 1 }); // Başlangıç değeri
         }
 
         console.log('Counters initialized successfully!');

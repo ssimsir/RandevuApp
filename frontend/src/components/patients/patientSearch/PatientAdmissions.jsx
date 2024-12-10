@@ -18,10 +18,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { blue, pink, grey } from "@mui/material/colors";
 import avatarMale from "../../../assets/avatarMale.png";
 import avatarFemale from "../../../assets/avatarFemale.png";
-import NewPatientAdmissionModal from "./NewPatientAdmissionModal";
+import NewPatientAdmissionModal from "./patientAdmissions/NewPatientAdmissionModal";
 
 import { useSelector } from "react-redux";
-import PatinetAdmissionServices from "./PatinetAdmissionServices";
+import PatinetAdmissionServices from "./patientAdmissions/PatinetAdmissionServices";
 
 
 const Accordion = styled((props) => (
@@ -134,16 +134,6 @@ const PatientAdmissions = ({
 
             }}>
                 <Box sx={{ padding: 1 }}>
-
-                    <Button
-                        sx={{ width: { xs: '100%', sm: 'auto' }, marginBottom: "10px" }}
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        onClick={newPatientAdmissionModalHandleOpen}
-                    >
-                        Yeni Kayıt Oluştur
-                    </Button>
-
                     <Card sx={{ minWidth: 500, boxShadow: 3, backgroundColor: genderColor, color: grey[800] }}>
                         <CardContent>
                             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -176,6 +166,14 @@ const PatientAdmissions = ({
                             </Box>
                         </CardContent>
                     </Card>
+                    <Button
+                        sx={{ width: { xs: '100%', sm: 'auto' }, marginTop: "10px" }}
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={newPatientAdmissionModalHandleOpen}
+                    >
+                        Yeni Protokol                        
+                    </Button>
 
                 </Box>
                 <Box sx={{
@@ -265,7 +263,6 @@ const PatientAdmissions = ({
                 </Box>
             </Box>
 
-
             <NewPatientAdmissionModal
                 newPatientAdmissionModalHandleClose={newPatientAdmissionModalHandleClose}
                 newPatientAdmissionModalOpen={newPatientAdmissionModalOpen}
@@ -301,8 +298,8 @@ const PatientAdmissionInfoTable = ({ patientAdmission }) => (
             <TableRow>            
                 <TableCell>Kayıt Tarihi</TableCell>
                 <TableCell>{new Date(patientAdmission.admissionDate).toLocaleDateString("tr-TR")}</TableCell>                
-                <TableCell>Kayıt Numarası</TableCell>
-                <TableCell>{patientAdmission.admissionNumber}</TableCell>
+                <TableCell>Protokol Numarası</TableCell>
+                <TableCell>{patientAdmission.protocolNumber}</TableCell>
             </TableRow>
         </TableBody>
     </StyledTable>
