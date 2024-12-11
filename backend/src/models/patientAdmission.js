@@ -40,7 +40,19 @@ const PatientAdmissionSchema = new mongoose.Schema({
     doctorId: {
         type: Number,
         required: true,
-    }
+    },
+    totalAmount: {
+        type: Number,
+        trim: true,
+    },
+    kdvAmount: {
+        type: Number,
+        trim: true,
+      },
+    totalAmountWithKDV: {
+        type: Number,
+        trim: true,
+      },
 
 }, {
     collection: 'patientAdmission',
@@ -62,7 +74,6 @@ PatientAdmissionSchema.pre('save', async function (next) {
             { new: true, upsert: true }  // Belge yoksa oluştur
         );
         // Increment edilen sayıyı admissionNumber alanına ata
-        console.log(counterAdmissionNumber.seq)
         this.admissionNumber = counterAdmissionNumber.seq;
 
         // Counter koleksiyonundan admissionNumber için yeni bir ardışık sayı alın

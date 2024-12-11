@@ -1,22 +1,20 @@
-
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
-import useBiltekRequest from "../../../../../services/useBiltekRequest";
 import { FormControl, IconButton, InputLabel, MenuItem, Select } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { modalStyle } from "../../../../../styles/globalStyles";
 import { useEffect, useState } from "react";
 import useAxios from "../../../../../services/useAxios";
 
-
 const NewPatinetAdmissionServiceModal = ({ 
-
     newPatinetAdmissionServiceModalopen,
     newPatinetAdmissionServiceModalHandleClose,
     newPatinetAdmissionServiceModalInfo,
-    setNewPatinetAdmissionServiceModalInfo
+    setNewPatinetAdmissionServiceModalInfo,
+    fetchPatinetAdmissionServicesData,
+    fetchPatinetAdmissionData
 })  => {
 	
     const { axiosToken} = useAxios()
@@ -26,10 +24,12 @@ const NewPatinetAdmissionServiceModal = ({
         if (name==='serviceId'){
             const [selectedService] = services.filter((item)=>item._id===value)
             setNewPatinetAdmissionServiceModalInfo({ ...newPatinetAdmissionServiceModalInfo, ["serviceId"]: selectedService._id, ["price"]:selectedService.price });
-        } else {
+        } else if (name==='discount' && value==="") {
+            setNewPatinetAdmissionServiceModalInfo({ ...newPatinetAdmissionServiceModalInfo, [name]: 0 });
+        } 
+        else {
             setNewPatinetAdmissionServiceModalInfo({ ...newPatinetAdmissionServiceModalInfo, [name]: value });
-        }   
-        console.log(newPatinetAdmissionServiceModalInfo)         
+        }          
 	};
 
     const [services, setServices] = useState([]);
@@ -51,13 +51,14 @@ const NewPatinetAdmissionServiceModal = ({
     const savePatientAdmissionService = async (newPatinetAdmissionServiceModalInfo) => {
         try {
             const { data } = await axiosToken.post(`/API/v1/patientAdmissionServices`, newPatinetAdmissionServiceModalInfo);
+            fetchPatinetAdmissionServicesData()
+            fetchPatinetAdmissionData()
         } catch (error) {
             console.error(error);
         }
     }
 
     const handleSubmit = (e) => {
-        console.log(newPatinetAdmissionServiceModalInfo)
 		e.preventDefault();
         savePatientAdmissionService(newPatinetAdmissionServiceModalInfo)
 		newPatinetAdmissionServiceModalHandleClose();
@@ -108,7 +109,7 @@ const NewPatinetAdmissionServiceModal = ({
 							id="discount"
 							type="number"
 							variant="outlined"
-							value={newPatinetAdmissionServiceModalInfo?.discount}
+							value={newPatinetAdmissionServiceModalInfo?.discount }
 							onChange={handleChange}							
 						/>			
 						<TextField

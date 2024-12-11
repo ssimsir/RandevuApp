@@ -8,7 +8,6 @@ import Reservations from "../pages/Reservations";
 import Home from "../pages/Home";
 import Patients from "../pages/Patients";
 import Services from "../pages/Services";
-import PatientAdmission from "../pages/PatientAdmission";
 
 const AppRouter = () => {
 	return (
@@ -22,7 +21,6 @@ const AppRouter = () => {
 						<Route path="patients" element={<Patients />} />
 						<Route path="reservations" element={<Reservations />} />
 						<Route path="services" element={<Services />} />
-						<Route path="patientAdmission" element={<PatientAdmission />} />
 					</Route>
 				</Route>
 			</Routes>

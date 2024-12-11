@@ -33,8 +33,7 @@ const PatientAdmissionServiceSchema = new mongoose.Schema({
     },
 
     infoMessage: {
-        type: String,
-        required: true
+        type: String
     },
 
     price: {
@@ -43,8 +42,7 @@ const PatientAdmissionServiceSchema = new mongoose.Schema({
     },
 
     discount: {
-        type: Number,
-        required: true
+        type: Number
     },
 
     discountedPrice: {

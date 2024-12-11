@@ -24,11 +24,6 @@ const MenuListComp = () => {
 			path: "/app/biltek/patients",
 		},
 		{
-			iconName: <PersonIcon />,
-			title: "Hasta Kabul",
-			path: "/app/biltek/patientAdmission",
-		},
-		{
 			iconName: <ShoppingCartCheckoutIcon />,
 			title: "Hizmetler",
 			path: "/app/biltek/services",

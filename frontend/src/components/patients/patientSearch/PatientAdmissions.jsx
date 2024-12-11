@@ -83,6 +83,7 @@ const PatientAdmissions = ({
     const handleChange = (panel) => (event, newExpanded) => {
         if (event.target.tagName !== 'BUTTON' && event.target.tagName !== 'path' && event.target.tagName !== 'svg') {
             setExpanded(newExpanded ? panel : false);
+            console.log(panel)
         }
     };
 
@@ -228,7 +229,7 @@ const PatientAdmissions = ({
                                     <Box sx={{ width: "100%", mt: 1, display: "flex", justifyContent: "space-between" }}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                <PatientAdmissionInfoTable patientAdmission={patientAdmission} />
+                                                <PatientAdmissionInfoTable patientAdmission={patientAdmission} />                                            
                                             </Grid>
                                             {/* <Grid item xs={12} sm={12} md={6} lg={4}>
                                                 <TextField

@@ -5,6 +5,8 @@
 // Category Controllers:
 
 const PatientAdmissionService = require('../models/patientAdmissionService')
+const PatientAdmission = require('../models/patientAdmission')
+const kdvRate = 20
 
 module.exports = {
 
@@ -51,8 +53,15 @@ module.exports = {
             }
         */
 
+        req.body.discountedPrice = req.body.price - (req.body.price * req.body.discount) / 100;
+
         const data = await PatientAdmissionService.create(req.body)
 
+        //Kayıt Sonrası patientAdmission Güncelle
+        const updatePatientAdmission = await PatientAdmission.updateOne(
+            { _id: data.patientAdmissionId }, 
+            { $inc: { totalAmount: +data.discountedPrice, kdvAmount: +(data.discountedPrice*kdvRate)/100, totalAmountWithKDV: +(data.discountedPrice+(data.discountedPrice*kdvRate)/100)}}
+        )
         res.status(201).send({
             error: false,
             data

@@ -10,7 +10,7 @@ import { Box, Table, TableBody, TableCell, TableRow } from "@mui/material";
 
 import { Button } from "@mui/material"
 import useAxios from "../../../../services/useAxios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import {AccordionTableSkeleton, NoDataMessage} from "../../../DataFetchMessages";
@@ -23,19 +23,31 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 
 	const { userId } = useSelector((state) => state.auth);
 
-    const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState();
-	const fetchPatinetAdmissionServicesData = async () => {
+    const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState([]);
+	const [patinetAdmissionData, setPatinetAdmissionData] = useState([]);
+
+	const fetchPatinetAdmissionData = async () => {
 		try {
-			const { data } = await axiosToken(`/API/v1/patientAdmissionServices/?filter[patientAdmissionId]=${patientAdmissionId}`);            
-			setPatinetAdmissionServicesData(data.data)
+			const { data } = await axiosToken(`/API/v1/patientAdmissions/${patientAdmissionId}`);    			
+			setPatinetAdmissionData(data.data)			
 		} catch (error) {
 			console.error(error);
 		}
-	}
+	};
 
-    useEffect(() => {
+	const fetchPatinetAdmissionServicesData = async () => {
+		try {
+			const { data } = await axiosToken(`/API/v1/patientAdmissionServices/?filter[patientAdmissionId]=${patientAdmissionId}`);    			
+			setPatinetAdmissionServicesData(data.data)			
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchPatinetAdmissionData()
 		fetchPatinetAdmissionServicesData();
-	}, [patinetAdmissionServicesData]);
+	}, []);
 
     const getRowId = (row) => row._id
     const columns = [
@@ -161,6 +173,8 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 	}
 	//NewPatinetAdmissionServiceModal
 
+
+
     return(
 		<Box sx={{ width: "100%" }}>
 			<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap:"wrap" }}>
@@ -169,18 +183,18 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 						HİZMET EKLE
 					</Button>
 				</Box>
-				{!patinetAdmissionServicesData ? (
+				{!patinetAdmissionServicesData?.length ? (
 					<AccordionTableSkeleton />
 				) : (
 					patinetAdmissionServicesData?.length ? (                        
-						<PatinetAdmissionServicesDetails patinetAdmissionServicesData={{}} />
+						<PatinetAdmissionCostDetails patinetAdmissionData={patinetAdmissionData} />
 					) : (
 						<NoDataMessage />
 					)
 				)}
 			</Box>
 
-			{!patinetAdmissionServicesData ? (
+			{!patinetAdmissionServicesData?.length ? (
 				<AccordionTableSkeleton />
 			) : (
 				patinetAdmissionServicesData?.length ? (
@@ -199,6 +213,8 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
                 newPatinetAdmissionServiceModalHandleClose={newPatinetAdmissionServiceModalHandleClose}
 				newPatinetAdmissionServiceModalInfo={newPatinetAdmissionServiceModalInfo}
 				setNewPatinetAdmissionServiceModalInfo={setNewPatinetAdmissionServiceModalInfo}
+				fetchPatinetAdmissionServicesData={fetchPatinetAdmissionServicesData}	
+				fetchPatinetAdmissionData={fetchPatinetAdmissionData}			
 			/>
 
 			{/* <QuotationDetailModal
@@ -235,20 +251,20 @@ const StyledTable = styled(Table)(({ theme }) => ({
 	},
 }));
 
-const PatinetAdmissionServicesDetails = ({ patinetAdmissionServicesData }) => (
+const PatinetAdmissionCostDetails = ({ patinetAdmissionData }) => (
 	<StyledTable>
 		<TableBody>
 			<TableRow>
 				<TableCell sx={{ fontWeight: "bold" }}>ARA TOPLAM</TableCell>
-				<TableCell sx={{ fontWeight: "bold" }}>{patinetAdmissionServicesData?.totalAmount}</TableCell>
+				<TableCell sx={{ fontWeight: "bold" }}>₺ {patinetAdmissionData?.totalAmount}</TableCell>
 			</TableRow>
 			<TableRow>
 				<TableCell sx={{ fontWeight: "bold" }}>KDV 20%</TableCell>
-				<TableCell sx={{ fontWeight: "bold" }}>{patinetAdmissionServicesData?.kdvAmount}</TableCell>
+				<TableCell sx={{ fontWeight: "bold" }}>₺ {patinetAdmissionData?.kdvAmount}</TableCell>
 			</TableRow>
 			<TableRow>
 				<TableCell sx={{ fontWeight: "bold" }}>GENEL TOPLAM</TableCell>
-				<TableCell sx={{ fontWeight: "bold" }}>{patinetAdmissionServicesData?.totalAmountWithKDV}</TableCell>
+				<TableCell sx={{ fontWeight: "bold" }}>₺ {patinetAdmissionData?.totalAmountWithKDV}</TableCell>
 			</TableRow>
 		</TableBody>
 	</StyledTable>
