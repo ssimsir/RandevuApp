@@ -32,6 +32,11 @@ const PatientAdmissionServiceSchema = new mongoose.Schema({
         required: true,
     },
 
+    infoMessage: {
+        type: String,
+        required: true
+    },
+
     price: {
         type: Number,
         required: true

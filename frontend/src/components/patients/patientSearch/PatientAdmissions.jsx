@@ -255,7 +255,7 @@ const PatientAdmissions = ({
                                 </Box>
                             </AccordionSummary>
                             <AccordionDetails>
-                                {expanded === patientAdmission._id && <PatinetAdmissionServices patientAdmissionId={patientAdmission._id}/>}
+                                {expanded === patientAdmission._id && <PatinetAdmissionServices patientId={patientId} patientAdmissionId={patientAdmission._id}/>}
                             </AccordionDetails>
                         </Accordion>
                     ))

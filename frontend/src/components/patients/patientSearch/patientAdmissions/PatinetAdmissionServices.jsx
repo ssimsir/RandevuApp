@@ -14,34 +14,19 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import {AccordionTableSkeleton, NoDataMessage} from "../../../DataFetchMessages";
+import NewPatinetAdmissionServiceModal from "./patientAdmissionServices/NewPatinetAdmissionServiceModal";
 
 
-const PatinetAdmissionServices = ({patientAdmissionId}) => {
+const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 
 	const { axiosToken } = useAxios()
 
 	const { userId } = useSelector((state) => state.auth);
 
-	const patinetAdmissionServicesInfoInitialState = {
-		userId: userId,
-		quotationId: patientAdmissionId,
-		productId: '',
-		brand: '',
-		color: '',
-		cablePackage: '',
-		delivery: '',
-		unitPrice: '',
-		quantity: '',
-		discount: '',
-	}
-
-	const [patinetAdmissionServicesInfo, setPatinetAdmissionServicesInfo] = useState(patinetAdmissionServicesInfoInitialState);
-
     const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState();
 	const fetchPatinetAdmissionServicesData = async () => {
 		try {
-			const { data } = await axiosToken(`/API/v1/patientAdmissionServices/?filter[patientAdmissionId]=${patientAdmissionId}`);
-            console.log(data.data);
+			const { data } = await axiosToken(`/API/v1/patientAdmissionServices/?filter[patientAdmissionId]=${patientAdmissionId}`);            
 			setPatinetAdmissionServicesData(data.data)
 		} catch (error) {
 			console.error(error);
@@ -50,8 +35,7 @@ const PatinetAdmissionServices = ({patientAdmissionId}) => {
 
     useEffect(() => {
 		fetchPatinetAdmissionServicesData();
-		//fetchQuotationData();
-	}, [patinetAdmissionServicesInfo]);
+	}, [patinetAdmissionServicesData]);
 
     const getRowId = (row) => row._id
     const columns = [
@@ -148,15 +132,40 @@ const PatinetAdmissionServices = ({patientAdmissionId}) => {
 		},
 	]
 
-    const quotationDetailModalOpenHandle = () => {
-		
-		//getArmer("firms");
+
+	// NewPatinetAdmissionServiceModal
+
+	const newPatinetAdmissionServiceModalInfoInitialState = {
+		userId: userId,
+		patientId:patientId,
+		patientAdmissionId:patientAdmissionId,
+		serviceId:'',
+		discount:'',
+		infoMessage: '',
+		price:''
+	}    
+    const [newPatinetAdmissionServiceModalInfo, setNewPatinetAdmissionServiceModalInfo] = useState(newPatinetAdmissionServiceModalInfoInitialState);
+    const [newPatinetAdmissionServiceModalopen, setNewPatinetAdmissionServiceModalopen] = useState(false)
+    const newPatinetAdmissionServiceModalHandleOpen = () => {
+        // setPatientAdmissionInfo({
+        //     userId,
+        //     patientId,
+        //     admissionDate: new Date().toISOString().split("T")[0],
+        //     doctorId: ""
+        // })
+        setNewPatinetAdmissionServiceModalopen(true)
+    }
+    const newPatinetAdmissionServiceModalHandleClose = () => {
+		setNewPatinetAdmissionServiceModalInfo(newPatinetAdmissionServiceModalInfoInitialState)
+		setNewPatinetAdmissionServiceModalopen(false)
 	}
+	//NewPatinetAdmissionServiceModal
+
     return(
 		<Box sx={{ width: "100%" }}>
 			<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap:"wrap" }}>
 				<Box sx={{ mb:"10px", display: "flex", justifyContent: "space-between", alignItems: "center", gap:"3px" }}>
-					<Button sx={{ marginRight: '10px' }} variant="contained" startIcon={<AddIcon />} onClick={quotationDetailModalOpenHandle}>
+					<Button sx={{ marginRight: '10px' }} variant="contained" startIcon={<AddIcon />} onClick={newPatinetAdmissionServiceModalHandleOpen}>
 						HİZMET EKLE
 					</Button>
 				</Box>
@@ -185,6 +194,12 @@ const PatinetAdmissionServices = ({patientAdmissionId}) => {
 					<NoDataMessage />
 				)
 			)}
+			<NewPatinetAdmissionServiceModal
+				newPatinetAdmissionServiceModalopen={newPatinetAdmissionServiceModalopen}
+                newPatinetAdmissionServiceModalHandleClose={newPatinetAdmissionServiceModalHandleClose}
+				newPatinetAdmissionServiceModalInfo={newPatinetAdmissionServiceModalInfo}
+				setNewPatinetAdmissionServiceModalInfo={setNewPatinetAdmissionServiceModalInfo}
+			/>
 
 			{/* <QuotationDetailModal
 				quotationDetailModalOpen={quotationDetailModalOpen}
