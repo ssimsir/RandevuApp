@@ -23,8 +23,8 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 
 	const { userId } = useSelector((state) => state.auth);
 
-    const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState([]);
-	const [patinetAdmissionData, setPatinetAdmissionData] = useState([]);
+    const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState();
+	const [patinetAdmissionData, setPatinetAdmissionData] = useState();
 
 	const fetchPatinetAdmissionData = async () => {
 		try {
@@ -183,7 +183,7 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 						HİZMET EKLE
 					</Button>
 				</Box>
-				{!patinetAdmissionServicesData?.length ? (
+				{!patinetAdmissionServicesData ? (
 					<AccordionTableSkeleton />
 				) : (
 					patinetAdmissionServicesData?.length ? (                        
@@ -194,7 +194,7 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 				)}
 			</Box>
 
-			{!patinetAdmissionServicesData?.length ? (
+			{!patinetAdmissionServicesData ? (
 				<AccordionTableSkeleton />
 			) : (
 				patinetAdmissionServicesData?.length ? (
