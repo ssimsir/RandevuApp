@@ -3,7 +3,6 @@
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
 const { mongoose } = require('../configs/dbConnection')
-const Counter = require('./counter'); // Counter modelini import et
 
 /* ------------------------------------------------------- */
 

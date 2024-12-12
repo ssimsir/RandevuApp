@@ -187,10 +187,8 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 		userId: userId,
 		patientId:patientId,
 		patientAdmissionId:patientAdmissionId,
-		serviceId:'',
-		discount:'',
+		paymentAmount:'',
 		infoMessage: '',
-		price:''
 	}    
 	const [newPatinetAdmissionPaymentModalInfo, setNewPatinetAdmissionPaymentModalInfo] = useState(newPatinetAdmissionPaymentModalInfoInitialState);
 	const [newPatinetAdmissionPaymentModalopen, setNewPatinetAdmissionPaymentModalopen] = useState(false)
