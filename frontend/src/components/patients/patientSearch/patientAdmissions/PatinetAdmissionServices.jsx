@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import PrintIcon from '@mui/icons-material/Print';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import { btnStyle } from "../../../../styles/globalStyles"
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid"
@@ -15,6 +16,7 @@ import { useSelector } from "react-redux";
 
 import {AccordionTableSkeleton, NoDataMessage} from "../../../DataFetchMessages";
 import NewPatinetAdmissionServiceModal from "./patientAdmissionServices/NewPatinetAdmissionServiceModal";
+import NewPatinetAdmissionPaymentModal from "./patientAdmissionServices/NewPatinetAdmissionPaymentModal";
 
 
 const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
@@ -23,26 +25,6 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 
 	const { userId } = useSelector((state) => state.auth);
 
-    const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState();
-	const [patinetAdmissionData, setPatinetAdmissionData] = useState();
-
-	const fetchPatinetAdmissionData = async () => {
-		try {
-			const { data } = await axiosToken(`/API/v1/patientAdmissions/${patientAdmissionId}`);    			
-			setPatinetAdmissionData(data.data)			
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	const fetchPatinetAdmissionServicesData = async () => {
-		try {
-			const { data } = await axiosToken(`/API/v1/patientAdmissionServices/?filter[patientAdmissionId]=${patientAdmissionId}`);    			
-			setPatinetAdmissionServicesData(data.data)			
-		} catch (error) {
-			console.error(error);
-		}
-	};
 
 	useEffect(() => {
 		fetchPatinetAdmissionData()
@@ -145,7 +127,29 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 	]
 
 
-	// NewPatinetAdmissionServiceModal
+	
+	const [patinetAdmissionData, setPatinetAdmissionData] = useState();
+
+	const fetchPatinetAdmissionData = async () => {
+		try {
+			const { data } = await axiosToken(`/API/v1/patientAdmissions/${patientAdmissionId}`);    			
+			setPatinetAdmissionData(data.data)			
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+
+	/* --------------NewPatinetAdmissionServiceModal----*/
+	const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState();
+	const fetchPatinetAdmissionServicesData = async () => {
+		try {
+			const { data } = await axiosToken(`/API/v1/patientAdmissionServices/?filter[patientAdmissionId]=${patientAdmissionId}`);    			
+			setPatinetAdmissionServicesData(data.data)			
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	const newPatinetAdmissionServiceModalInfoInitialState = {
 		userId: userId,
@@ -158,29 +162,54 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 	}    
     const [newPatinetAdmissionServiceModalInfo, setNewPatinetAdmissionServiceModalInfo] = useState(newPatinetAdmissionServiceModalInfoInitialState);
     const [newPatinetAdmissionServiceModalopen, setNewPatinetAdmissionServiceModalopen] = useState(false)
-    const newPatinetAdmissionServiceModalHandleOpen = () => {
-        // setPatientAdmissionInfo({
-        //     userId,
-        //     patientId,
-        //     admissionDate: new Date().toISOString().split("T")[0],
-        //     doctorId: ""
-        // })
-        setNewPatinetAdmissionServiceModalopen(true)
-    }
+    const newPatinetAdmissionServiceModalHandleOpen = () => setNewPatinetAdmissionServiceModalopen(true)
     const newPatinetAdmissionServiceModalHandleClose = () => {
 		setNewPatinetAdmissionServiceModalInfo(newPatinetAdmissionServiceModalInfoInitialState)
 		setNewPatinetAdmissionServiceModalopen(false)
 	}
-	//NewPatinetAdmissionServiceModal
+	/* --------------NewPatinetAdmissionServiceModal----*/
 
 
+	// NewPatinetAdmissionPaymentModal
+
+	const [patinetAdmissionPaymentsData, setPatinetAdmissionPaymentsData] = useState();
+
+	const fetchPatinetAdmissionPaymentsData = async () => {
+		try {
+			const { data } = await axiosToken(`/API/v1/patientAdmissionServices/?filter[patientAdmissionId]=${patientAdmissionId}`);    			
+			setPatinetAdmissionPaymentsData(data.data)			
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const newPatinetAdmissionPaymentModalInfoInitialState = {
+		userId: userId,
+		patientId:patientId,
+		patientAdmissionId:patientAdmissionId,
+		serviceId:'',
+		discount:'',
+		infoMessage: '',
+		price:''
+	}    
+	const [newPatinetAdmissionPaymentModalInfo, setNewPatinetAdmissionPaymentModalInfo] = useState(newPatinetAdmissionPaymentModalInfoInitialState);
+	const [newPatinetAdmissionPaymentModalopen, setNewPatinetAdmissionPaymentModalopen] = useState(false)
+	const newPatinetAdmissionPaymentModalHandleOpen = () => setNewPatinetAdmissionPaymentModalopen(true)
+	const newPatinetAdmissionPaymentModalHandleClose = () => {
+		setNewPatinetAdmissionPaymentModalInfo(newPatinetAdmissionPaymentModalInfoInitialState)
+		setNewPatinetAdmissionPaymentModalopen(false)
+	}
+	// NewPatinetAdmissionPaymentModal
 
     return(
 		<Box sx={{ width: "100%" }}>
 			<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap:"wrap" }}>
-				<Box sx={{ mb:"10px", display: "flex", justifyContent: "space-between", alignItems: "center", gap:"3px" }}>
+				<Box sx={{ mb:"10px", display: "flex", flexDirection:"column", gap:"3px" }}>
 					<Button sx={{ marginRight: '10px' }} variant="contained" startIcon={<AddIcon />} onClick={newPatinetAdmissionServiceModalHandleOpen}>
 						HİZMET EKLE
+					</Button>
+					<Button sx={{ marginRight: '10px' }} variant="contained" startIcon={<AttachMoneyIcon />} onClick={newPatinetAdmissionPaymentModalHandleOpen}>
+						Tahsilat
 					</Button>
 				</Box>
 				{!patinetAdmissionServicesData ? (
@@ -214,6 +243,15 @@ const PatinetAdmissionServices = ({patientId, patientAdmissionId}) => {
 				newPatinetAdmissionServiceModalInfo={newPatinetAdmissionServiceModalInfo}
 				setNewPatinetAdmissionServiceModalInfo={setNewPatinetAdmissionServiceModalInfo}
 				fetchPatinetAdmissionServicesData={fetchPatinetAdmissionServicesData}	
+				fetchPatinetAdmissionData={fetchPatinetAdmissionData}			
+			/>
+
+			<NewPatinetAdmissionPaymentModal
+				newPatinetAdmissionPaymentModalopen={newPatinetAdmissionPaymentModalopen}
+                newPatinetAdmissionPaymentModalHandleClose={newPatinetAdmissionPaymentModalHandleClose}
+				newPatinetAdmissionPaymentModalInfo={newPatinetAdmissionPaymentModalInfo}
+				setNewPatinetAdmissionPaymentModalInfo={setNewPatinetAdmissionPaymentModalInfo}
+				fetchPatinetAdmissionPaymentsData={fetchPatinetAdmissionPaymentsData}	
 				fetchPatinetAdmissionData={fetchPatinetAdmissionData}			
 			/>
 

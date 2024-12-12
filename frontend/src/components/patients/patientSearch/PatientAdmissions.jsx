@@ -212,7 +212,7 @@ const PatientAdmissions = ({
                                                 sx={{ marginRight: '10px', width: { xs: '100%', sm: 'auto' } }}
                                                 variant="contained"
                                                 startIcon={<EditIcon />}
-                                                onClick={() => { setQuotationModalOpen(true); setQuotationInfo(patientAdmission) }}
+                                                //onClick={() => { setQuotationModalOpen(true); setQuotationInfo(patientAdmission) }}
                                             >
                                                 GÜNCELLE
                                             </Button>
@@ -220,7 +220,7 @@ const PatientAdmissions = ({
                                                 sx={{ width: { xs: '100%', sm: 'auto' } }}
                                                 variant="contained"
                                                 startIcon={<DeleteIcon />}
-                                                onClick={() => { window.confirm(`${patientAdmission.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(patientAdmission._id) }}
+                                                //onClick={() => { window.confirm(`${patientAdmission.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(patientAdmission._id) }}
                                             >
                                                 SİL
                                             </Button>
