@@ -3,7 +3,7 @@ import Modal from "@mui/material/Modal";
 import { modalStyle } from "../../../../styles/globalStyles";
 import { Button, TextField } from "@mui/material";
 import { MenuItem, Select, InputLabel, FormControl } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAxios from "../../../../services/useAxios"
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -63,6 +63,22 @@ const NewPatientAdmissionModal = ({
         })
     }
 
+
+    const [doctors, setDoctors] = useState([]);
+
+    const fetchDoctors = async () => {
+        try {
+            const { data } = await axiosToken(`/API/v1/doctors`);
+            setDoctors(data.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchDoctors()
+    }, [])
+
     return (
         <div>
             <Modal
@@ -83,25 +99,26 @@ const NewPatientAdmissionModal = ({
                         onSubmit={handleSubmit}
                     >
 
-
                         <FormControl>
                             <InputLabel variant="outlined" id="doctorLabel">
                                 DOKTOR
                             </InputLabel>
                             <Select
                                 labelId="doctorLabel"
-                                label="Doktor"
+                                label="DOKTOR"
                                 name="doctorId"
                                 value={patientAdmissionInfo?.doctorId}
                                 onChange={handleChange}
                                 required
                             >
-                                
-                                <MenuItem key={1} value={"1"}>Doktor1</MenuItem>
-                                <MenuItem key={2} value={"2"}>Doktor2</MenuItem>
-
+                                {doctors?.map((item) => (
+                                    <MenuItem key={item._id} value={item._id}>
+                                        {item.name}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
+
 
                         <TextField
                             label="Kayıt Tarihi"

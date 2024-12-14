@@ -25,7 +25,7 @@ module.exports = {
 
         //const data = await res.getModelList(PatientAdmissionPayment, {}, ['patientId'])
         const data = await res.getModelList(PatientAdmissionPayment, {}, [
-            { path: 'serviceId', select: 'name content price' },
+            //{ path: 'serviceId', select: 'name content price' },
         ])
 
 

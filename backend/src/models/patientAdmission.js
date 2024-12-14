@@ -38,9 +38,11 @@ const PatientAdmissionSchema = new mongoose.Schema({
     },
 
     doctorId: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Doctor',
         required: true,
     },
+    
     totalAmount: {
         type: Number,
         trim: true,

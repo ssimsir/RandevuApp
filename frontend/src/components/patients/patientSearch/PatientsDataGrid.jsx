@@ -17,7 +17,7 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 		(id) => () => {
 			setTimeout(() => {
 
-				if (window.confirm("Müşteri silinecektir eminmisiniz")) {
+				if (window.confirm("Hasta silinecektir eminmisiniz")) {
 					deleteBiltek("patients", id)
 				}
 				console.log("delete", id)
@@ -49,19 +49,18 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 			flex: 1,
 		},
 		{
-			field: "email",
-			headerName: "Email",
+			field: "age",
+			headerName: "Yaş",
 			flex: 1,
 		},
 		{
-			field: "phoneNumber",
+			field: "gsmNumber",
 			headerName: "Telefon",
 			flex: 1,
 		},
-
 		{
-			field: "companyName",
-			headerName: "Firma Adı",
+			field: "email",
+			headerName: "Email",
 			flex: 1,
 		},
 		{

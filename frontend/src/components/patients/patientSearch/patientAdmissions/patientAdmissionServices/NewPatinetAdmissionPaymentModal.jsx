@@ -22,6 +22,7 @@ const NewPatinetAdmissionPaymentModal = ({
 	const handleChange = (e) => {
         const { name, value } = e.target;
         setNewPatinetAdmissionPaymentModalInfo({ ...newPatinetAdmissionPaymentModalInfo, [name]: value });         
+        console.log(newPatinetAdmissionPaymentModalInfo)
 	};
 
 
@@ -63,12 +64,12 @@ const NewPatinetAdmissionPaymentModal = ({
 					>	
                         <TextField
 							label="Tahsilat Miktarı"
-							name="paymentAmount "
-							id="paymentAmount "
+							name="paymentAmount"
+							id="paymentAmount"
 							type="number"
 							variant="outlined"
                             required
-							value={newPatinetAdmissionPaymentModalInfo?.paymentAmount  }
+							value={newPatinetAdmissionPaymentModalInfo?.paymentAmount}
 							onChange={handleChange}							
 						/>			
 						<TextField

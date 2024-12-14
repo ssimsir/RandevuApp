@@ -23,7 +23,7 @@ module.exports = {
             `
         */
 
-        const data = await res.getModelList(PatientAdmission, {}, ['patientId'])
+        const data = await res.getModelList(PatientAdmission, {}, ['patientId', 'doctorId'])
         // const data = await res.getModelList(PatientAdmission, {}, [
         //     { path: 'categoryId', select: 'name' }
         // ])

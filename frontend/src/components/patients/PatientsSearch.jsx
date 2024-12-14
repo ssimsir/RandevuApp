@@ -90,7 +90,7 @@ const PatientsSearch = () => {
                                 variant="contained"
                                 color="primary"
                                 onClick={handleSearch}
-                                fullWidth
+                                
                             >
                                 Ara
                             </Button>
