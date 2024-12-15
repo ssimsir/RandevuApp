@@ -36,7 +36,7 @@ const PatientAdmissionPaymentSchema = new mongoose.Schema({
     }
     
 }, {
-    collection: 'patientAdmissionPayment',
+    collection: 'patientAdmissionPayments',
     timestamps: true
 })
 

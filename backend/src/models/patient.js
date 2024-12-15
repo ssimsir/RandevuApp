@@ -80,7 +80,7 @@ const PatientSchema = new mongoose.Schema({
         trim: true,
     },
 }, {
-    collection: 'patient',
+    collection: 'patients',
     timestamps: true
 })
 

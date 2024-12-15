@@ -51,7 +51,7 @@ const PatientAdmissionServiceSchema = new mongoose.Schema({
         //transform: function() { return this.unitPrice - (this.unitPrice * this.discount) / 100 } // Update yaparken de hesaplasın.
     },
 }, {
-    collection: 'patientAdmissionService',
+    collection: 'patientAdmissionServices',
     timestamps: true
 })
 

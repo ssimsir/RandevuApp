@@ -46,7 +46,7 @@ module.exports = {
             borderColor :  reservation.serviceId.color,
 
         }));
-
+       
 
         res.status(200).send({
             error: false,

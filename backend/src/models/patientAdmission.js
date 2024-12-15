@@ -62,7 +62,7 @@ const PatientAdmissionSchema = new mongoose.Schema({
 
 
 }, {
-    collection: 'patientAdmission',
+    collection: 'patientAdmissions',
     timestamps: true
 })
 

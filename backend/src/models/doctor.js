@@ -70,7 +70,7 @@ const DoctorSchema = new mongoose.Schema({
         trim: true,
     },
 }, {
-    collection: 'doctor',
+    collection: 'doctors',
     timestamps: true
 })
 
