@@ -22,6 +22,7 @@ import NewPatientAdmissionModal from "./patientAdmissions/NewPatientAdmissionMod
 
 import { useSelector } from "react-redux";
 import PatinetAdmissionServices from "./patientAdmissions/PatinetAdmissionServices";
+import TableSkeleton from "../../DataFetchMessages";
 
 
 const Accordion = styled((props) => (
@@ -61,26 +62,25 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
     borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const PatientAdmissions = ({ 
+const PatientAdmissions = ({
     patientByPatientId,
-    fetchPatientByPatientId,
+    fetchPatientAdmissionByPatientId,
     patientLoading,
-    
-    
-    quotationsData, setQuotationModalOpen, setQuotationInfo, quotationModalData, setQuotationModalData }) => 
-{
+    patientAdmissionsByPatientId,
+    patientAdmissionLoading
+}) => {
 
-    const [selectedPatient] = patientByPatientId
+    const selectedPatient = patientByPatientId
+    const patientAdmissions = patientAdmissionsByPatientId;
+
     const { userId } = useSelector((state) => state.auth);
 
     const genderColor = selectedPatient?.gender === "Male" ? blue[50] : pink[50];
     const genderAvatar = selectedPatient?.gender === "Male" ? avatarMale : avatarFemale;
     const patientId = selectedPatient?._id;
-    const patientAdmissions = selectedPatient.patientAdmissions;
 
     const [expanded, setExpanded] = useState();
-
-    const handleChange = (panel) => (event, newExpanded) => {
+    const accordionHandleChange = (panel) => (event, newExpanded) => {
         if (event.target.tagName !== 'BUTTON' && event.target.tagName !== 'path' && event.target.tagName !== 'svg') {
             setExpanded(newExpanded ? panel : false);
             console.log(panel)
@@ -90,25 +90,14 @@ const PatientAdmissions = ({
     useEffect(() => {
         setExpanded(patientAdmissions[0]?._id || 1)
         console.log(selectedPatient)
-    },[patientAdmissions] )
+    }, [patientAdmissions])
     const { axiosToken } = useAxios()
-
-    const deleteQuotation = async (quotationId) => {
-        try {
-            const { data: productType } = await axiosToken.delete(`/API/v1/quotations/${quotationId}`);
-            toastSuccessNotify(`İşlem Başarılı.`);
-            setQuotationModalData(quotationModalData + 1)
-        } catch (error) {
-            console.error(error);
-            toastErrorNotify(`Hata Oluştu`);
-        }
-    }
 
     /*-----New Patient Admission Modal------*/
     const [newPatientAdmissionModalOpen, setNewPatientAdmissionModalOpen] = useState(false)
     const [patientAdmissionInfo, setPatientAdmissionInfo] = useState({
-        userId:"",
-        patientId:"",
+        userId: "",
+        patientId: "",
         admissionDate: "",
         doctorId: ""
     })
@@ -121,17 +110,23 @@ const PatientAdmissions = ({
         })
         setNewPatientAdmissionModalOpen(true)
     }
-    const newPatientAdmissionModalHandleClose = () => setNewPatientAdmissionModalOpen(false)
+    const newPatientAdmissionModalHandleClose = () => {
+        fetchPatientAdmissionByPatientId(patientId)
+        setNewPatientAdmissionModalOpen(false)
+    }
     /*-----New Patient Admission Modal------*/
+
     if (!selectedPatient?._id) return (<p>Hasta Seçiniz</p>)
-    if (patientLoading) return (<p>Yükleniyor</p>)
+    if (patientLoading) return (<TableSkeleton />)
+
+
     return (
         <>
             <Box sx={{
                 width: "100%",
                 //mt: 2,
 
-               
+
                 border: '1px solid #ccc',
 
             }}>
@@ -177,94 +172,70 @@ const PatientAdmissions = ({
                         startIcon={<AddIcon />}
                         onClick={newPatientAdmissionModalHandleOpen}
                     >
-                        Yeni Protokol                        
+                        Yeni Protokol
                     </Button>
 
                 </Box>
-                <Box sx={{
-                width: "100%",
-                //mt: 2,
-                height: 'calc(90vh - 227px)',
-                overflowY: 'auto', // Yalnızca dikey kaydırma                
-                padding: '5px',
-            }}>
-                {
-                    patientAdmissions.map((patientAdmission) => (
-                        <Accordion
-                            key={patientAdmission._id + "-key"}
-                            expanded={expanded === patientAdmission._id}
-                            onChange={handleChange(patientAdmission._id)}
-                            sx={{
-                                width: "100%", // Tam genişlik
-                                // [theme.breakpoints.down('sm')]: {
-                                //     padding: '8px', // Küçük ekranlar için ekstra padding
-                                // }
-                            }}
-                        >
-                            <AccordionSummary
-                                aria-controls={patientAdmission._id + "-content"}
-                                id={patientAdmission._id + "-header"}
-                            >
-                                <Box sx={{ width: "100%", mt: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "end" }}>
-                                    <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: 'wrap' }}>
-                                        <Typography variant="h6" /*sx={{ fontSize: { xs: '1.2rem', sm: '2rem', md: '2.5rem' } }}*/>
-                                            {`Doktor :  ${patientAdmission?.doctorDetails[0]?.name} ${patientAdmission?.doctorDetails[0]?.surname}`}
-                                        </Typography>
+                <Box sx={{ width: "100%", height: 'calc(90vh - 227px)', overflowY: 'auto', padding: '5px', }}>
+                    {
+                        patientAdmissionLoading ? (<TableSkeleton />) : (
+                            patientAdmissions.map((patientAdmission) => (
+                                <Accordion
+                                    key={patientAdmission._id + "-key"}
+                                    expanded={expanded === patientAdmission._id}
+                                    onChange={accordionHandleChange(patientAdmission._id)}
+                                    sx={{
+                                        width: "100%", // Tam genişlik
+                                        // [theme.breakpoints.down('sm')]: {
+                                        //     padding: '8px', // Küçük ekranlar için ekstra padding
+                                        // }
+                                    }}
+                                >
+                                    <AccordionSummary
+                                        aria-controls={patientAdmission._id + "-content"}
+                                        id={patientAdmission._id + "-header"}
+                                    >
+                                        <Box sx={{ width: "100%", mt: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "end" }}>
+                                            <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: 'wrap' }}>
+                                                <Typography variant="h6" /*sx={{ fontSize: { xs: '1.2rem', sm: '2rem', md: '2.5rem' } }}*/>
+                                                    {`Doktor :  ${patientAdmission?.doctorId?.name} ${patientAdmission?.doctorId?.surname}`}
+                                                </Typography>
 
-                                        <Box sx={{ width: { xs: "100%", sm: "auto" }, display: "flex", justifyContent: "start", alignItems: "center", mt: { xs: 2, sm: 0 } }}>
-                                            <Button
-                                                sx={{ marginRight: '10px', width: { xs: '100%', sm: 'auto' } }}
-                                                variant="contained"
-                                                startIcon={<EditIcon />}
-                                                //onClick={() => { setQuotationModalOpen(true); setQuotationInfo(patientAdmission) }}
-                                            >
-                                                GÜNCELLE
-                                            </Button>
-                                            <Button
-                                                sx={{ width: { xs: '100%', sm: 'auto' } }}
-                                                variant="contained"
-                                                startIcon={<DeleteIcon />}
-                                                //onClick={() => { window.confirm(`${patientAdmission.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(patientAdmission._id) }}
-                                            >
-                                                SİL
-                                            </Button>
+                                                <Box sx={{ width: { xs: "100%", sm: "auto" }, display: "flex", justifyContent: "start", alignItems: "center", mt: { xs: 2, sm: 0 } }}>
+                                                    <Button
+                                                        sx={{ marginRight: '10px', width: { xs: '100%', sm: 'auto' } }}
+                                                        variant="contained"
+                                                        startIcon={<EditIcon />}
+                                                    //onClick={() => { setQuotationModalOpen(true); setQuotationInfo(patientAdmission) }}
+                                                    >
+                                                        GÜNCELLE
+                                                    </Button>
+                                                    <Button
+                                                        sx={{ width: { xs: '100%', sm: 'auto' } }}
+                                                        variant="contained"
+                                                        startIcon={<DeleteIcon />}
+                                                    //onClick={() => { window.confirm(`${patientAdmission.firmName} Teklifi Silinecektir Eminmisiniz ?`) && deleteQuotation(patientAdmission._id) }}
+                                                    >
+                                                        SİL
+                                                    </Button>
+                                                </Box>
+                                            </Box>
+                                            <Box sx={{ width: "100%", mt: 1, display: "flex", justifyContent: "space-between" }}>
+                                                <Grid container spacing={2}>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        <PatientAdmissionInfoTable patientAdmission={patientAdmission} />
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
                                         </Box>
-                                    </Box>
-                                    <Box sx={{ width: "100%", mt: 1, display: "flex", justifyContent: "space-between" }}>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                <PatientAdmissionInfoTable patientAdmission={patientAdmission} />                                            
-                                            </Grid>
-                                            {/* <Grid item xs={12} sm={12} md={6} lg={4}>
-                                                <TextField
-                                                    sx={{
-                                                        maxHeight: { xs: '40px', sm: '100%' },
-                                                        width: '100%',
-                                                        minWidth: '100px',
-                                                        maxWidth: '300px',
-                                                        marginLeft: '10px',
-                                                        overflow: "hidden"
-                                                        //marginRight: '15px',
-                                                    }}
-                                                    label=""
-                                                    multiline
-                                                    rows={5}
-                                                    variant="outlined"
-                                                    name="description"
-                                                    value={patientAdmission.description}
-                                                    disabled
-                                                />
-                                            </Grid> */}
-                                        </Grid>
-                                    </Box>
-                                </Box>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                {expanded === patientAdmission._id && <PatinetAdmissionServices patientId={patientId} patientAdmissionId={patientAdmission._id}/>}
-                            </AccordionDetails>
-                        </Accordion>
-                    ))
-                }
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        {expanded === patientAdmission._id && <PatinetAdmissionServices patientId={patientId} patientAdmissionId={patientAdmission._id} />}
+                                    </AccordionDetails>
+                                </Accordion>
+                            ))
+                        )
+                    }
                 </Box>
             </Box>
 
@@ -273,7 +244,6 @@ const PatientAdmissions = ({
                 newPatientAdmissionModalOpen={newPatientAdmissionModalOpen}
                 patientAdmissionInfo={patientAdmissionInfo}
                 setPatientAdmissionInfo={setPatientAdmissionInfo}
-                fetchPatientByPatientId={fetchPatientByPatientId}
             />
         </>
     );
@@ -300,9 +270,9 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const PatientAdmissionInfoTable = ({ patientAdmission }) => (
     <StyledTable>
         <TableBody>
-            <TableRow>            
+            <TableRow>
                 <TableCell>Kayıt Tarihi</TableCell>
-                <TableCell>{new Date(patientAdmission.admissionDate).toLocaleDateString("tr-TR")}</TableCell>                
+                <TableCell>{new Date(patientAdmission.admissionDate).toLocaleDateString("tr-TR")}</TableCell>
                 <TableCell>Protokol Numarası</TableCell>
                 <TableCell>{patientAdmission.protocolNumber}</TableCell>
             </TableRow>

@@ -6,6 +6,31 @@
 const mongoose = require('mongoose');
 const Patient = require('../models/patient')
 
+
+const  ageCalculate = (data) => {
+    const currentDate = new Date();
+    return data.map((patient) => {
+        // Patient nesnesini düz bir JavaScript nesnesine dönüştür
+        const patientObj = patient.toObject();
+
+        const birthDate = new Date(patientObj.birthDate); // Doğum tarihini Date objesine çevir
+        const age = currentDate.getFullYear() - birthDate.getFullYear();
+
+        // Doğum gününe göre düzeltme yap
+        const isBeforeBirthdayThisYear =
+            currentDate.getMonth() < birthDate.getMonth() ||
+            (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate());
+
+        const correctedAge = isBeforeBirthdayThisYear ? age - 1 : age;
+
+        // Yaş bilgisini ekle
+        return {
+            ...patientObj, // Yalnızca gerekli veriler
+            age: correctedAge
+        }
+    });
+}
+
 module.exports = {
 
     list: async (req, res) => {
@@ -24,38 +49,11 @@ module.exports = {
         */
 
         const data = await res.getModelList(Patient)
-
-
-        const currentDate = new Date();
-        const updatedData = data.map((patient) => {
-            // Patient nesnesini düz bir JavaScript nesnesine dönüştür
-            const patientObj = patient.toObject();
-        
-            const birthDate = new Date(patientObj.birthDate); // Doğum tarihini Date objesine çevir
-            const age = currentDate.getFullYear() - birthDate.getFullYear();
-        
-            // Doğum gününe göre düzeltme yap
-            const isBeforeBirthdayThisYear =
-                currentDate.getMonth() < birthDate.getMonth() ||
-                (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate());
-        
-            const correctedAge = isBeforeBirthdayThisYear ? age - 1 : age;
-        
-            // Yaş bilgisini ekle
-            return {
-                ...patientObj, // Yalnızca gerekli veriler
-                age: correctedAge
-            };
-        });
-
-
-
         res.status(200).send({
             error: false,
             details: await res.getModelListDetails(Patient),
-            data:updatedData
+            data:ageCalculate(data)
         })
-
     },
 
     create: async (req, res) => {
@@ -84,57 +82,74 @@ module.exports = {
             #swagger.tags = ["Patient"]
             #swagger.summary = "Get Single Patient"
         */
-        const data = await Patient.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } }, // ObjectId dönüşümü
-            {
-                $lookup: {
-                    from: 'patientAdmission', // İlişkili koleksiyon adı
-                    localField: '_id',        // Patient._id
-                    foreignField: 'patientId', // PatientAdmission.patientId
-                    as: 'patientAdmissions'    // Dönen veri için bir ad
-                }
-            },
-            { $unwind: { path: "$patientAdmissions", preserveNullAndEmptyArrays: true } }, // patientAdmissions'ı aç
-            { $sort: { "patientAdmissions.admissionNumber": -1 } }, // Sıralama işlemi
-            {
-                $addFields: { // Yaş hesaplama
-                    age: {
-                        $dateDiff: {
-                            startDate: "$birthDate", // Doğum tarihi
-                            endDate: "$$NOW",       // Şu anki tarih
-                            unit: "year"            // Yıl birimi
-                        }
-                    }
-                }
-            },
-            {
-                $lookup: {
-                    from: 'doctor', // Doctor koleksiyonu adı
-                    localField: 'patientAdmissions.doctorId', // patientAdmissions içindeki doctorId alanı
-                    foreignField: '_id', // Doctor koleksiyonundaki _id alanı
-                    as: 'patientAdmissions.doctorDetails' // doctorDetails'i her patientAdmission'a ekliyoruz
-                }
-            },
+        // const data = await Patient.aggregate([
+        //     { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } }, // ObjectId dönüşümü
+        //     {
+        //         $lookup: {
+        //             from: 'patientAdmission', // İlişkili koleksiyon adı
+        //             localField: '_id',        // Patient._id
+        //             foreignField: 'patientId', // PatientAdmission.patientId
+        //             as: 'patientAdmissions'    // Dönen veri için bir ad
+        //         }
+        //     },
+        //     { $unwind: { path: "$patientAdmissions", preserveNullAndEmptyArrays: true } }, // patientAdmissions'ı aç
+        //     { $sort: { "patientAdmissions.admissionNumber": -1 } }, // Sıralama işlemi
+        //     {
+        //         $addFields: { // Yaş hesaplama
+        //             age: {
+        //                 $dateDiff: {
+        //                     startDate: "$birthDate", // Doğum tarihi
+        //                     endDate: "$$NOW",       // Şu anki tarih
+        //                     unit: "year"            // Yıl birimi
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     {
+        //         $lookup: {
+        //             from: 'doctor', // Doctor koleksiyonu adı
+        //             localField: 'patientAdmissions.doctorId', // patientAdmissions içindeki doctorId alanı
+        //             foreignField: '_id', // Doctor koleksiyonundaki _id alanı
+        //             as: 'patientAdmissions.doctorDetails' // doctorDetails'i her patientAdmission'a ekliyoruz
+        //         }
+        //     },
             
-            {
-                $group: {
-                    _id: "$_id",
-                    name: { $first: "$name" },
-                    surname: { $first: "$surname" },
-                    birthDate: { $first: "$birthDate" },
-                    age: { $first: "$age" }, // Yaş bilgisini ekle
-                    gender: { $first: "$gender" },
-                    idNumber: { $first: "$idNumber" },
-                    email: { $first: "$email" },
-                    gsmNumber: { $first: "$gsmNumber" },
-                    patientAdmissions: { $push: "$patientAdmissions" }, // Sıralanmış admissions'ı yeniden grupla                
-                }
-            }
-        ]);
+        //     {
+        //         $group: {
+        //             _id: "$_id",
+        //             name: { $first: "$name" },
+        //             surname: { $first: "$surname" },
+        //             birthDate: { $first: "$birthDate" },
+        //             age: { $first: "$age" }, // Yaş bilgisini ekle
+        //             gender: { $first: "$gender" },
+        //             idNumber: { $first: "$idNumber" },
+        //             email: { $first: "$email" },
+        //             gsmNumber: { $first: "$gsmNumber" },
+        //             patientAdmissions: { $push: "$patientAdmissions" }, // Sıralanmış admissions'ı yeniden grupla                
+        //         }
+        //     }
+        // ]);
+
+        const data = await Patient.findOne({ _id: req.params.id })
+
+        const currentDate = new Date();
+        const patientObj = data.toObject();
+        const birthDate = new Date(patientObj.birthDate); // Doğum tarihini Date objesine çevir
+        const age = currentDate.getFullYear() - birthDate.getFullYear();
+
+        // Doğum gününe göre düzeltme yap
+        const isBeforeBirthdayThisYear =
+            currentDate.getMonth() < birthDate.getMonth() ||
+            (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate());
+
+        const correctedAge = isBeforeBirthdayThisYear ? age - 1 : age;
 
         res.status(200).send({
             error: false,
-            data
+            data:  {
+                ...patientObj, // Yalnızca gerekli veriler
+                age: correctedAge
+            }
         })
 
     },

@@ -5,6 +5,7 @@ import useFetchPatient from "../../services/useFetchPatient";
 import PatientAdmissions from './patientSearch/PatientAdmissions';
 import NewPatientModal from './patientSearch/NewPatientModal';
 import { useSelector } from "react-redux";
+import useFetchPatientAdmission from '../../services/useFetchPatientAdmission';
 
 const PatientsSearch = () => {
 
@@ -45,11 +46,12 @@ const PatientsSearch = () => {
                 console.error("Veri çekilirken hata oluştu:", error);
             }
         };
-
         fetchData();
     }, []);
 
     const { patients, fetchPatient, patientByPatientId, fetchPatientByPatientId, loading: patientLoading } = useFetchPatient();
+    const {patientAdmissionsByPatientId, fetchPatientAdmissionByPatientId, loading: patientAdmissionLoading} = useFetchPatientAdmission();
+
     const [nameFilter, setNameFilter] = useState('');
     const [idFilter, setIdFilter] = useState('');
 
@@ -100,14 +102,17 @@ const PatientsSearch = () => {
                         patients={patients}
                         patientLoadin={patientLoading}
                         fetchPatientByPatientId={fetchPatientByPatientId}
+                        fetchPatientAdmissionByPatientId = {fetchPatientAdmissionByPatientId}
                     />
                 </Grid>
                 <Grid item xs={7} >
-                    {patientByPatientId.length > 0 ?
+                    {patientByPatientId ?
                         <PatientAdmissions
-                            patientByPatientId={patientByPatientId}
-                            fetchPatientByPatientId={fetchPatientByPatientId}
+                            patientByPatientId={patientByPatientId}                            
+                            fetchPatientAdmissionByPatientId={fetchPatientAdmissionByPatientId}
                             patientLoading={patientLoading}
+                            patientAdmissionsByPatientId = {patientAdmissionsByPatientId}                         
+                            patientAdmissionLoading = {patientAdmissionLoading}
                         /> : <h1 style={{textAlign:"center"}}>Hasta Seçiniz</h1>}
                 </Grid>
             </Grid>

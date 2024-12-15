@@ -31,8 +31,9 @@ const useFetchPatientAdmission = () => {
     const fetchPatientAdmissionByPatientId = async (patientId) => {
         setLoading(true);
         setError(null); // Önceki hatayı sıfırlıyoruz
+        console.log(patientId)
         try {
-            const { data } = await axiosToken(`/API/v1/patientAdmissions/?filter[patientId]=${patientId}`);
+            const { data } = await axiosToken(`/API/v1/patientAdmissions/?filter[patientId]=${patientId}&sort[admissionNumber]=desc`);
             setPatientAdmissionsByPatientId(data.data); // Gelen verileri state'e kaydediyoruz
         } catch (error) {
             setError('Hata oluşru.');
@@ -41,7 +42,6 @@ const useFetchPatientAdmission = () => {
             setLoading(false); // Yükleme durumu bitiyor
         }
     };
-
 
     const savePatientAdmission = async (patientAdmissions) => {
         setLoading(true);

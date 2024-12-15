@@ -13,7 +13,6 @@ const NewPatientAdmissionModal = ({
     newPatientAdmissionModalHandleClose , 
     patientAdmissionInfo, 
     setPatientAdmissionInfo,
-    fetchPatientByPatientId
 }) => {
 
     const { axiosToken } = useAxios()
@@ -24,8 +23,7 @@ const NewPatientAdmissionModal = ({
 
     const savePatientAdmission = async (info) => {
         try {
-            const { data: productType } = await axiosToken.post(`/API/v1/patientAdmissions`, info);
-            fetchPatientByPatientId(info.patientId)
+            const { data } = await axiosToken.post(`/API/v1/patientAdmissions`, info);
         } catch (error) {
             console.error(error);
         }

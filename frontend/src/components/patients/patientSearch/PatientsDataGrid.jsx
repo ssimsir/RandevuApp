@@ -1,22 +1,16 @@
 import * as React from "react";
 import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import useBiltekRequest from "../../../services/useBiltekRequest";
 
+export default function PatientsDataGrid({ patients, patientLoading, fetchPatientByPatientId ,
+	fetchPatientAdmissionByPatientId
+}) {
 
-export default function PatientsDataGrid({ patients, patientLoading, fetchPatientByPatientId }) {
-
-
-	// const { patients, loading } = useSelector((state) => state.biltek);
-	
-	const rows = patients;
 	const { deleteBiltek } = useBiltekRequest();
 	const deleteUser = React.useCallback(
 		(id) => () => {
 			setTimeout(() => {
-
 				if (window.confirm("Hasta silinecektir eminmisiniz")) {
 					deleteBiltek("patients", id)
 				}
@@ -29,10 +23,6 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 
 	const getRowId = (row) => row._id
 	const columns = [
-		// {
-		// 	field: "patientId",
-		// 	hide: true,
-		// },
 		{
 			field: "name",
 			headerName: "Adı",
@@ -73,7 +63,6 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 					label="Delete"
 					onClick={deleteUser(params.id)}
 				/>,
-
 			],
 		},
 	];
@@ -81,6 +70,7 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 	// Satıra tıklama işlevi
 	const handleRowClick = (param) => {
 		fetchPatientByPatientId(param.row._id)
+		fetchPatientAdmissionByPatientId(param.row._id)
 	};
 
 	return (
@@ -89,19 +79,9 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 				<div>Yükleniyor</div>
 			) : (
 				<DataGrid
-					rows={rows}
+					rows={patients}
 					columns={columns}
-					localeText={{
-						toolbarDensity: "Size",
-						toolbarDensityLabel: "Size",
-						toolbarDensityCompact: "Small",
-						toolbarDensityStandard: "Medium",
-						toolbarDensityComfortable: "Large",
-					}}
 					getRowId={getRowId}
-					slots={{
-						toolbar: GridToolbar,
-					}}
 					onRowClick={handleRowClick} // Tıklama olayını buraya ekliyoruz				
 				/>
 			)}

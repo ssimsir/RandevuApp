@@ -6,7 +6,7 @@ const useFetchPatient = () => {
 
     // State'leri tanımlıyoruz
     const [patients, setPatients] = useState([]);
-    const [patientByPatientId, setPatientByPatientId] = useState([]);
+    const [patientByPatientId, setPatientByPatientId] = useState({});
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -46,8 +46,6 @@ const useFetchPatient = () => {
             setLoading(false); // Yükleme durumu bitiyor
         }
     };
-
-
 
     const saveProduct = async (product) => {
         setLoading(true);
