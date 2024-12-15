@@ -20,19 +20,19 @@ const PatientAdmissionSchema = new mongoose.Schema({
         required: true,
     },
     admissionDate: {
-        type:Date,
+        type: Date,
         trim: true,
         required: true
     },
 
-    admissionNumber:  {
-        type:Number,
+    admissionNumber: {
+        type: Number,
         trim: true,
         unique: true,
     },
 
-    protocolNumber:  {
-        type:Number,
+    protocolNumber: {
+        type: Number,
         trim: true,
         unique: true,
     },
@@ -42,7 +42,7 @@ const PatientAdmissionSchema = new mongoose.Schema({
         ref: 'Doctor',
         required: true,
     },
-    
+
     totalAmount: {
         type: Number,
         trim: true,
@@ -50,11 +50,16 @@ const PatientAdmissionSchema = new mongoose.Schema({
     kdvAmount: {
         type: Number,
         trim: true,
-      },
+    },
     totalAmountWithKDV: {
         type: Number,
         trim: true,
-      },
+    },
+    totalPayment: {
+        type: Number,
+        trim: true,
+    },
+
 
 }, {
     collection: 'patientAdmission',

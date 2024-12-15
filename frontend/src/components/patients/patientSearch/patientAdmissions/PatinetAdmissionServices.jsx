@@ -158,12 +158,23 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 			headerAlign: "center",
 		},
 		{
-			field: "discount",
+			field: "createdAt",
 			headerName: "Tarih",
 			type: "number",
-			width: 100,
+			width: 200,
 			align: "right",
 			headerAlign: "center",
+			valueGetter: (value) => new Date(value).toLocaleString("tr-TR"),
+
+		},
+		{
+			field: "userId",
+			headerName: "Kayıt Yapan",
+			type: "number",
+			width: 200,
+			align: "right",
+			headerAlign: "center",
+			valueGetter: (value) => `${value.firstName} ${value.lastName}`,
 		},
 		{
 			field: "actions",
@@ -297,7 +308,7 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 
 	return (
 		<>
-			<Box sx={{ width: "100%", border:"1px solid black" }}>
+			<Box sx={{ width: "100%", border: "1px solid black" }}>
 				<Tabs value={activeTab} onChange={handleTabChange}>
 					<Tab label="HİZMETLER" />
 					<Tab label="TAHSİLAT" />
@@ -310,21 +321,15 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 					{activeTab === 0 && (
 						<Box sx={{ width: "100%" }}>
 							<Box
+								mb={1}
 								sx={{
 									display: "flex",
-									justifyContent: "space-between",
+									justifyContent: "end",
 									alignItems: "center",
 									flexWrap: "wrap",
 								}}
 							>
-								<Box
-									sx={{
-										mb: "10px",
-										display: "flex",
-										flexDirection: "column",
-										gap: "3px",
-									}}
-								>
+		
 									<Button
 										sx={{ marginRight: "10px" }}
 										variant="contained"
@@ -333,7 +338,7 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 									>
 										HİZMET EKLE
 									</Button>
-								</Box>
+								
 							</Box>
 							{!patinetAdmissionServicesData ? (
 								<AccordionTableSkeleton />
@@ -357,56 +362,49 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 								sx={{
 									display: "flex",
 									justifyContent: "space-between",
-									alignItems: "center",
+									alignItems: "start",
 									flexWrap: "wrap",
 								}}
 							>
-								<Box
-									sx={{
-										mb: "10px",
-										display: "flex",
-										flexDirection: "column",
-										gap: "3px",
-									}}
-								>
-									<Button
-										sx={{ marginRight: "10px" }}
-										variant="contained"
-										startIcon={<AttachMoneyIcon />}
-										onClick={newPatinetAdmissionPaymentModalHandleOpen}
-									>
-										TAHSİLAT
-									</Button>
-								</Box>
 								{!patinetAdmissionServicesData ? (
-						<AccordionTableSkeleton />
-					) : patinetAdmissionServicesData?.length ? (
-						<PatinetAdmissionCostDetails
-							patinetAdmissionData={patinetAdmissionData}
-						/>
-					) : (
-						<NoDataMessage />
-					)}
+									<AccordionTableSkeleton />
+								) : patinetAdmissionServicesData?.length ? (
+									<Box sx={{ display: "flex", gap: "10px", alignItems: "end" }}>
+										<PatinetAdmissionCostDetails patinetAdmissionData={patinetAdmissionData} />
+										<PatinetAdmissionPaymentDetails patinetAdmissionData={patinetAdmissionData} />
+										<PatinetAdmissionRemainingAmountDetails patinetAdmissionData={patinetAdmissionData} />																			
+									</Box>
+								) : (
+									<NoDataMessage />
+								)}
+																<Button
+									sx={{ marginRight: "10px" }}
+									variant="contained"
+									startIcon={<AttachMoneyIcon />}
+									onClick={newPatinetAdmissionPaymentModalHandleOpen}
+								>
+									TAHSİLAT
+								</Button>
 							</Box>
 							{!patinetAdmissionServicesData ? (
 								<AccordionTableSkeleton />
 							) : patinetAdmissionServicesData?.length ? (
-						<DataGrid
-							rows={patinetAdmissionPaymentsData}
-							columns={patinetAdmissionPaymentsColumns}
-							getRowId={getRowIdPatinetAdmissionPayments}
-							disableRowSelectionOnClick
-						/>
-						// <PatinetAdmissionPaymentDetails
-						// 	patinetAdmissionPaymentsData={patinetAdmissionPaymentsData}
-						// />
+								<DataGrid
+									rows={patinetAdmissionPaymentsData}
+									columns={patinetAdmissionPaymentsColumns}
+									getRowId={getRowIdPatinetAdmissionPayments}
+									disableRowSelectionOnClick
+								/>
+								// <PatinetAdmissionPaymentDetails
+								// 	patinetAdmissionPaymentsData={patinetAdmissionPaymentsData}
+								// />
 							) : (
 								<NoDataMessage />
 							)}
 						</Box>
 					)}
 					{activeTab === 2 && (
-						<MedicalRecords/>
+						<MedicalRecords />
 					)}
 					{/* {activeTab === 3 && <Typography>Tab 4 Content</Typography>} */}
 				</Box>
@@ -489,54 +487,30 @@ const PatinetAdmissionCostDetails = ({ patinetAdmissionData }) => (
 	</StyledTable>
 );
 
-const PatinetAdmissionPaymentDetails = ({ patinetAdmissionPaymentsData }) => (
-	<TableContainer component={Paper}>
-		<Table sx={{ minWidth: 150 }} size="small" aria-label="a dense table">
-			<TableHead>
-				<TableRow>
-					<TableCell align="right">Tutar</TableCell>
-					<TableCell align="right">Tarih</TableCell>
-				</TableRow>
-			</TableHead>
-			<TableBody>
-				{patinetAdmissionPaymentsData.map((row) => (
-					<TableRow
-						key={row.name}
-						sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-					>
-						<TableCell align="right" component="th" scope="row">
-							{row.paymentAmount}
-						</TableCell>
-						<TableCell align="right">{row.paymentAmount}</TableCell>
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
-	</TableContainer>
-);
-
-const PatinetAdmissionPaymentDetails1 = ({ patinetAdmissionData }) => (
+const PatinetAdmissionPaymentDetails = ({ patinetAdmissionData }) => (
 	<StyledTable>
 		<TableBody>
 			<TableRow>
-				<TableCell sx={{ fontWeight: "bold" }}>payment</TableCell>
+				<TableCell sx={{ fontWeight: "bold" }}>TOPLAM TAHSİLAT</TableCell>
 				<TableCell sx={{ fontWeight: "bold" }}>
-					₺ {patinetAdmissionData?.totalAmount}
-				</TableCell>
-			</TableRow>
-			<TableRow>
-				<TableCell sx={{ fontWeight: "bold" }}>KDV 20%</TableCell>
-				<TableCell sx={{ fontWeight: "bold" }}>
-					₺ {patinetAdmissionData?.kdvAmount}
-				</TableCell>
-			</TableRow>
-			<TableRow>
-				<TableCell sx={{ fontWeight: "bold" }}>GENEL TOPLAM</TableCell>
-				<TableCell sx={{ fontWeight: "bold" }}>
-					₺ {patinetAdmissionData?.totalAmountWithKDV}
+					₺ {patinetAdmissionData?.totalPayment}
 				</TableCell>
 			</TableRow>
 		</TableBody>
 	</StyledTable>
 );
+
+const PatinetAdmissionRemainingAmountDetails = ({ patinetAdmissionData }) => (
+	<StyledTable>
+		<TableBody>
+			<TableRow>
+				<TableCell sx={{ fontWeight: "bold" }}>KALAN</TableCell>
+				<TableCell sx={{ fontWeight: "bold" }}>
+					₺  {patinetAdmissionData?.totalAmountWithKDV - patinetAdmissionData?.totalPayment}
+				</TableCell>
+			</TableRow>
+		</TableBody>
+	</StyledTable>
+);
+
 export default PatinetAdmissionServices;

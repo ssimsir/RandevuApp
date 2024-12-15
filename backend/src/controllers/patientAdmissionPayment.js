@@ -5,6 +5,7 @@
 // Category Controllers:
 
 const PatientAdmissionPayment = require('../models/patientAdmissionPayment')
+const PatientAdmission = require('../models/patientAdmission')
 
 module.exports = {
 
@@ -25,7 +26,7 @@ module.exports = {
 
         //const data = await res.getModelList(PatientAdmissionPayment, {}, ['patientId'])
         const data = await res.getModelList(PatientAdmissionPayment, {}, [
-            //{ path: 'serviceId', select: 'name content price' },
+            { path: 'userId', select: 'firstName lastName' },
         ])
 
 
@@ -52,6 +53,11 @@ module.exports = {
         */
 
         const data = await PatientAdmissionPayment.create(req.body)
+        
+        const updatePatientAdmission = await PatientAdmission.updateOne(
+            { _id: data.patientAdmissionId }, 
+            { $inc: { totalPayment: +data.paymentAmount}}
+        )
 
         res.status(201).send({
             error: false,

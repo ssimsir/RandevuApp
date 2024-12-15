@@ -208,7 +208,7 @@ const PatientAdmissions = ({
                                 <Box sx={{ width: "100%", mt: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "end" }}>
                                     <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: 'wrap' }}>
                                         <Typography variant="h6" /*sx={{ fontSize: { xs: '1.2rem', sm: '2rem', md: '2.5rem' } }}*/>
-                                            {`Doktor :  ${patientAdmission.doctorDetails[0].name} ${patientAdmission.doctorDetails[0].surname}`}
+                                            {`Doktor :  ${patientAdmission?.doctorDetails[0]?.name} ${patientAdmission?.doctorDetails[0]?.surname}`}
                                         </Typography>
 
                                         <Box sx={{ width: { xs: "100%", sm: "auto" }, display: "flex", justifyContent: "start", alignItems: "center", mt: { xs: 2, sm: 0 } }}>
