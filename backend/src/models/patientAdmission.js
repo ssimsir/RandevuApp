@@ -43,6 +43,19 @@ const PatientAdmissionSchema = new mongoose.Schema({
         required: true,
     },
 
+    findings:{
+        type: String,
+        trim: true,
+    },
+    diagnoses : {
+        type: String,
+        trim: true,
+    },
+    treatments:{
+        type: String,
+        trim: true,
+    },
+
     totalAmount: {
         type: Number,
         trim: true,

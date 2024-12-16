@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from "react"
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -17,11 +17,14 @@ const Item = styled(Paper)(({ theme }) => ({
     }),
 }));
 
-const MedicalRecords = () => {
+const MedicalRecords = ({patinetAdmissionMedicalRecordsData, setPatinetAdmissionMedicalRecordsData}) => {
+
+    const medicalRecordsHandleChange = (e) => {
+        setPatinetAdmissionMedicalRecordsData({ ...patinetAdmissionMedicalRecordsData, [e.target.name]: e.target.value });
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Button >Kayıt</Button>
             <Stack spacing={2}>
                 <Item>
                     <TextField
@@ -33,8 +36,11 @@ const MedicalRecords = () => {
                         multiline
                         rows={3}
                         variant="outlined"
-                    //value={patientInfo?.infoMessage}
-                    //onChange={handleChange}							
+                        value={patinetAdmissionMedicalRecordsData?.findings}
+                        onChange={medicalRecordsHandleChange}
+                        InputLabelProps={{
+                            shrink: true, // Etiketin her zaman görünmesini sağlar
+                        }}
                     />
                 </Item>
                 <Item>
@@ -47,8 +53,11 @@ const MedicalRecords = () => {
                         multiline
                         rows={3}
                         variant="outlined"
-                    //value={patientInfo?.infoMessage}
-                    //onChange={handleChange}							
+                        value={patinetAdmissionMedicalRecordsData?.diagnoses}
+                        onChange={medicalRecordsHandleChange}
+                        InputLabelProps={{
+                            shrink: true, // Etiketin her zaman görünmesini sağlar
+                        }}
                     />
                 </Item>
                 <Item>
@@ -61,8 +70,11 @@ const MedicalRecords = () => {
                         multiline
                         rows={3}
                         variant="outlined"
-                    //value={patientInfo?.infoMessage}
-                    //onChange={handleChange}							
+                        value={patinetAdmissionMedicalRecordsData?.treatments}
+                        onChange={medicalRecordsHandleChange}
+                        InputLabelProps={{
+                            shrink: true, // Etiketin her zaman görünmesini sağlar
+                        }}
                     />
                 </Item>
             </Stack>

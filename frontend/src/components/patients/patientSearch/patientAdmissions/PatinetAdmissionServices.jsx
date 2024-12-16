@@ -32,6 +32,7 @@ import {
 import NewPatinetAdmissionServiceModal from "./patientAdmissionServices/NewPatinetAdmissionServiceModal";
 import NewPatinetAdmissionPaymentModal from "./patientAdmissionServices/NewPatinetAdmissionPaymentModal";
 import MedicalRecords from "./patientAdmissionServices/MedicalRecords";
+import { toastSuccessNotify } from "../../../../helper/ToastNotify";
 
 const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 	const { axiosToken } = useAxios();
@@ -42,7 +43,37 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 		fetchPatinetAdmissionData();
 		fetchPatinetAdmissionServicesData();
 		fetchPatinetAdmissionPaymentsData();
+		fetchPatinetAdmissionMedicalRecordsData();
 	}, []);
+
+
+	/* --------------PatinetAdmissionMedicalRecords----*/
+	const patinetAdmissionMedicalRecordsInitialState = {
+		findings: "",
+		diagnoses: "",
+		treatments: ""
+	}
+	const [patinetAdmissionMedicalRecordsData, setPatinetAdmissionMedicalRecordsData] = useState(patinetAdmissionMedicalRecordsInitialState);
+	const fetchPatinetAdmissionMedicalRecordsData = async () => {
+		try {
+			const { data } = await axiosToken(`/API/v1/patientAdmissions/${patientAdmissionId}`);
+			setPatinetAdmissionMedicalRecordsData(data.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const savePatinetAdmissionMedicalRecordsData = async () => {
+		try {
+			const { data } = await axiosToken.patch(`/API/v1/patientAdmissions/${patientAdmissionId}`, patinetAdmissionMedicalRecordsData);
+			setPatinetAdmissionMedicalRecordsData(data.data);
+			toastSuccessNotify(`Kayıt Tamamlanmıştır`)
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	/* --------------PatinetAdmissionMedicalRecords----*/
 
 	const getRowIdPatinetAdmissionServices = (row) => row._id;
 	const patinetAdmissionServicesColumns = [
@@ -220,8 +251,7 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 	};
 
 	/* --------------NewPatinetAdmissionServiceModal----*/
-	const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] =
-		useState();
+	const [patinetAdmissionServicesData, setPatinetAdmissionServicesData] = useState();
 	const fetchPatinetAdmissionServicesData = async () => {
 		try {
 			const { data } = await axiosToken(
@@ -329,16 +359,16 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 									flexWrap: "wrap",
 								}}
 							>
-		
-									<Button
-										sx={{ marginRight: "10px" }}
-										variant="contained"
-										startIcon={<AddIcon />}
-										onClick={newPatinetAdmissionServiceModalHandleOpen}
-									>
-										HİZMET EKLE
-									</Button>
-								
+
+								<Button
+									sx={{ marginRight: "10px" }}
+									variant="contained"
+									startIcon={<AddIcon />}
+									onClick={newPatinetAdmissionServiceModalHandleOpen}
+								>
+									HİZMET EKLE
+								</Button>
+
 							</Box>
 							{!patinetAdmissionServicesData ? (
 								<AccordionTableSkeleton />
@@ -369,15 +399,15 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 								{!patinetAdmissionServicesData ? (
 									<AccordionTableSkeleton />
 								) : patinetAdmissionServicesData?.length ? (
-									<Box sx={{ display: "flex", gap: "10px", alignItems: "end" }}>
+									<Box sx={{ display: "flex", gap: "10px", alignItems: "end", justifyContent: "space-between", flexWrap: "wrap" }}>
 										<PatinetAdmissionCostDetails patinetAdmissionData={patinetAdmissionData} />
 										<PatinetAdmissionPaymentDetails patinetAdmissionData={patinetAdmissionData} />
-										<PatinetAdmissionRemainingAmountDetails patinetAdmissionData={patinetAdmissionData} />																			
+										<PatinetAdmissionRemainingAmountDetails patinetAdmissionData={patinetAdmissionData} />
 									</Box>
 								) : (
 									<NoDataMessage />
 								)}
-																<Button
+								<Button
 									sx={{ marginRight: "10px" }}
 									variant="contained"
 									startIcon={<AttachMoneyIcon />}
@@ -404,7 +434,27 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 						</Box>
 					)}
 					{activeTab === 2 && (
-						<MedicalRecords />
+						<Box sx={{ width: "100%" }}>
+							<Box
+								mb={1}
+								sx={{
+									display: "flex",
+									justifyContent: "end",
+									alignItems: "center",
+									flexWrap: "wrap",
+								}}
+							>
+								<Button
+									sx={{ marginRight: "10px" }}
+									variant="contained"
+									startIcon={<AddIcon />}
+									onClick={savePatinetAdmissionMedicalRecordsData}
+								>
+									KAYIT
+								</Button>
+							</Box>
+							<MedicalRecords patinetAdmissionMedicalRecordsData={patinetAdmissionMedicalRecordsData} setPatinetAdmissionMedicalRecordsData = {setPatinetAdmissionMedicalRecordsData} />
+						</Box>
 					)}
 					{/* {activeTab === 3 && <Typography>Tab 4 Content</Typography>} */}
 				</Box>
@@ -448,10 +498,9 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 };
 
 const StyledTable = styled(Table)(({ theme }) => ({
-	width: "25%",
-	minWidth: "220px",
+	//width: "20%",
+	//minWidth: "210px",
 	marginBottom: "15px",
-
 	borderCollapse: "collapse",
 	"& th, & td": {
 		border: "1px solid #ddd",
@@ -463,7 +512,7 @@ const StyledTable = styled(Table)(({ theme }) => ({
 }));
 
 const PatinetAdmissionCostDetails = ({ patinetAdmissionData }) => (
-	<StyledTable>
+	<StyledTable sx={{ width: "210px" }}>
 		<TableBody>
 			<TableRow>
 				<TableCell sx={{ fontWeight: "bold" }}>ARA TOPLAM</TableCell>
@@ -488,7 +537,7 @@ const PatinetAdmissionCostDetails = ({ patinetAdmissionData }) => (
 );
 
 const PatinetAdmissionPaymentDetails = ({ patinetAdmissionData }) => (
-	<StyledTable>
+	<StyledTable sx={{ width: "240px" }}>
 		<TableBody>
 			<TableRow>
 				<TableCell sx={{ fontWeight: "bold" }}>TOPLAM TAHSİLAT</TableCell>
@@ -501,7 +550,7 @@ const PatinetAdmissionPaymentDetails = ({ patinetAdmissionData }) => (
 );
 
 const PatinetAdmissionRemainingAmountDetails = ({ patinetAdmissionData }) => (
-	<StyledTable>
+	<StyledTable sx={{ width: "150px" }}>
 		<TableBody>
 			<TableRow>
 				<TableCell sx={{ fontWeight: "bold" }}>KALAN</TableCell>
