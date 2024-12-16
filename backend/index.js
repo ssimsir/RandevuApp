@@ -39,13 +39,13 @@ app.use('/API/v1',require("./src/routes"));
 app.use(require("./src/middlewares/errorHandler"));
 
 
-//localde çalışırken bu kısım açık olacak
-app.listen(PORT, () => {
-  console.log(`Server running on PORT ${PORT}...`);
-});
+// //localde çalışırken bu kısım açık olacak
+// app.listen(PORT, () => {
+//   console.log(`Server running on PORT ${PORT}...`);
+// });
 
-// //netlify deploy yaparken bu kısım açık olacak
-//  module.exports.handler = serverless(app)
+//netlify deploy yaparken bu kısım açık olacak
+ module.exports.handler = serverless(app)
 
 // require('./src/helpers/sync')() // !!! It clear database.
 
