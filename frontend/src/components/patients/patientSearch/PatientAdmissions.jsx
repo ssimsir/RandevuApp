@@ -125,10 +125,7 @@ const PatientAdmissions = ({
             <Box sx={{
                 width: "100%",
                 //mt: 2,
-
-
                 border: '1px solid #ccc',
-
             }}>
                 <Box sx={{ padding: 1 }}>
                     <Card sx={{ minWidth: 500, boxShadow: 3, backgroundColor: genderColor, color: grey[800] }}>
@@ -172,7 +169,7 @@ const PatientAdmissions = ({
                         startIcon={<AddIcon />}
                         onClick={newPatientAdmissionModalHandleOpen}
                     >
-                        Yeni Protokol
+                        YENİ PROTOKOL
                     </Button>
 
                 </Box>
