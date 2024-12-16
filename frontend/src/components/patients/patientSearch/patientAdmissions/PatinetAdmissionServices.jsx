@@ -33,6 +33,8 @@ import NewPatinetAdmissionServiceModal from "./patientAdmissionServices/NewPatin
 import NewPatinetAdmissionPaymentModal from "./patientAdmissionServices/NewPatinetAdmissionPaymentModal";
 import MedicalRecords from "./patientAdmissionServices/MedicalRecords";
 import { toastSuccessNotify } from "../../../../helper/ToastNotify";
+import PatinetAdmissionPaymentReceiptPdfModal from "./patientAdmissionServices/PatinetAdmissionPaymentReceiptPdfModal";
+import useReceiptPdfDesing from "./patientAdmissionServices/useReceiptPdfDesing/useReceiptPdfDesing";
 
 const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 	const { axiosToken } = useAxios();
@@ -46,34 +48,6 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 		fetchPatinetAdmissionMedicalRecordsData();
 	}, []);
 
-
-	/* --------------PatinetAdmissionMedicalRecords----*/
-	const patinetAdmissionMedicalRecordsInitialState = {
-		findings: "",
-		diagnoses: "",
-		treatments: ""
-	}
-	const [patinetAdmissionMedicalRecordsData, setPatinetAdmissionMedicalRecordsData] = useState(patinetAdmissionMedicalRecordsInitialState);
-	const fetchPatinetAdmissionMedicalRecordsData = async () => {
-		try {
-			const { data } = await axiosToken(`/API/v1/patientAdmissions/${patientAdmissionId}`);
-			setPatinetAdmissionMedicalRecordsData(data.data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	const savePatinetAdmissionMedicalRecordsData = async () => {
-		try {
-			const { data } = await axiosToken.patch(`/API/v1/patientAdmissions/${patientAdmissionId}`, patinetAdmissionMedicalRecordsData);
-			setPatinetAdmissionMedicalRecordsData(data.data);
-			toastSuccessNotify(`Kayıt Tamamlanmıştır`)
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	/* --------------PatinetAdmissionMedicalRecords----*/
 
 	const getRowIdPatinetAdmissionServices = (row) => row._id;
 	const patinetAdmissionServicesColumns = [
@@ -210,11 +184,21 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 		{
 			field: "actions",
 			headerName: "Actions",
-			minWidth: 40,
+			minWidth: 120,
 			headerAlign: "center",
 			align: "center",
 			renderCell: ({ row: { id } }) => {
 				return [
+					<GridActionsCellItem
+					key={"print"}
+					icon={<PrintIcon />}
+					label="Print"
+					onClick={() => {
+						patinetAdmissionPaymentReceiptPdfModalOpenHandle()
+						//setQuotationDetailInfo({ id, productId, productGroup, product, brand, color, cablePackage, delivery, quantity, discount })
+					}}
+					sx={btnStyle}
+				/>,
 					<GridActionsCellItem
 						key={"edit"}
 						icon={<EditIcon />}
@@ -234,7 +218,7 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 					/>,
 				];
 			},
-		},
+		}
 	];
 
 	const [patinetAdmissionData, setPatinetAdmissionData] = useState();
@@ -290,8 +274,7 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 	};
 	/* --------------NewPatinetAdmissionServiceModal----*/
 
-	// NewPatinetAdmissionPaymentModal
-
+	/* --------------NewPatinetAdmissionPaymentModal----*/
 	const [patinetAdmissionPaymentsData, setPatinetAdmissionPaymentsData] =
 		useState();
 
@@ -329,7 +312,55 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 		);
 		setNewPatinetAdmissionPaymentModalopen(false);
 	};
-	// NewPatinetAdmissionPaymentModal
+	/* --------------NewPatinetAdmissionPaymentModal----*/
+
+	/* --------------PatinetAdmissionMedicalRecords----*/
+	const patinetAdmissionMedicalRecordsInitialState = {
+		findings: "",
+		diagnoses: "",
+		treatments: ""
+	}
+	const [patinetAdmissionMedicalRecordsData, setPatinetAdmissionMedicalRecordsData] = useState(patinetAdmissionMedicalRecordsInitialState);
+	const [patinetAdmissionMedicalRecordsLoading, setPatinetAdmissionMedicalRecordsLoading] = useState(false);
+
+	const fetchPatinetAdmissionMedicalRecordsData = async () => {
+		try {
+			setPatinetAdmissionMedicalRecordsLoading(true)
+			const { data } = await axiosToken(`/API/v1/patientAdmissions/${patientAdmissionId}`);
+			setPatinetAdmissionMedicalRecordsData(data.data);
+		} catch (error) {
+			console.error(error);
+		} finally {
+            setPatinetAdmissionMedicalRecordsLoading(false); // Yükleme durumu bitiyor
+        }
+	};
+	const savePatinetAdmissionMedicalRecordsData = async () => {
+		try {
+			setPatinetAdmissionMedicalRecordsLoading(true)
+			const { data } = await axiosToken.patch(`/API/v1/patientAdmissions/${patientAdmissionId}`, patinetAdmissionMedicalRecordsData);
+			toastSuccessNotify(`Kayıt Tamamlanmıştır`)
+		} catch (error) {
+			console.error(error);
+		} finally {
+            setPatinetAdmissionMedicalRecordsLoading(false); // Yükleme durumu bitiyor
+        }
+	};
+	/* --------------PatinetAdmissionMedicalRecords----*/
+
+	/* --------------PatinetAdmissionPaymentReceiptPdfModal----*/
+	const [patinetAdmissionPaymentReceiptPdfModalOpen, setPatinetAdmissionPaymentReceiptPdfModalOpen] = useState(false);
+	const [patinetAdmissionPaymentReceiptPdfUrl, setPatinetAdmissionPaymentReceiptPdfUrl] = useState('');
+
+	const { receiptPdfDesing } = useReceiptPdfDesing()
+	const patinetAdmissionPaymentReceiptPdfModalOpenHandle = () => {
+		const doc = receiptPdfDesing({/* ...quotationData, quotationDetails: quotationDetailData */});
+		const pdfBlob = doc.output('blob');
+		const url = URL.createObjectURL(pdfBlob);
+		setPatinetAdmissionPaymentReceiptPdfUrl(url);
+		setPatinetAdmissionPaymentReceiptPdfModalOpen(true);
+	};
+	/* --------------PatinetAdmissionPaymentReceiptPdfModal----*/
+
 
 	const [activeTab, setActiveTab] = useState(0);
 	const handleTabChange = (event, newValue) => {
@@ -453,7 +484,11 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 									KAYIT
 								</Button>
 							</Box>
-							<MedicalRecords patinetAdmissionMedicalRecordsData={patinetAdmissionMedicalRecordsData} setPatinetAdmissionMedicalRecordsData = {setPatinetAdmissionMedicalRecordsData} />
+							<MedicalRecords 
+								patinetAdmissionMedicalRecordsData={patinetAdmissionMedicalRecordsData} 
+								setPatinetAdmissionMedicalRecordsData={setPatinetAdmissionMedicalRecordsData} 
+								patinetAdmissionMedicalRecordsLoading = {patinetAdmissionMedicalRecordsLoading}								
+								/>
 						</Box>
 					)}
 					{/* {activeTab === 3 && <Typography>Tab 4 Content</Typography>} */}
@@ -461,37 +496,27 @@ const PatinetAdmissionServices = ({ patientId, patientAdmissionId }) => {
 			</Box>
 
 			<NewPatinetAdmissionServiceModal
-				newPatinetAdmissionServiceModalopen={
-					newPatinetAdmissionServiceModalopen
-				}
-				newPatinetAdmissionServiceModalHandleClose={
-					newPatinetAdmissionServiceModalHandleClose
-				}
-				newPatinetAdmissionServiceModalInfo={
-					newPatinetAdmissionServiceModalInfo
-				}
-				setNewPatinetAdmissionServiceModalInfo={
-					setNewPatinetAdmissionServiceModalInfo
-				}
+				newPatinetAdmissionServiceModalopen={newPatinetAdmissionServiceModalopen}
+				newPatinetAdmissionServiceModalHandleClose={newPatinetAdmissionServiceModalHandleClose}
+				newPatinetAdmissionServiceModalInfo={newPatinetAdmissionServiceModalInfo}
+				setNewPatinetAdmissionServiceModalInfo={setNewPatinetAdmissionServiceModalInfo}
 				fetchPatinetAdmissionServicesData={fetchPatinetAdmissionServicesData}
 				fetchPatinetAdmissionData={fetchPatinetAdmissionData}
 			/>
-
 			<NewPatinetAdmissionPaymentModal
-				newPatinetAdmissionPaymentModalopen={
-					newPatinetAdmissionPaymentModalopen
-				}
-				newPatinetAdmissionPaymentModalHandleClose={
-					newPatinetAdmissionPaymentModalHandleClose
-				}
-				newPatinetAdmissionPaymentModalInfo={
-					newPatinetAdmissionPaymentModalInfo
-				}
-				setNewPatinetAdmissionPaymentModalInfo={
-					setNewPatinetAdmissionPaymentModalInfo
-				}
+				newPatinetAdmissionPaymentModalopen={newPatinetAdmissionPaymentModalopen}
+				newPatinetAdmissionPaymentModalHandleClose={newPatinetAdmissionPaymentModalHandleClose}
+				newPatinetAdmissionPaymentModalInfo={newPatinetAdmissionPaymentModalInfo}
+				setNewPatinetAdmissionPaymentModalInfo={setNewPatinetAdmissionPaymentModalInfo}
 				fetchPatinetAdmissionPaymentsData={fetchPatinetAdmissionPaymentsData}
 				fetchPatinetAdmissionData={fetchPatinetAdmissionData}
+			/>
+
+			<PatinetAdmissionPaymentReceiptPdfModal
+				patinetAdmissionPaymentReceiptPdfModalOpen={patinetAdmissionPaymentReceiptPdfModalOpen}
+				setPatinetAdmissionPaymentReceiptPdfModalOpen={setPatinetAdmissionPaymentReceiptPdfModalOpen}
+				patinetAdmissionPaymentReceiptPdfUrl={patinetAdmissionPaymentReceiptPdfUrl}
+				setPatinetAdmissionPaymentReceiptPdfUrl={setPatinetAdmissionPaymentReceiptPdfUrl}
 			/>
 		</>
 	);

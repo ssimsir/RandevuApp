@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button'
 import { TextField } from '@mui/material';
+import TableSkeleton from "../../../../DataFetchMessages";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -17,14 +18,14 @@ const Item = styled(Paper)(({ theme }) => ({
     }),
 }));
 
-const MedicalRecords = ({patinetAdmissionMedicalRecordsData, setPatinetAdmissionMedicalRecordsData}) => {
-
+const MedicalRecords = ({patinetAdmissionMedicalRecordsData, setPatinetAdmissionMedicalRecordsData, patinetAdmissionMedicalRecordsLoading}) => {
     const medicalRecordsHandleChange = (e) => {
         setPatinetAdmissionMedicalRecordsData({ ...patinetAdmissionMedicalRecordsData, [e.target.name]: e.target.value });
     }
-
+    
     return (
         <Box sx={{ width: '100%' }}>
+            {patinetAdmissionMedicalRecordsLoading ? (<TableSkeleton/>) : (
             <Stack spacing={2}>
                 <Item>
                     <TextField
@@ -77,7 +78,7 @@ const MedicalRecords = ({patinetAdmissionMedicalRecordsData, setPatinetAdmission
                         }}
                     />
                 </Item>
-            </Stack>
+            </Stack>)}
         </Box>
     )
 }
