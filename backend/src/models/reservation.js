@@ -17,7 +17,6 @@ const ReservationSchema = new mongoose.Schema({
     description: {
         type: String,
         trim: true,
-        required: true,
     },
 
     startTime: {
