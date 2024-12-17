@@ -85,7 +85,6 @@ const UpdateReservationModel = ({ reservationId, open, setOpen }) => {
 				serviceId: values.serviceId,
 			})
 			.then((response) => {
-				console.log("İstek başarılı:", response.data);
 				getBiltek("reservations");
 				handleClose();
 			})

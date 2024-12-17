@@ -84,7 +84,6 @@ PatientAdmissionSchema.pre('save', async function (next) {
     if (!this.isNew) {
         return next(); // Yalnızca yeni belgelerde çalışsın
     }
-    console.log("save")
 
     try {
         // Counter koleksiyonundan admissionNumber için yeni bir ardışık sayı alın

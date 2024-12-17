@@ -1,6 +1,5 @@
 import React from "react";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -71,7 +70,7 @@ const MenuListComp = () => {
 
 					<ListItemButton
 						key={index}
-						disablePadding
+						// disablePadding
 						onClick={() => navigate(icon.path)}
 						sx={listItemStyle}
 					>
@@ -91,7 +90,10 @@ const MenuListComp = () => {
 					{open ? <ExpandLess /> : <ExpandMore />}
 				</ListItemButton>
 				<Collapse in={open} timeout="auto" unmountOnExit>
-					<List component="div" disablePadding>
+					<List 
+						component="div" 
+						// disablePadding
+					>
 						<ListItemButton sx={{ ...listItemStyle, pl: 4 }}>
 							<ListItemIcon>
 								<MedicationIcon />

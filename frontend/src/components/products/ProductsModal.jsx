@@ -39,7 +39,6 @@ export default function ProductsModal({ handleClose, open, info, setInfo }) {
 	
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(info)
 		if (info?._id) {
 			//? put isteginin
 			postBiltek("products", info)
@@ -52,7 +51,6 @@ export default function ProductsModal({ handleClose, open, info, setInfo }) {
 		handleClose();
 	};
 
-	//console.log(info);
 	return (
 		<div>
 			<Modal

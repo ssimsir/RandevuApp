@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import useAxios from './useAxios';
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
-import useFetchPatient from './useFetchPatient';
 const useFetchPatientAdmission = () => {
     const { axiosToken } = useAxios();
 
@@ -31,7 +30,6 @@ const useFetchPatientAdmission = () => {
     const fetchPatientAdmissionByPatientId = async (patientId) => {
         setLoading(true);
         setError(null); // Önceki hatayı sıfırlıyoruz
-        console.log(patientId)
         try {
             const { data } = await axiosToken(`/API/v1/patientAdmissions/?filter[patientId]=${patientId}&sort[admissionNumber]=desc`);
             setPatientAdmissionsByPatientId(data.data); // Gelen verileri state'e kaydediyoruz
@@ -48,7 +46,6 @@ const useFetchPatientAdmission = () => {
         setError(null);
         try {
             const { data } = await axiosToken.post('/API/v1/patientAdmissions', patientAdmissions);
-            console.log(data);
             toastSuccessNotify(`${data.data.group} ${data.data.type} Eklenmiştir`)
         } catch (error) {
             toastErrorNotify("Hata Oluştu")

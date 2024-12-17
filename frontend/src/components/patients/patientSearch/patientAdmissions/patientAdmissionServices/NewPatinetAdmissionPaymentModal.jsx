@@ -2,10 +2,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
-import { FormControl, IconButton, InputLabel, MenuItem, Select } from "@mui/material";
+import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { modalStyle } from "../../../../../styles/globalStyles";
-import { useEffect, useState } from "react";
 import useAxios from "../../../../../services/useAxios";
 
 const NewPatinetAdmissionPaymentModal = ({ 
@@ -21,15 +20,12 @@ const NewPatinetAdmissionPaymentModal = ({
 
 	const handleChange = (e) => {
         const { name, value } = e.target;
-        setNewPatinetAdmissionPaymentModalInfo({ ...newPatinetAdmissionPaymentModalInfo, [name]: value });         
-        console.log(newPatinetAdmissionPaymentModalInfo)
+        setNewPatinetAdmissionPaymentModalInfo({ ...newPatinetAdmissionPaymentModalInfo, [name]: value });
 	};
-
-
 
     const savePatientAdmissionPayment = async (newPatinetAdmissionPaymentModalInfo) => {
         try {
-            const { data } = await axiosToken.post(`/API/v1/patientAdmissionPayments`, newPatinetAdmissionPaymentModalInfo);
+            await axiosToken.post(`/API/v1/patientAdmissionPayments`, newPatinetAdmissionPaymentModalInfo);
             fetchPatinetAdmissionPaymentsData()
             fetchPatinetAdmissionData()
         } catch (error) {

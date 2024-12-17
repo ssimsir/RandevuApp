@@ -57,14 +57,6 @@ export default function Calendar() {
 		getBiltek("products");
 		setUpdateModelopen(true);
 		setReservationId(clickInfo.event._def.publicId);
-		//console.log(clickInfo.event._def.publicId);
-		// if (
-		// 	window.confirm(
-		// 		`Are you sure you want to delete the event '${clickInfo.event.title}'`
-		// 	)
-		// ) {
-		// 	clickInfo.event.remove();
-		// }
 	};
 
 	function handleEvents(events) {
@@ -73,8 +65,6 @@ export default function Calendar() {
 
 	return (
 		<div className="demo-app">
-			{/*console.log(reservations)*/}
-			{/*console.log(reservationsLoading)*/}
 			{reservationsLoading ? (
 				<div>Yükleniyor...</div>
 			) : (

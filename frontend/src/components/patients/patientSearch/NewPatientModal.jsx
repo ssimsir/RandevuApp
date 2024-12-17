@@ -46,7 +46,6 @@ export default function NewPatientModal({
 	
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(patientInfo)
 		if (patientInfo?._id) {
 			//? put isteginin
 			postBiltek("patients", patientInfo)
@@ -59,7 +58,6 @@ export default function NewPatientModal({
 		newPatientModalHandleClose();
 	};
 
-	//console.log(patientInfo);
 	return (
 		<div>
 			<Modal

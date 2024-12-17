@@ -14,7 +14,6 @@ export default function PatientsDataGrid({ patients, patientLoading, fetchPatien
 				if (window.confirm("Hasta silinecektir eminmisiniz")) {
 					deleteBiltek("patients", id)
 				}
-				console.log("delete", id)
 				//setRows((prevRows) => prevRows.filter((row) => row.id !== id));
 			});
 		},

@@ -9,9 +9,7 @@ import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { Box, Table, TableBody, TableCell, TableRow, TextField, Button, Grid, Card, CardContent, Avatar } from "@mui/material";
-import useAxios from "../../../services/useAxios";
-import { toastErrorNotify, toastSuccessNotify } from "../../../helper/ToastNotify";
+import { Box, Table, TableBody, TableCell, TableRow, Button, Grid, Card, CardContent, Avatar } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 
@@ -89,9 +87,7 @@ const PatientAdmissions = ({
 
     useEffect(() => {
         setExpanded(patientAdmissions[0]?._id || 1)
-        console.log(selectedPatient)
     }, [patientAdmissions])
-    const { axiosToken } = useAxios()
 
     /*-----New Patient Admission Modal------*/
     const [newPatientAdmissionModalOpen, setNewPatientAdmissionModalOpen] = useState(false)

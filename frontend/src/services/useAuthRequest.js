@@ -34,7 +34,6 @@ const useAuthRequest = () => {
       try {
          //const { data } = await axiosPublic.post("/auth/signup",registerData)
          const { data } = await axiosPublic.post(BASE_URL+"/users",registerData)
-         console.log(data)
          dispatch(loginSuccess(data))
          toastSuccessNotify("Register işlemi başarılı")
          navigate("/")
