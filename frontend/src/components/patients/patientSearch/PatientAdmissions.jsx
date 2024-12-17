@@ -107,7 +107,6 @@ const PatientAdmissions = ({
         setNewPatientAdmissionModalOpen(true)
     }
     const newPatientAdmissionModalHandleClose = () => {
-        fetchPatientAdmissionByPatientId(patientId)
         setNewPatientAdmissionModalOpen(false)
     }
     /*-----New Patient Admission Modal------*/
@@ -237,6 +236,7 @@ const PatientAdmissions = ({
                 newPatientAdmissionModalOpen={newPatientAdmissionModalOpen}
                 patientAdmissionInfo={patientAdmissionInfo}
                 setPatientAdmissionInfo={setPatientAdmissionInfo}
+                fetchPatientAdmissionByPatientId = {fetchPatientAdmissionByPatientId}
             />
         </>
     );

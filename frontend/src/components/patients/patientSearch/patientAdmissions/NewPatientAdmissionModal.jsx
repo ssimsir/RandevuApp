@@ -13,6 +13,7 @@ const NewPatientAdmissionModal = ({
     newPatientAdmissionModalHandleClose , 
     patientAdmissionInfo, 
     setPatientAdmissionInfo,
+    fetchPatientAdmissionByPatientId
 }) => {
 
     const { axiosToken } = useAxios()
@@ -24,6 +25,7 @@ const NewPatientAdmissionModal = ({
     const savePatientAdmission = async (info) => {
         try {
             const { data } = await axiosToken.post(`/API/v1/patientAdmissions`, info);
+            fetchPatientAdmissionByPatientId(info.patientId)
         } catch (error) {
             console.error(error);
         }
